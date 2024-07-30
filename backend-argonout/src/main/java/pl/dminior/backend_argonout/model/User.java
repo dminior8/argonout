@@ -14,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "\"users\"")
 public class User {
     @Id
@@ -22,12 +23,12 @@ public class User {
     private UUID id;
 
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 3, max = 50)
     @Column(name = "username", unique = true)
     private String username;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 4, max = 100)
     @Column(name = "email", unique = true)
     private String email;
 
@@ -41,8 +42,8 @@ public class User {
     private String firstName;
 
     @Size(max = 50)
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "surname")
+    private String surname;
 
     @NotNull
     @Column(name = "role_id")

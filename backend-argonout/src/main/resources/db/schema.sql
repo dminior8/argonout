@@ -10,7 +10,7 @@ CREATE TABLE "users" (
   "email" VARCHAR(100) UNIQUE NOT NULL,
   "password_hash" VARCHAR(255) NOT NULL,
   "first_name" VARCHAR(50),
-  "last_name" VARCHAR(50),
+  "surname" VARCHAR(50),
   "role_id" INT NOT NULL,
   "points" INT DEFAULT 0
 );

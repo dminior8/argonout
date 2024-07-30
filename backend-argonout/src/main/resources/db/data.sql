@@ -4,7 +4,7 @@ INSERT INTO "roles" (role_id, role_name) VALUES
                                              (1, 'ADMIN');
 
 -- Users, hasła: Admin123!
-INSERT INTO "users" (user_id, username, email, password_hash, first_name, last_name, role_id, points) VALUES
+INSERT INTO "users" (user_id, username, email, password_hash, first_name, surname, role_id, points) VALUES
                                                                                                           ('b39289b0-b88a-4f09-b8fd-38ab15071acf', 'jkowalski', 'janek.kowalski@example.com', '$2a$10$kAdlfSJUwH7w2oooYJSLkunU0HXJM8BEHZtmmMamCHd2unCzweFFi', 'Jan', 'Kowalski', 0, 10),
                                                                                                           ('b3683311-a2e5-4546-b3e3-742f303b2d13', 'anowak', 'anna.nowak@example.com', '$2a$10$kAdlfSJUwH7w2oooYJSLkunU0HXJM8BEHZtmmMamCHd2unCzweFFi', 'Anna', 'Nowak', 0, 20),
                                                                                                           ('46c520c6-8467-437b-9518-8126bc49cbd8', 'piotr_wisniewski', 'piotr.wisniewski@example.com', '$2a$10$kAdlfSJUwH7w2oooYJSLkunU0HXJM8BEHZtmmMamCHd2unCzweFFi', 'Piotr', 'Wiśniewski', 1, 30),
