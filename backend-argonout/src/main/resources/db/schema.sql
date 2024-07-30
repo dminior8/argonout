@@ -21,8 +21,7 @@ CREATE TABLE "places" (
   "name" VARCHAR(100) NOT NULL,
   "description" TEXT,
   "latitude" DECIMAL(10,8),
-  "longitude" DECIMAL(11,8),
-  "qr_code" VARCHAR(255) NOT NULL
+  "longitude" DECIMAL(11,8)
 );
 
 CREATE TABLE "achievements" (
@@ -77,7 +76,7 @@ CREATE TABLE "users_achievements" (
 CREATE TABLE "users_routes" (
   "user_id" UUID NOT NULL,
   "route_id" UUID NOT NULL,
-  "added_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "visited_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY ("user_id", "route_id"),
   FOREIGN KEY ("user_id") REFERENCES "users" ("user_id"),
   FOREIGN KEY ("route_id") REFERENCES "routes" ("route_id")
@@ -86,7 +85,6 @@ CREATE TABLE "users_routes" (
 CREATE TABLE "routes_places" (
   "route_id" UUID NOT NULL,
   "place_id" UUID NOT NULL,
-  "added_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY ("route_id", "place_id"),
   FOREIGN KEY ("route_id") REFERENCES "routes" ("route_id"),
   FOREIGN KEY ("place_id") REFERENCES "places" ("place_id")
@@ -100,7 +98,7 @@ CREATE TABLE "posts_threads" (
   FOREIGN KEY ("thread_id") REFERENCES "threads" ("thread_id")
 );
 
-CREATE TABLE "users_points" (
+CREATE TABLE "points_of_users" (
   "user_id" UUID NOT NULL,
   "points" INT NOT NULL DEFAULT 0,
   "period" DATE NOT NULL,
@@ -108,7 +106,7 @@ CREATE TABLE "users_points" (
   FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
 );
 
-CREATE TABLE "users_leagues" (
+CREATE TABLE "leagues_of_users" (
   "user_id" UUID NOT NULL,
   "league_id" UUID NOT NULL,
   "assigned_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
