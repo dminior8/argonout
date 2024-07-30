@@ -1,3 +1,9 @@
+-- Create the roles table
+CREATE TABLE roles (
+    role_id INT PRIMARY KEY,
+    role_name VARCHAR(10) UNIQUE NOT NULL
+);
+
 CREATE TABLE "users" (
   "user_id" UUID PRIMARY KEY,
   "username" VARCHAR(50) UNIQUE NOT NULL,
@@ -5,7 +11,7 @@ CREATE TABLE "users" (
   "password_hash" VARCHAR(255) NOT NULL,
   "first_name" VARCHAR(50),
   "last_name" VARCHAR(50),
-  "role" VARCHAR(10) NOT NULL CHECK (role IN ('USER', 'ADMIN')),
+  "role_id" INT NOT NULL,
   "points" INT DEFAULT 0
 );
 
@@ -102,7 +108,7 @@ CREATE TABLE "points_of_users" (
   "user_id" UUID NOT NULL,
   "points" INT NOT NULL DEFAULT 0,
   "period" DATE NOT NULL,
-  PRIMARY KEY ("user_id", "period"),
+--   PRIMARY KEY ("user_id", "period"),
   FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
 );
 
@@ -110,7 +116,7 @@ CREATE TABLE "leagues_of_users" (
   "user_id" UUID NOT NULL,
   "league_id" UUID NOT NULL,
   "assigned_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY ("user_id", "league_id"),
+--   PRIMARY KEY ("user_id", "league_id"),
   FOREIGN KEY ("user_id") REFERENCES "users" ("user_id"),
   FOREIGN KEY ("league_id") REFERENCES "leagues" ("league_id")
 );
