@@ -12,7 +12,8 @@ CREATE TABLE "users" (
   "first_name" VARCHAR(50),
   "surname" VARCHAR(50),
   "role_id" INT NOT NULL,
-  "points" INT DEFAULT 0
+  "points" INT DEFAULT 0,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "routes" (

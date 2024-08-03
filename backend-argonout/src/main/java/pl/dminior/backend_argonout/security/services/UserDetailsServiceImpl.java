@@ -10,6 +10,8 @@ import pl.dminior.backend_argonout.model.User;
 import pl.dminior.backend_argonout.repository.UserRepository;
 import pl.dminior.backend_argonout.security.services.UserDetailsImpl;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,12 +20,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException("User Not Found with username: " + username);
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            return UserDetailsImpl.build(user.get());
         }
+        throw new UsernameNotFoundException("User Not Found with username: " + username);
 
-        return UserDetailsImpl.build(user);
     }
 
 }

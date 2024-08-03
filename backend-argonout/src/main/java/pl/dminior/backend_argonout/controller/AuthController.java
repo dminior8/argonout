@@ -28,13 +28,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        RegisterRequest request = RegisterRequest.builder()
-                .username(registerRequest.getUsername())
-                .email(registerRequest.getEmail())
-                .firstName(registerRequest.getFirstName())
-                .surname(registerRequest.getSurname())
-                .password(registerRequest.getPassword())
-                .build();
+//        RegisterRequest request = RegisterRequest.builder()
+//                .username(registerRequest.getUsername())
+//                .email(registerRequest.getEmail())
+//                .firstName(registerRequest.getFirstName())
+//                .surname(registerRequest.getSurname())
+//                .password(registerRequest.getPassword())
+//                .build();
 
         try{
             userService.registerUser(registerRequest);
