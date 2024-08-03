@@ -47,8 +47,19 @@ public class UserController {
 
 
       //Usuwa konto zalogowanego użytkownika
-//    @DeleteMapping
-//    public ResponseEntity<MessageResponse> deleteCurrentUser() {}
+      @DeleteMapping
+      @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+      public ResponseEntity<?> deleteCurrentUser() throws UserAuthenticationException {
+          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+          String username = authentication.getName();
+
+
+          if(userService.deleteCurrentUser(username)){
+              return ResponseEntity.ok(new MessageResponse("Account successfully deleted."));
+          }
+
+          return ResponseEntity.status(404).body(new MessageResponse("Wrong username.")) ;
+      }
 
       //Pobranie osiągnięć zalogowanego użytkownika
 //    @GetMapping("/achievements")

@@ -69,7 +69,7 @@ public class UserService {
     public UserResponse editDataAboutUser(String username, EditUserDTO editUserDTO) throws UserAuthenticationException {
         Optional<User> existingUser = userRepository.findByUsername(username);
 
-        if (existingUser.isPresent()) { //TODO: zastanowić się czy OPTIONAL (w nim isPresent)
+        if (existingUser.isPresent()) {
             User userToUpdate = existingUser.get();
 
             userToUpdate.setUsername(editUserDTO.getUsername());
@@ -95,4 +95,15 @@ public class UserService {
         return null;
     }
 
+    @Transactional
+    public Boolean deleteCurrentUser(String username) throws UserAuthenticationException {
+        Optional<User> existingUser = userRepository.findByUsername(username);
+
+        if (existingUser.isPresent()) {
+            userRepository.deleteByUsername(username);
+            return true;
+        }
+        return false;
+
+    }
 }
