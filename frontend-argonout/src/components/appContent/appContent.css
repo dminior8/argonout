@@ -1,0 +1,96 @@
+.AppContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+  
+.container-fluid {
+    min-height: 8vh;
+}
+
+.right-top-container {
+    position: fixed;
+    right: 20px; /* Odległość od prawej krawędzi */
+    top: 20px; /* Odległość od górnej krawędzi */
+    display: flex;
+    flex-direction: column; /* Układa elementy w kolumnie, jeden pod drugim */
+    gap: 20px; /* Odstęp między elementami */
+    margin: 5rem 5rem 0 0;
+}
+
+.right-top-item {
+    display: flex;
+    align-items: center; /* Wyrównuje ikonę i tekst w pionie */
+    color: #D1D1D1;
+    font-size: 1.3rem;
+    padding: 20px;
+    background-color: #202F36; /* Opcjonalne tło */
+    border-radius: 12px; /* Zaokrąglenie krawędzi */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Opcjonalny cień */
+    min-width: 25rem;
+    border: 2px solid #2F7A7E;
+}
+
+.points-icon {
+    width: 45px; /* Szerokość ikony */
+    height: 45px; /* Wysokość ikony */
+    margin-right: 15px; /* Odstęp między ikoną a tekstem */
+}
+
+.points {
+    margin-left: 2.5rem;
+    font-size: 1.6rem;
+}
+
+.right-top-item {
+    min-height: 8rem;
+    display: flex;
+}
+.right-top-item:first-child {
+    min-height: 4rem;
+    font-weight: 550;
+}
+
+
+.right-top-item:nth-child(2) {
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+}
+  
+.top-row {
+    width: 95%;
+    display: flex; /* Ustawia elementy w rzędzie */
+    gap: 2rem; /* Odstęp między elementami w górnym wierszu */
+    text-align: center;
+}
+  
+.first-element {
+    font-weight: bold;
+    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+}
+
+.second-element {
+    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+    
+}
+
+.second-element a:hover{
+    font-weight: bold;
+    transition: 0.3s ease; /* Płynna animacja dla obwódki */
+}
+  
+.third-element {
+    width: 100%; /* Trzeci element zajmuje całą szerokość kontenera */
+    background-color: #202F36; /* Opcjonalne tło */
+    border-radius: 12px; /* Zaokrąglenie krawędzi */
+    margin: 15px 0;
+    text-align: center; /* Wyrównanie tekstu do środka */
+}
+  
+.leaderboard-link {
+    text-decoration: none; /* Usunięcie podkreślenia z linku */
+    color: #2F7A7E; /* Kolor linku */
+}
+

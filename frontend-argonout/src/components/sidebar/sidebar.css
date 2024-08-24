@@ -1,0 +1,65 @@
+/* sidebar.css */
+
+.sidebar {
+    min-width: 400px;
+    height: 100vh; /* Pełna wysokość okna przeglądarki */
+    background-color: #131F24;
+    padding: 20px;
+    position: fixed; /* Ustawienie sidebar na stałej pozycji */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
+}
+
+.sidebar-logo {
+    width: 340px; /* Szerokość logo */
+    height: auto; /* Automatyczna wysokość */
+    margin-right: 10px; /* Odstęp między logo a tekstem */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+    font-size: 20px;
+    min-width: 300px;
+}
+
+.sidebar ul li button {
+    margin: 10px 0;
+    font-size: 30px;
+    color: #D1D1D1;
+}
+
+/* Stylizowanie przycisków */
+.sidebar .MuiButton-outlined {
+    font-size: 1.3rem; /* Rozmiar czcionki */
+    padding: 15px 20px;
+    min-width: 320px;
+    text-align: left; /* Wyrównanie tekstu do lewej */
+    justify-content: flex-start; /* Ustala położenie tekstu i ikony wewnątrz przycisku */
+    border: 2px solid transparent; 
+    border-radius: 12px;
+    color: #D1D1D1; /* Kolor tekstu */
+    background-color: transparent; /* Tło przezroczyste */
+    transition: border 0.3s ease; /* Płynna animacja dla obwódki */
+}
+
+.sidebar .MuiButton-outlined:hover {
+    border: 2px solid #2F7A7E; /* Obwódka po najechaniu */
+    background-color: rgba(0, 0, 0, 0.1); /* Opcjonalnie dodaj tło po najechaniu */
+}
+
+.button-icon {
+    width: 45px; /* Szerokość ikony */
+    height: 45px; /* Wysokość ikony */
+    margin-right: 10px; /* Odstęp między ikoną a tekstem */
+}
+
+.sidebar .MuiButton-outlined a {
+    text-decoration: none;
+    color: inherit; /* Dziedziczy kolor z przycisku */
+}

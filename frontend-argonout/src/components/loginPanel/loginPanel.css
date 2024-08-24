@@ -1,0 +1,93 @@
+.signInForm {
+    margin: 40px 0 0 0;
+    
+}
+.main-container {
+    max-width: 400px;
+    margin: auto;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: calc(100vh - 60px); /* 60px footer*/  
+    background-color: rgba(250, 250, 250, 0.25);
+    color: #b5ebf8;      
+}
+
+.form-container {
+    margin-top: 20px;
+    color: #b5ebf8;
+}
+
+.text-input {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.welcome-text {
+    font-weight: normal; /* Lżejsza czcionka dla "Welcome to" */
+}
+
+.argonout-text {
+    font-weight: bold; /* Początkowe pogrubienie */
+    transition: all 0.15s ease; /* Płynna animacja */
+}
+
+.argonout-text:hover {
+    font-weight: normal; /* Pogrubienie podczas hover */
+    transform: scale(1.05); /* Powiększenie */
+}
+
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #134b4e;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Dodanie płynnej animacji */
+}
+
+.submit-btn:hover {
+    background-color: #0f3b3e; /* Zmiana koloru tła */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie efektu cienia */
+    transform: scale(1.05); /* Powiększenie przycisku */
+}
+
+.register-link {
+    color: #6dcfe7;
+    text-decoration: none; /* usunięcie podkreślenia */
+    font-weight: bold;
+    transition: color 0.3s ease;
+    font-size: 15px;
+  }
+  
+  .register-link:hover {
+    color: #C3EEFF; /* zmiana koloru przy najechaniu myszką */
+  }
+  
+
+
+/* .forgot-password a {
+    color: #517703;
+}
+.forgot-password a:hover {
+    color: #0691b4;
+} */
+.footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.another-option-btn a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #6dcfe7;
+}
+
+.another-option-btn a:hover {
+    text-decoration: none;
+    color: #28a3c2;
+}
