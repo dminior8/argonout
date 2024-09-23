@@ -28,7 +28,9 @@ CREATE TABLE "places" (
   "name" VARCHAR(100) NOT NULL,
   "description" TEXT,
   "latitude" DECIMAL(10,8),
-  "longitude" DECIMAL(11,8)
+  "longitude" DECIMAL(11,8),
+  more_info_link VARCHAR(255),
+  image_url VARCHAR(100)
 );
 
 CREATE TABLE "achievements" (
