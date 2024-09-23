@@ -1,4 +1,4 @@
-package pl.dminior.backendSCM.payloads;
+package pl.dminior.backend_argonout.security.payloads;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,0 +1,70 @@
+/* UserProfile.css */
+.user-profile-container{
+    min-height: 100vh; /* Pełna wysokość widoku */
+}
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Wyśrodkowanie w poziomie */
+    
+    padding: 2rem;
+    background-color: #f4f4f4; /* Tło dla całego kontenera */
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Wyśrodkowanie w poziomie */
+    background-color: #202f36; /* Tło dla karty profilu */
+    color: #D1D1D1; /* Kolor tekstu */
+    padding: 2rem;
+    border-radius: 12px; /* Zaokrąglenie krawędzi */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Cień dla karty */
+    width: 90%;
+    max-width: 800px; /* Maksymalna szerokość karty */
+    margin: 2rem 0;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Odstęp między informacjami */
+    width: 100%;
+}
+
+.profile-info p {
+    font-size: 1.2rem; /* Rozmiar czcionki dla informacji */
+    margin: 0; /* Usunięcie marginesów */
+}
+
+.profile-actions {
+    margin-top: 2rem; /* Odstęp od informacji */
+    display: flex;
+    gap: 1rem; /* Odstęp między przyciskami */
+}
+
+.edit-button, .delete-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button {
+    background-color: #2F7A7E; /* Kolor przycisku edycji */
+}
+
+.edit-button:hover {
+    background-color: #1f5c5b; /* Kolor przycisku edycji po najechaniu */
+}
+
+.delete-button {
+    background-color: #d9534f; /* Kolor przycisku usuwania */
+}
+
+.delete-button:hover {
+    background-color: #c9302c; /* Kolor przycisku usuwania po najechaniu */
+}

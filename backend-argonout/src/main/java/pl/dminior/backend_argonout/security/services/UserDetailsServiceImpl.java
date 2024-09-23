@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dminior.backend_argonout.model.User;
 import pl.dminior.backend_argonout.repository.UserRepository;
-import pl.dminior.backend_argonout.security.services.UserDetailsImpl;
 
 import java.util.Optional;
 

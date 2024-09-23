@@ -1,4 +1,4 @@
-package pl.dminior.backend_argonout.payloads.response;
+package pl.dminior.backend_argonout.security.payloads.response;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;

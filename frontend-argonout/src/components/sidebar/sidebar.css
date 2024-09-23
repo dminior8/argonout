@@ -9,6 +9,8 @@
     top: 0;
     left: 0;
     z-index: 1000; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
+    transition: transform 0.3s ease; /* Płynne przejście przy ukrywaniu */
+    transform: translateX(0); /* Domyślnie widoczny */
 }
 
 .sidebar-logo {
@@ -62,4 +64,42 @@
 .sidebar .MuiButton-outlined a {
     text-decoration: none;
     color: inherit; /* Dziedziczy kolor z przycisku */
+}
+
+.sidebar-button {
+    display: none;
+}
+
+/* Media queries dla mniejszych ekranów */
+@media (max-width: 1150px) {
+    .sidebar {
+        transform: translateX(-100%); /* Ukrywa sidebar na mniejszych ekranach */
+    }
+  
+    .sidebar.open {
+        transform: translateX(0); /* Pokazuje sidebar, gdy otwarty */
+        text-align: center;
+    }
+
+    .sidebar-button {
+        display: block; /* Pokazuje przycisk hamburgera */
+        position: fixed;
+        top: 5%; /* Środek w pionie */
+        left: 50%; /* Środek w poziomie */
+        transform: translate(-50%, -50%); /* Przesunięcie o połowę szerokości i wysokości, aby wyśrodkować */
+        z-index: 1500; /* Wyższy indeks z-index dla przycisku hamburgera */
+        background: #131F24;
+        border: none;
+        color: #D1D1D1;
+        font-size: 24px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 2px solid #2F7A7E;
+        cursor: pointer;
+        min-width: 5rem;
+    }
+
+    .sidebar-button:hover {
+        background: #2F7A7E;
+    }
 }
