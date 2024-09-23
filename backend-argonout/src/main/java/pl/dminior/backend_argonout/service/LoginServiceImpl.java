@@ -1,4 +1,4 @@
-package pl.dminior.backend_argonout.security.services;
+package pl.dminior.backend_argonout.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +14,19 @@ import org.springframework.stereotype.Service;
 
 import pl.dminior.backend_argonout.configuration.PropertiesConfig;
 import pl.dminior.backend_argonout.security.jwt.JwtUtils;
-import pl.dminior.backend_argonout.payloads.request.LoginRequest;
-import pl.dminior.backend_argonout.payloads.response.JwtResponse;
+import pl.dminior.backend_argonout.security.payloads.request.LoginRequest;
+import pl.dminior.backend_argonout.security.payloads.response.JwtResponse;
+import pl.dminior.backend_argonout.security.services.UserDetailsImpl;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class LoginServiceImpl {
+public class LoginServiceImpl implements LoginService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final PropertiesConfig propertiesConfig;
 
+    @Override
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         log.info("Authenticating user: {}", loginRequest.getUsername());
         Authentication authentication;
@@ -47,7 +49,7 @@ public class LoginServiceImpl {
                 userDetails.getRole());
     }
 
-
+    @Override
     public HttpHeaders createHeaders(JwtResponse jwtResponse) {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(HttpHeaders.SET_COOKIE, String.valueOf(createAccessTokenCookie(jwtResponse.getToken(), propertiesConfig.getJwtExpirationMs() / 1000)));
@@ -55,20 +57,22 @@ public class LoginServiceImpl {
         return responseHeaders;
     }
 
-    private HttpCookie createAccessTokenCookie(String token, Long duration) {
+    @Transactional
+    @Override
+    public ResponseEntity<JwtResponse> getJwtResponseResponseEntity(LoginRequest loginRequest) {
+        JwtResponse jwtResponse = authenticateUser(loginRequest);
+        HttpHeaders responseHeaders = createHeaders(jwtResponse);
+        return ResponseEntity.ok().headers(responseHeaders).body(jwtResponse);
+    }
+
+    @Override
+    public HttpCookie createAccessTokenCookie(String token, Long duration) {
         return ResponseCookie.from(propertiesConfig.getAccessTokenCookieName(), token)
                 .maxAge(duration)
                 .httpOnly(true)
                 .sameSite("Strict")
                 .path("/")
                 .build();
-    }
-
-    @Transactional
-    public ResponseEntity<JwtResponse> getJwtResponseResponseEntity(LoginRequest loginRequest) {
-        JwtResponse jwtResponse = authenticateUser(loginRequest);
-        HttpHeaders responseHeaders = createHeaders(jwtResponse);
-        return ResponseEntity.ok().headers(responseHeaders).body(jwtResponse);
     }
 
 }

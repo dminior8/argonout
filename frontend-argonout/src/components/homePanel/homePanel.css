@@ -4,6 +4,12 @@
     flex-direction: column;
     min-height: 100vh;
 }
+
+.main-content {
+    display: flex;
+    position: relative; /* Umożliwia użycie absolute w dziecięcych elementach */
+    min-width: 1200px;
+}
   
 .container-fluid {
     min-height: 8vh;
@@ -21,7 +27,7 @@
 
 .right-top-item {
     display: flex;
-    align-items: center; /* Wyrównuje ikonę i tekst w pionie */
+    align-items: left; /* Wyrównuje ikonę i tekst w pionie */
     color: #D1D1D1;
     font-size: 1.3rem;
     padding: 20px;
