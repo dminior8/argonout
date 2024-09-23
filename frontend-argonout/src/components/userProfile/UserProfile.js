@@ -19,7 +19,6 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState(userProfile);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -84,7 +83,7 @@ const UserProfile = () => {
       });
 
       Cookies.remove('accessTokenFront');
-      navigate('/api/auth/login');
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting account:', error);
     }

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import Sidebar from "../sidebar/Sidebar";
+import BasicMap from "./map/basicMap";
 import { useUser } from '../userProfile/UserContext';
+
 import "./homePanel.css";
 
 const HomePage = () => {
-  const { user } = useUser(); // Use user context
+  const { user } = useUser(); 
 
   const fetchData = async () => {
     try {
@@ -21,8 +23,7 @@ const HomePage = () => {
   return (
     <div className="AppContent">
       <div className="main-content">
-        <Sidebar /> {/* Dodajemy Sidebar */}
-        <div className="container-fluid">
+        <Sidebar /> 
           <div className="right-top-container">
             <div className="right-top-item">
             <div className="d-flex align-items-center">
@@ -45,7 +46,9 @@ const HomePage = () => {
             </div>
             </div>
           </div>
-        </div>
+
+        <BasicMap />
+
       </div>
     </div>
   );
