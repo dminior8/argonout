@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Button, Container, Typography, Box, TextField } from '@mui/material';
+import { Button, Container, Box, TextField, Card, CardContent, List, ListItem, ListItemText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './userProfile.css'; // Import stylów
+import Sidebar from '../sidebar/Sidebar';
 
 const UserProfile = () => {
   const [userProfile, setUserProfile] = useState({
@@ -37,7 +37,7 @@ const UserProfile = () => {
         });
 
         setUserProfile(response.data);
-        setEditedProfile(response.data); // Initialize edit form with current profile data
+        setEditedProfile(response.data);
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
@@ -89,77 +89,157 @@ const UserProfile = () => {
       console.error('Error deleting account:', error);
     }
   };
+  
 
   return (
-    <Container className="user-profile-container">
-      <Typography variant="h4" className="user-profile-header">User Profile</Typography>
-      <Box className="user-profile-details">
-        {isEditing ? (
-          <div className="user-profile-edit-form">
-            <TextField
-              fullWidth
-              label="Username"
-              name="username"
-              value={editedProfile.username}
-              onChange={handleChange}
-              sx={{ marginBottom: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={editedProfile.email}
-              onChange={handleChange}
-              sx={{ marginBottom: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="First Name"
-              name="firstName"
-              value={editedProfile.firstName}
-              onChange={handleChange}
-              sx={{ marginBottom: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Surname"
-              name="surname"
-              value={editedProfile.surname}
-              onChange={handleChange}
-              sx={{ marginBottom: 2 }}
-            />
-            <Box className="user-profile-buttons">
-              <Button className="save-button" onClick={handleSave}>
-                Save
-              </Button>
-              <Button className="cancel-button" onClick={handleEditToggle}>
-                Cancel
-              </Button>
+    <Container sx={{ paddingTop: '3.5rem', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Sidebar />
+      <Card sx={{width: '100%', maxWidth: '450px', backgroundColor: '#202F36', color: '#D1D1D1', borderRadius: '12px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', padding: '2rem', margin: '2rem 0' }}>
+        <CardContent>
+          <Box sx={{ textAlign: 'center', color: '#3ac2c9', marginBottom: '1.5rem', fontSize: '24px', fontWeight: 'bold' }}>
+            User Profile
+          </Box>
+          {isEditing ? (
+            <Box>
+              <TextField
+                fullWidth
+                label="Username"
+                name="username"
+                value={editedProfile.username}
+                onChange={handleChange}
+                sx={{ marginBottom: 2 }}
+                InputLabelProps={{
+                  style: { color: '#D1D1D1', fontWeight: 'bold', letterSpacing: '2px' }, 
+                }}
+                InputProps={{
+                  style: { color: '#def7f4' }, 
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={editedProfile.email}
+                onChange={handleChange}
+                sx={{ marginBottom: 2 }}
+                InputLabelProps={{
+                  style: { color: '#D1D1D1', fontWeight: 'bold', letterSpacing: '2px' }, 
+                }}
+                InputProps={{
+                  style: { color: '#def7f4' }, 
+                }}
+              />
+              <TextField
+                fullWidth
+                label="First Name"
+                name="firstName"
+                value={editedProfile.firstName}
+                onChange={handleChange}
+                sx={{ marginBottom: 2 }}
+                InputLabelProps={{
+                  style: { color: '#D1D1D1', fontWeight: 'bold', letterSpacing: '2px' }, 
+                }}
+                InputProps={{
+                  style: { color: '#def7f4' }, 
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Surname"
+                name="surname"
+                value={editedProfile.surname}
+                onChange={handleChange}
+                sx={{ marginBottom: 2 }}
+                InputLabelProps={{
+                  style: { color: '#D1D1D1', fontWeight: 'bold', letterSpacing: '2px' }, 
+                }}
+                InputProps={{
+                  style: { color: '#def7f4' },
+                }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+                <Button onClick={handleSave} variant="contained" color="primary" sx={{ minWidth: '8rem' }}>
+                  Save
+                </Button>
+                <Button onClick={handleEditToggle} variant="outlined" color="secondary" sx={{ minWidth: '8rem' }}>
+                  Cancel
+                </Button>
+              </Box>
             </Box>
-          </div>
-        ) : (
-          <>
-            <Typography variant="body1">Username: {userProfile.username}</Typography>
-            <Typography variant="body1">Email: {userProfile.email}</Typography>
-            <Typography variant="body1">First Name: {userProfile.firstName}</Typography>
-            <Typography variant="body1">Surname: {userProfile.surname}</Typography>
-            <Typography variant="body1">Role: {userProfile.role}</Typography>
-            <Typography variant="body1">Points: {userProfile.points}</Typography>
-            <Typography variant="body1">
-              Created At: {new Date(userProfile.createdAt).toLocaleString()}
-            </Typography>
-            <Box className="user-profile-buttons">
-              <Button className="save-button" onClick={handleEditToggle}>
-                Edit Profile
-              </Button>
-              <Button className="delete-button" onClick={handleDeleteAccount}>
-                Delete Account
-              </Button>
-            </Box>
-          </>
-        )}
-      </Box>
+          ) : (
+            <List>
+              <ListItem>
+                <ListItemText 
+                  primary="Username" 
+                  secondary={userProfile.username} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="Email" 
+                  secondary={userProfile.email} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px'} }}
+                  
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="First Name" 
+                  secondary={userProfile.firstName} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="Surname" 
+                  secondary={userProfile.surname} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="Role" 
+                  secondary={userProfile.role} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="Points" 
+                  secondary={userProfile.points} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText 
+                  primary="Created At" 
+                  secondary={new Date(userProfile.createdAt).toLocaleString()} 
+                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                />
+              </ListItem>
+
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+                <Button onClick={handleEditToggle} variant="contained" color="primary" sx={{ minWidth: '8rem' }}>
+                  Edit Profile
+                </Button>
+                <Button onClick={handleDeleteAccount} variant="outlined" color="error" sx={{ minWidth: '8rem' }}>
+                  Delete Account
+                </Button>
+              </Box>
+            </List>
+          )}
+        </CardContent>
+      </Card>
     </Container>
   );
 };

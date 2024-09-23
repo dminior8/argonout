@@ -1,6 +1,8 @@
 package pl.dminior.backend_argonout.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -30,11 +32,14 @@ public class UserController {
 
     @PutMapping
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<UserResponse> editDataAboutUser(@RequestBody EditUserDTO editUserDTO) throws UserAuthenticationException {
+    public ResponseEntity<MessageResponse> editDataAboutUser(@RequestBody EditUserDTO editUserDTO) throws UserAuthenticationException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
-        return ResponseEntity.ok(userServiceImpl.editDataAboutUser(username, editUserDTO));
+        if(userServiceImpl.editDataAboutUser(username, editUserDTO) != null){
+            return ResponseEntity.ok(new MessageResponse("Account edited successfully"));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Error during account editing"));
     }
 
     @DeleteMapping
