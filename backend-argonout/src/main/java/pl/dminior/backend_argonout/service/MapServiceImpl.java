@@ -20,4 +20,12 @@ public class MapServiceImpl implements MapService{
     public List<Place> getAllLocations(){
         return mapRepository.findAll();
     }
+
+    @Override
+    public boolean setLocation(Place place){
+        System.out.println(place.getDescription() + " " + place.getName());
+        mapRepository.save(place);
+
+        return true;
+    }
 }

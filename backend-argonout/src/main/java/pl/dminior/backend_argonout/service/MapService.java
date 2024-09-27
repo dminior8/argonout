@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface MapService {
     List<Place> getAllLocations();
+
+    boolean setLocation(Place place);
 }

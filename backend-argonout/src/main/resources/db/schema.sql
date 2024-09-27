@@ -30,7 +30,7 @@ CREATE TABLE "places" (
   "latitude" DECIMAL(10,8),
   "longitude" DECIMAL(11,8),
   more_info_link VARCHAR(255),
-  image_url VARCHAR(100)
+  image BYTEA
 );
 
 CREATE TABLE "achievements" (

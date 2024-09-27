@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
-import { useMapEvents } from "react-leaflet";
-import L from 'leaflet';
-import { Icon } from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents } from "react-leaflet";
+import L, { Icon } from 'leaflet';
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Upewnij się, że ten import jest w Twoim kodzie
+import Cookies from 'js-cookie';
 import osm from "./osm-providers";
 import './basicMap.css';
 import 'leaflet/dist/leaflet.css';
@@ -30,7 +28,7 @@ L.Icon.Default.mergeOptions({
 // Komponent do lokalizacji użytkownika
 function LocationMarker() {
   const [position, setPosition] = useState(null);
-  
+
   const map = useMapEvents({
     click() {
       map.locate();
@@ -52,8 +50,21 @@ function LocationMarker() {
   );
 }
 
+// Komponent nasłuchujący na kliknięcia na mapie w trybie dodawania miejsca
+const MapClickHandler = ({ addPlaceMode, onMapClick }) => {
+  useMapEvents({
+    click(e) {
+      if (addPlaceMode) {
+        onMapClick(e.latlng); // Ustaw pozycję nowego miejsca
+      }
+    },
+  });
+
+  return null;
+};
+
 // Główny komponent mapy
-const BasicMap = () => {
+const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
   const ZOOM_LEVEL = 12;
   const [center, setCenter] = useState({ lat: 50.05931, lng: 19.94251 });
   const [places, setCoordinates] = useState([]);
@@ -69,17 +80,15 @@ const BasicMap = () => {
       });
 
       const locations = response.data;
-      // Zakładam, że dane mają format odpowiedni do użycia jako współrzędne
-      setCoordinates(locations); // Zaktualizuj stan z pobranymi danymi
+      setCoordinates(locations);
     } catch (error) {
       console.error('Error fetching locations:', error);
     }
   };
 
-  // Użyj useEffect do wywołania funkcji pobierania danych
   useEffect(() => {
     handleGetAll();
-  }, []); // Pusty array oznacza, że efekt uruchomi się tylko raz, po zamontowaniu komponentu
+  }, []);
 
   return (
     <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={false} className="rounded-map">
@@ -87,18 +96,34 @@ const BasicMap = () => {
         url={osm.maptiler.url}
         attribution={osm.maptiler.attribution}
       />
+      {/* Renderowanie istniejących miejsc */}
       {places.map((markerData, index) => (
         <Marker key={index} position={[markerData.latitude, markerData.longitude]} icon={customIcon}>
           <Popup>
             <div className="popupContainer">
               <h5>{markerData.name}</h5>
-              <img src={process.env.PUBLIC_URL + '/icons/mapMarkersImages' + markerData.imageUrl} alt="Monument photo" />
+              {markerData.imageUrl && <img src={process.env.PUBLIC_URL + '/icons/mapMarkersImages' + markerData.imageUrl} alt="Monument photo" />}
               <p>{markerData.description}</p>
               <a href={markerData.moreInfoLink}>Click for more info</a>
             </div>
           </Popup>
         </Marker>
       ))}
+
+      {/* Renderowanie znacznika dodawanego miejsca */}
+      {newPlacePosition && (
+        <Marker position={newPlacePosition} icon={customIcon}>
+          <Popup>
+            <div>
+              <h4>Nowe miejsce</h4>
+              <p>Kliknij poniżej, aby dodać szczegóły.</p>
+            </div>
+          </Popup>
+        </Marker>
+      )}
+
+      {/* Nasłuchiwacz kliknięć na mapie */}
+      <MapClickHandler addPlaceMode={addPlaceMode} onMapClick={onMapClick} />
       <LocationMarker />
     </MapContainer>
   );
