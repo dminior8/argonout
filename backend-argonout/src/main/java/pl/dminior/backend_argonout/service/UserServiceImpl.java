@@ -1,6 +1,7 @@
 package pl.dminior.backend_argonout.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
@@ -15,17 +16,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public void registerUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail()) ||

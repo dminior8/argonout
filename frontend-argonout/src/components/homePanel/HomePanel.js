@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from 'axios';
@@ -14,8 +14,8 @@ const AddPlaceForm = ({ position, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    moreInfoLink: '',
-    image: null,
+    selectedRoute: '',
+    moreInfoLink: ''
   });
 
   const handleInputChange = (e) => {
@@ -26,63 +26,93 @@ const AddPlaceForm = ({ position, onSubmit, onClose }) => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      image: e.target.files[0],
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({...formData, selectedMap});
+  };
+
+  //ROUTES OPTIONS
+  const [maps, setMaps] = useState([]); // Stan do przechowywania listy map
+  const [selectedMap, setSelectedMap] = useState(null); // Stan do przechowywania wybranej mapy
+   
+  // Funkcja do pobierania map z API
+   const fetchMaps = async () => {
+    try {
+      const token = Cookies.get('accessTokenFront')
+      const response = await axios.get('http://localhost:8080/api/routes/all', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }); // Endpoint do pobrania map
+      setMaps(response.data); // Ustawienie stanu na pobrane dane
+    } catch (error) {
+      console.error('Error during routes fetching: ', error);
+    }
+  };
+
+  // Użycie useEffect do załadowania map po zamontowaniu komponentu
+  useEffect(() => {
+    fetchMaps();
+  }, []);
+
+  // Funkcja do obsługi zmiany wybranej mapy
+  const handleMapChange = (e) => {
+    const selectedMapId = e.target.value;
+    const map = maps.find((m) => m.id === selectedMapId); // Znajdź cały obiekt mapy na podstawie ID
+    
+    setSelectedMap(map); // Zapisz cały obiekt mapy, nie tylko ID
   };
 
   return (
     <div className="add-place-form">
-      <h3>Dodaj nowe miejsce</h3>
+      <h3>DODAJ NOWE MIEJSCE</h3>
       {position && (
         <p>Nowe miejsce będzie dodane w lokalizacji: {`(${position.lat}, ${position.lng})`}</p>
       )}
       <form onSubmit={handleSubmit} className="place-form">
-        <div>
-          <label>Nazwa:</label>
           <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Opis:</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Link do strony:</label>
+                className="text-input"
+                type="text"
+                name="name"
+                placeholder="Nazwa"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+          />          
+        <input
+                className="text-input"
+                type="text"
+                name="description"
+                placeholder="Opis"
+                value={formData.description}
+                onChange={handleInputChange}
+                required
+          />  
           <input
-            type="url"
-            name="moreInfoLink"
-            value={formData.moreInfoLink}
-            onChange={handleInputChange}
+                className="text-input"
+                type="url"
+                name="moreInfoLink"
+                placeholder="Link"
+                value={formData.moreInfoLink}
+                onChange={handleInputChange}
+                required
           />
-        </div>
-        <div>
-          <label>Zdjęcie:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </div>
-        <button type="submit">Dodaj miejsce</button>
-        <button type="button" onClick={onClose} style={{ marginLeft: '10px' }}>Anuluj</button>
+            <select
+              className="form-select"
+              id="mapSelect"
+              value={selectedMap ? selectedMap.id : ''}
+              onChange={handleMapChange}
+              required
+            >
+              <option value="">Wybierz mapę</option>
+              {maps.map((map) => ( // Renderowanie opcji na podstawie pobranych danych
+                <option key={map.id} value={map.id}> {/* Zakładamy, że każdy obiekt mapy ma unikalne 'id' */}
+                  {map.name} {/* Zakładamy, że każdy obiekt mapy ma pole 'name' */}
+                </option>
+              ))}
+            </select>
+            <br/>
+        <button type="submit" className="btn btn-secondary">Dodaj miejsce</button>
       </form>
     </div>
   );
@@ -108,48 +138,47 @@ const HomePage = () => {
   // Funkcja do obsługi dodania miejsca
   const handleAddPlace = async (placeData) => {
     if (!newPlacePosition) {
-      console.error("Brak pozycji miejsca do dodania.");
+      console.error("No place selected.");
       return;
     }
   
-    const { name, description, moreInfoLink, image } = placeData;
-  
-    // Tworzenie obiektu formularza, aby wysłać dane, w tym plik obrazu, do backendu.
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("moreInfoLink", moreInfoLink);
-    formData.append("latitude", newPlacePosition.lat); // Dodaj współrzędne
-    formData.append("longitude", newPlacePosition.lng); // Dodaj współrzędne
-    if (formData.image) {  // użycie image z formData
-      formData.append("image", formData.image);  // użycie formData.image
-  }
+    const { name, description, moreInfoLink, selectedMap } = placeData;
+    
+    // Tworzenie obiektu do wysłania jako JSON
+    const payload = {
+      name,
+      description,
+      moreInfoLink,
+      latitude: newPlacePosition.lat,
+      longitude: newPlacePosition.lng,
+      routeId: selectedMap.id // Przesyłamy cały obiekt mapy
+    };
+    console.log('Payload:', JSON.stringify(payload, null, 2));
+
   
     try {
-      const token = Cookies.get('accessTokenFront'); // Pobranie tokenu autoryzacyjnego, jeśli jest wymagany.
-      
-      // Wysłanie danych do backendu.
-      const response = await axios.post('http://localhost:8080/api/map/add-location', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Nagłówek dla formData
+      const token = Cookies.get('accessTokenFront'); 
+      const response = await axios.post('http://localhost:8080/api/map/add-location', payload, {
+        headers: { 
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Nagłówek autoryzacyjny
         },
       });
-  
-      console.log('Dane miejsca zostały pomyślnie dodane:', response.data);
+      
+      console.log('New place added succesfully: ', response.data);
       
       setAddPlaceMode(false);
       setNewPlacePosition(null);
 
   } catch (error) {
-    console.error("Wystąpił błąd podczas dodawania nowego miejsca:", error);
+    console.error("Error during adding new place: ", error);
   }
   };
 
   return (
     <div className="AppContent">
-      <div className="main-content">
         <Sidebar />
+        <div className="top-container">
         <div className="right-top-container">
           <div className="right-top-item">
             <div className="d-flex align-items-center">
@@ -172,30 +201,39 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-
+        </div>
         {/* Komponent mapy */}
+        <div className="bottom-container">
         <BasicMap
           addPlaceMode={addPlaceMode}
           onMapClick={handleMapClick}
           newPlacePosition={newPlacePosition} // Przekazanie pozycji do komponentu mapy
         />
-        
-        {/* Przycisk do przełączania trybu dodawania miejsca */}
-        <button
-          onClick={toggleAddPlaceMode}
-          style={{
-            marginTop: '15px',
-            padding: '10px 15px',
-            backgroundColor: addPlaceMode ? 'red' : 'green',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-          }}
-        >
-          {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
-        </button>
+        </div>
+        <div>
+          {/* Przycisk do przełączania trybu dodawania miejsca */}
+          <button
+          className="btn-primary"
+            onClick={toggleAddPlaceMode}
+            style={{
+              marginTop: '15px',
+              padding: '10px 15px',
+              backgroundColor: addPlaceMode ? 'red' : 'green',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+            }}
+          >
+            {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
+          </button>
+        </div>
 
         {/* Formularz dodawania miejsca poniżej mapy */}
+        <div className="bottom-right-container"
+          style={{
+            display: addPlaceMode ? 'block' : 'none', // Ustawienie stylu 'display' w zależności od warunków
+          }}
+        >
         {addPlaceMode && (
           <AddPlaceForm
             position={newPlacePosition}
@@ -203,7 +241,7 @@ const HomePage = () => {
             onClose={() => setNewPlacePosition(null)}
           />
         )}
-      </div>
+        </div>
     </div>
   );
 };

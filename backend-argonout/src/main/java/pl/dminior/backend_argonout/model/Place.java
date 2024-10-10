@@ -7,16 +7,17 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
-@Entity
+
 @Getter
 @Setter
+@Entity
 @Table(name = "places")
 public class Place {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID placeId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "place_id")
+    private UUID id;
 
     private String name;
 
@@ -28,6 +29,4 @@ public class Place {
 
     private String moreInfoLink;
 
-    @Lob
-    private byte[] image;
 }

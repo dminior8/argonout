@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
+import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
 import pl.dminior.backend_argonout.model.Place;
+import pl.dminior.backend_argonout.model.Route;
 import pl.dminior.backend_argonout.security.payloads.request.LoginRequest;
 import pl.dminior.backend_argonout.security.payloads.response.JwtResponse;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
@@ -31,36 +34,16 @@ public class MapController {
     }
 
 
-    @PostMapping(value = "/map/add-location", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/map/add-location")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<MessageResponse> setLocation(
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
-            @RequestParam("moreInfoLink") String moreInfoLink,
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+    public ResponseEntity<MessageResponse> setLocation(@RequestBody PlaceWithRouteDTO placeWithRouteDTO) {
 
-        // Tworzenie obiektu Place na podstawie otrzymanych danych
-        Place place = new Place();
-        place.setName(name);
-        place.setDescription(description);
-        place.setMoreInfoLink(moreInfoLink);
-        place.setLatitude(latitude);
-        place.setLongitude(longitude);
-        place.setImage(null);
-        // Logika dodawania obrazu (jeśli przekazany)
-        if (image != null && !image.isEmpty()) {
-            try {
-                place.setImage(image.getBytes()); // Przekształcenie obrazu na tablicę bajtów
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Error processing image"));
-            }
-        }
-
-        if (mapService.setLocation(place)) {
+        mapService.setLocation(placeWithRouteDTO);
             return ResponseEntity.ok().body(new MessageResponse("Place added successfully"));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Error during place adding"));
+    }
+
+    @GetMapping("/routes/all")
+    public ResponseEntity<List<SimpleRouteDTO>> getAllRoutes() {
+        return ResponseEntity.ok().body(mapService.getAllRoutes());
     }
 }

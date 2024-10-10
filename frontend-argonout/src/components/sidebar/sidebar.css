@@ -71,7 +71,7 @@
 }
 
 /* Media queries dla mniejszych ekranów */
-@media (max-width: 1350px) {
+@media (max-width: 92rem) {
     .sidebar {
         transform: translateX(-100%); /* Ukrywa sidebar na mniejszych ekranach */
     }
