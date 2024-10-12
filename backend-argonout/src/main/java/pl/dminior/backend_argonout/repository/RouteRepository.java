@@ -9,4 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface RouteRepository extends JpaRepository<Route, UUID> {
+
+
+    Route getById(UUID id);
 }

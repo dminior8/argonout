@@ -21,7 +21,7 @@ public class Route {
       private String description;
       private int maxTime;
 
-      @ManyToMany(cascade = CascadeType.ALL)
+      @OneToMany(cascade = CascadeType.ALL)
       @JoinTable(
               name = "routes_places",
               joinColumns = @JoinColumn(name = "route_id"),
