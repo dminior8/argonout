@@ -45,7 +45,7 @@ function LocationMarker() {
       pathOptions={blueOptions}
       radius={100}
     >
-      <Popup>Your location</Popup>
+      <Popup>Tu jesteś!</Popup>
     </Circle>
   );
 }
@@ -64,7 +64,7 @@ const MapClickHandler = ({ addPlaceMode, onMapClick }) => {
 };
 
 // Główny komponent mapy
-const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
+const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) => {
   const ZOOM_LEVEL = 12;
   const [center, setCenter] = useState({ lat: 50.05931, lng: 19.94251 });
   const [places, setCoordinates] = useState([]);
@@ -73,7 +73,7 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
   const handleGetAll = async () => {
     try {
       const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/map/all-locations', {
+      const response = await axios.get('http://localhost:8080/api/places', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,6 +90,12 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
     handleGetAll();
   }, []);
 
+  const handlePopupClick = (markerData) => {
+    if (onPopupClick) {
+      onPopupClick(markerData); // Wywołanie funkcji przekazanej z komponentu nadrzędnego
+    }
+  };
+
   return (
     <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={false} className="rounded-map">
       <TileLayer
@@ -98,13 +104,21 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
       />
       {/* Renderowanie istniejących miejsc */}
       {places.map((markerData, index) => (
-        <Marker key={index} position={[markerData.latitude, markerData.longitude]} icon={customIcon}>
+        <Marker 
+        key={index} 
+        position={[markerData.latitude, markerData.longitude]} 
+        icon={customIcon}
+        eventHandlers={{
+          click: () => {
+            handlePopupClick(markerData); // Funkcja obsługująca kliknięcie na markerze
+          },
+        }}
+      >
           <Popup>
-            <div className="popupContainer">
+            <div className="popupContainer" >
               <h5>{markerData.name}</h5>
-              {markerData.imageUrl && <img src={process.env.PUBLIC_URL + '/icons/mapMarkersImages' + markerData.imageUrl} alt="Monument photo" />}
               <p>{markerData.description}</p>
-              <a href={markerData.moreInfoLink}>Click for more info</a>
+              <a href={markerData.moreInfoLink}>Kliknij po więcej informacji</a>
             </div>
           </Popup>
         </Marker>
@@ -116,7 +130,7 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition }) => {
           <Popup>
             <div>
               <h4>Nowe miejsce</h4>
-              <p>Kliknij poniżej, aby dodać szczegóły.</p>
+              <p>Uzupełnij formularz dodając szczegóły.</p>
             </div>
           </Popup>
         </Marker>

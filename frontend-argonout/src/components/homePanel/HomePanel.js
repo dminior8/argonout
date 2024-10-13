@@ -3,19 +3,18 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from 'axios';
 
-
 import Sidebar from "../sidebar/Sidebar";
 import BasicMap from "./map/basicMap";
 import { useUser } from '../userProfile/UserContext';
 import './homePanel.css';
 
 // Komponent formularza dodawania miejsca
-const AddPlaceForm = ({ position, onSubmit, onClose }) => {
+const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    selectedRoute: '',
-    moreInfoLink: ''
+    name: placeData?.name || '',
+    description: placeData?.description || '',
+    selectedRoute: placeData?.selectedMap || '',
+    moreInfoLink: placeData?.moreInfoLink || ''
   });
 
   const handleInputChange = (e) => {
@@ -33,86 +32,84 @@ const AddPlaceForm = ({ position, onSubmit, onClose }) => {
 
   //ROUTES OPTIONS
   const [maps, setMaps] = useState([]); // Stan do przechowywania listy map
-  const [selectedMap, setSelectedMap] = useState(null); // Stan do przechowywania wybranej mapy
-   
-  // Funkcja do pobierania map z API
-   const fetchMaps = async () => {
+  const [selectedMap, setSelectedMap] = useState(placeData?.selectedMap || null); // Stan do przechowywania wybranej mapy
+
+  useEffect(() => {
+    fetchMaps();
+  }, []);
+
+  const fetchMaps = async () => {
     try {
-      const token = Cookies.get('accessTokenFront')
+      const token = Cookies.get('accessTokenFront');
       const response = await axios.get('http://localhost:8080/api/routes/all', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }); // Endpoint do pobrania map
-      setMaps(response.data); // Ustawienie stanu na pobrane dane
+      });
+      setMaps(response.data);
     } catch (error) {
       console.error('Error during routes fetching: ', error);
     }
   };
 
-  // Użycie useEffect do załadowania map po zamontowaniu komponentu
-  useEffect(() => {
-    fetchMaps();
-  }, []);
-
-  // Funkcja do obsługi zmiany wybranej mapy
   const handleMapChange = (e) => {
     const selectedMapId = e.target.value;
-    const map = maps.find((m) => m.id === selectedMapId); // Znajdź cały obiekt mapy na podstawie ID
-    
-    setSelectedMap(map); // Zapisz cały obiekt mapy, nie tylko ID
+    const map = maps.find((m) => m.id === selectedMapId);
+    setSelectedMap(map);
   };
 
   return (
     <div className="add-place-form">
-      <h3>DODAJ NOWE MIEJSCE</h3>
+      <h3>{placeData ? 'EDYTUJ MIEJSCE' : 'DODAJ NOWE MIEJSCE'}</h3>
       {position && (
-        <p>Nowe miejsce będzie dodane w lokalizacji: {`(${position.lat}, ${position.lng})`}</p>
+        <p>Miejsce w lokalizacji: {`(${position.lat}, ${position.lng})`}</p>
       )}
       <form onSubmit={handleSubmit} className="place-form">
-          <input
-                className="text-input"
-                type="text"
-                name="name"
-                placeholder="Nazwa"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-          />          
         <input
-                className="text-input"
-                type="text"
-                name="description"
-                placeholder="Opis"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-          />  
-          <input
-                className="text-input"
-                type="url"
-                name="moreInfoLink"
-                placeholder="Link"
-                value={formData.moreInfoLink}
-                onChange={handleInputChange}
-                required
-          />
-            <select
-              className="form-select"
-              id="mapSelect"
-              value={selectedMap ? selectedMap.id : ''}
-              onChange={handleMapChange}
-              required
-            >
-              <option value="">Wybierz mapę</option>
-              {maps.map((map) => ( // Renderowanie opcji na podstawie pobranych danych
-                <option key={map.id} value={map.id}> {/* Zakładamy, że każdy obiekt mapy ma unikalne 'id' */}
-                  {map.name} {/* Zakładamy, że każdy obiekt mapy ma pole 'name' */}
-                </option>
-              ))}
-            </select>
-            <br/>
-        <button type="submit" className="btn btn-secondary">Dodaj miejsce</button>
+          className="text-input"
+          type="text"
+          name="name"
+          placeholder="Nazwa"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
+        />
+        <textarea
+          className="text-input"
+          name="description"
+          placeholder="Opis"
+          rows="4"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          className="text-input"
+          type="url"
+          name="moreInfoLink"
+          placeholder="Link"
+          value={formData.moreInfoLink}
+          onChange={handleInputChange}
+          required
+        />
+        <select
+          className="form-select"
+          id="mapSelect"
+          value={selectedMap ? selectedMap.id : ''}
+          onChange={handleMapChange}
+          required
+        >
+          <option value="">Wybierz mapę</option>
+          {maps.map((map) => (
+            <option key={map.id} value={map.id}>
+              {map.name}
+            </option>
+          ))}
+        </select>
+        <br />
+        <button type="submit" className="btn btn-secondary">
+          {placeData ? 'Zapisz zmiany' : 'Dodaj miejsce'}
+        </button>
       </form>
     </div>
   );
@@ -120,18 +117,56 @@ const AddPlaceForm = ({ position, onSubmit, onClose }) => {
 
 const HomePage = () => {
   const { user } = useUser();
-  const [addPlaceMode, setAddPlaceMode] = useState(false); // Stan do zarządzania trybem dodawania miejsca
-  const [newPlacePosition, setNewPlacePosition] = useState(null); // Pozycja nowego miejsca
+  const [addPlaceMode, setAddPlaceMode] = useState(false); // Tryb dodawania miejsca
+  const [editPlaceMode, setEditPlaceMode] = useState(false); // Tryb edycji miejsca
+  const [newPlacePosition, setNewPlacePosition] = useState(null); 
+  const [selectedPlace, setSelectedPlace] = useState(null); 
 
-  // Funkcja do przełączania trybu dodawania miejsca
   const toggleAddPlaceMode = () => {
     setAddPlaceMode((prevMode) => !prevMode);
+    setSelectedPlace(null);
+    setEditPlaceMode(false); // Wyłączenie trybu edycji
+    setNewPlacePosition(null);
   };
 
-  // Funkcja do obsługi kliknięcia na mapie i ustawienia pozycji nowego miejsca
   const handleMapClick = (position) => {
+    setSelectedPlace(null);
     if (addPlaceMode) {
       setNewPlacePosition(position);
+    }
+  };
+
+  const handlePlaceSelect = (place) => {
+    setSelectedPlace(place);
+    setEditPlaceMode(false); // Wyłączenie trybu edycji
+  };
+
+  const handleEditPlace = () => {
+    setEditPlaceMode((prevMode) => !prevMode);
+    setAddPlaceMode(false); // Wyłączenie trybu dodawania
+  };
+
+  const handleDeletePlace = async () => {
+    if (selectedPlace) {
+      const confirmation = window.confirm(`Czy na pewno chcesz usunąć miejsce: ${selectedPlace.name}?`);
+      if (!confirmation) return;
+  
+      try {
+        const token = Cookies.get('accessTokenFront');
+        await axios.delete(`http://localhost:8080/api/map/places/${selectedPlace.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        console.log('Place deleted successfully.');
+        window.location.reload();
+  
+        setSelectedPlace(null);  // Wyczyść zaznaczone miejsce
+  
+      } catch (error) {
+        console.error('Error deleting place:', error);
+      }
     }
   };
 
@@ -158,7 +193,7 @@ const HomePage = () => {
   
     try {
       const token = Cookies.get('accessTokenFront'); 
-      const response = await axios.post('http://localhost:8080/api/map/add-location', payload, {
+      const response = await axios.post('http://localhost:8080/api/map/places/add', payload, {
         headers: { 
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Nagłówek autoryzacyjny
@@ -169,17 +204,47 @@ const HomePage = () => {
       
       setAddPlaceMode(false);
       setNewPlacePosition(null);
+      window.location.reload();
 
   } catch (error) {
     console.error("Error during adding new place: ", error);
   }
   };
 
+  //funkcja asynchroniczna mająca przekazać otrzymane dane (placeData)
+  const handleUpdatePlace = async (placeData) => {
+    const { name, description, moreInfoLink, selectedMap } = placeData;
+    //payload to DTO (obiekt danych), który ma być zaktualizowany na serwerze
+    const payload = { 
+      name,
+      description,
+      moreInfoLink,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
+      routeId: selectedMap.id
+    };
+    try {
+      const token = Cookies.get('accessTokenFront');
+      const response = await axios.put(`http://localhost:8080/api/map/places/${selectedPlace.id}`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Place updated successfully:', response.data);
+      setSelectedPlace(null);
+      setEditPlaceMode(false);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error during updating place:', error);
+    }
+  };
+
   return (
     <div className="AppContent">
-        <Sidebar />
-        <div className="top-container">
-        <div className="right-top-container">
+      <Sidebar />
+      <div className="top-container">
+      <div className="right-top-container">
           <div className="right-top-item">
             <div className="d-flex align-items-center">
               <img src="/icons/star_8605046.png" alt="Icon" className="points-icon" />
@@ -202,46 +267,86 @@ const HomePage = () => {
           </div>
         </div>
         </div>
+
         {/* Komponent mapy */}
-        <div className="bottom-container">
+      <div className="bottom-container">
         <BasicMap
           addPlaceMode={addPlaceMode}
           onMapClick={handleMapClick}
-          newPlacePosition={newPlacePosition} // Przekazanie pozycji do komponentu mapy
+          newPlacePosition={newPlacePosition}
+          onPopupClick={handlePlaceSelect}
         />
-        </div>
-        <div>
-          {/* Przycisk do przełączania trybu dodawania miejsca */}
-          <button
+      </div>
+      <div>
+        <button
           className="btn-primary"
-            onClick={toggleAddPlaceMode}
+          onClick={toggleAddPlaceMode}
+          style={{
+            marginTop: '15px',
+            padding: '10px 15px',
+            backgroundColor: addPlaceMode ? 'red' : '#2F7A7E',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+          }}
+        >
+          {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
+        </button>
+        {selectedPlace && (
+          <div style={{ marginTop: '15px'}}>
+            <button 
+            className="btn-secondary" 
+            onClick={handleEditPlace}
             style={{
               marginTop: '15px',
               padding: '10px 15px',
-              backgroundColor: addPlaceMode ? 'red' : 'green',
+              backgroundColor: addPlaceMode ? 'red' : '#2F7A7E',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
             }}
-          >
-            {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
-          </button>
-        </div>
+            >
+            {editPlaceMode ? 'Anuluj' : 'Edytuj miejsce'} 
+            </button>
+            <button
+             className="btn-danger"
+             onClick={handleDeletePlace}
+             style={{
+              margin: '15pt 0 0 10pt',
+              padding: '10px 15px',
+              backgroundColor: 'red',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              }}
+            >
+              Usuń miejsce
+            </button>
+          </div>
+        )}
+      </div>
 
-        {/* Formularz dodawania miejsca poniżej mapy */}
-        <div className="bottom-right-container"
-          style={{
-            display: addPlaceMode ? 'block' : 'none', // Ustawienie stylu 'display' w zależności od warunków
-          }}
-        >
+      <div className="bottom-right-container"
+        style={{
+          display: addPlaceMode || editPlaceMode ? 'block' : 'none',
+        }}
+      >
         {addPlaceMode && (
-          <AddPlaceForm
-            position={newPlacePosition}
+          <PlaceForm
             onSubmit={handleAddPlace}
+            position={newPlacePosition}
             onClose={() => setNewPlacePosition(null)}
           />
         )}
-        </div>
+        {editPlaceMode && selectedPlace && (
+          //poniższe propsy customowe, nie wbudowane w Reacta
+          <PlaceForm
+            onSubmit={handleUpdatePlace} //funkcja obsługująca propsa o nazwie onSubmit, w obecnej konwencji odpowiada on za obsługę formularza przy jego wysyłaniu
+            placeData={selectedPlace}
+            onClose={() => setSelectedPlace(null)}
+          />
+        )}
+      </div>
     </div>
   );
 };

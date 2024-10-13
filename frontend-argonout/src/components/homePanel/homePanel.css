@@ -19,6 +19,15 @@
 .bottom-container {
     min-width: 70vh;
 }
+
+.add-place-container {
+    float: left;
+}
+
+.edit-delete-container {
+    float: left;
+}
+
 .container-fluid {
     min-height: 8vh;
 }
