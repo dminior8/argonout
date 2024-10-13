@@ -13,20 +13,6 @@ function App() {
     setIsLoggedIn(!!Cookies.get("accessTokenFront"));
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('http://localhost:8080/api/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('accessTokenFront')}`,
-        },
-      });
-      Cookies.remove('accessTokenFront');
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
-  };
-
   return (
     <Router>
       <UserProvider>

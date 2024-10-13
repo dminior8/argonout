@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import Cookies from "js-cookie";
 import { useUser } from '../userProfile/UserContext';
 import './sidebar.css'; // Import stylów dla Sidebar
 
@@ -10,6 +12,20 @@ const Sidebar = () => {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen); // Przełączanie widoczności paska bocznego
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:8080/api/auth/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessTokenFront')}`,
+        },
+      });
+      Cookies.remove('accessTokenFront');
+      window.location.reload(true);
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (
@@ -59,7 +75,6 @@ const Sidebar = () => {
             </Button>
           </li>
 
-          {console.log('User role:', user?.role)} {/* Loguj rolę użytkownika */}
           {user?.role === 'ADMIN' ? (
             <li>
               <Button
@@ -77,6 +92,16 @@ const Sidebar = () => {
               startIcon={<img src="/icons/folder_5679940.png" alt="Icon" className="button-icon" />}
             >
               <Link to="/api/users/me">Ustawienia</Link>
+            </Button>
+          </li>
+
+          <li>
+            <Button
+              variant="outlined"
+              startIcon={<img src="/icons/exit_11820530.png" alt="Icon" className="button-icon" />}
+              onClick={handleLogout}
+            >
+              Wyloguj
             </Button>
           </li>
         </ul>
