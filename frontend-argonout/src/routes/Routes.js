@@ -6,36 +6,41 @@ import LoginPanel from '../components/loginPanel/LoginPanel';
 import RegisterPage from '../components/loginPanel/RegisterPanel';
 import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
+import AdventureModePanel from '../components/adventureModePanel/adventureModePanel';
 
 export const routes = (isLoggedIn, onLogin) => (
   <>
     <Route
-      path="/api/auth/login"
-      element={isLoggedIn ? <Navigate to="/api/home" /> : <LoginPanel onLogin={onLogin} />}
+      path="/auth/login"
+      element={isLoggedIn ? <Navigate to="/home" /> : <LoginPanel onLogin={onLogin} />}
     />
     <Route
-      path="/api/auth/register"
-      element={isLoggedIn ? <Navigate to="/api/home" /> : <RegisterPage />}
+      path="/auth/register"
+      element={isLoggedIn ? <Navigate to="/home" /> : <RegisterPage />}
     />
     <Route
-      path="/api/home"
-      element={isLoggedIn ? <HomePage /> : <Navigate to="/api/auth/login" />}
+      path="/home"
+      element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
     />
     <Route
-      path="/api/users/me"
-      element={isLoggedIn ? <UserProfile /> : <Navigate to="/api/auth/login" />}
+      path="/adventure"
+      element={isLoggedIn ? <AdventureModePanel /> : <Navigate to="/auth/login" />}
     />
     <Route
-      path="/api/management"
-      element={isLoggedIn ? <ManagementMenu /> : <Navigate to="/api/auth/login" />}
+      path="/users/me"
+      element={isLoggedIn ? <UserProfile /> : <Navigate to="/auth/login" />}
     />
     <Route
-      path="/api/users/all"
-      element={isLoggedIn ? <HomePage /> : <Navigate to="/api/auth/login" />}
+      path="/management"
+      element={isLoggedIn ? <ManagementMenu /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/users/all"
+      element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="*"
-      element={<Navigate to={isLoggedIn ? "/api/home" : "/api/auth/login"} />}
+      element={<Navigate to={isLoggedIn ? "/home" : "/auth/login"} />}
     />
   </>
 );

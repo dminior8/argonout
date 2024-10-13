@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import axios from 'axios';
 
 import Sidebar from "../sidebar/Sidebar";
-import BasicMap from "./map/basicMap";
+import BasicMap from "../map/BasicMap";
 import { useUser } from '../userProfile/UserContext';
 import './homePanel.css';
 
@@ -269,14 +269,13 @@ const HomePage = () => {
         </div>
 
         {/* Komponent mapy */}
-      <div className="bottom-container">
         <BasicMap
           addPlaceMode={addPlaceMode}
           onMapClick={handleMapClick}
           newPlacePosition={newPlacePosition}
           onPopupClick={handlePlaceSelect}
         />
-      </div>
+      
       <div>
         <button
           className="btn-primary"

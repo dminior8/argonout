@@ -55,7 +55,7 @@ const Sidebar = () => {
               variant="outlined"
               startIcon={<img src="/icons/rocket_1012233.png" alt="Icon" className="button-icon" />}
             >
-              <Link to="/home">Tryb wyzwania</Link>
+              <Link to="/adventure">Tryb wyzwania</Link>
             </Button>
           </li>
           <li>
