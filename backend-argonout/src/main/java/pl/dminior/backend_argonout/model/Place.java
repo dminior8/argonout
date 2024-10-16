@@ -1,25 +1,23 @@
 package pl.dminior.backend_argonout.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
-@Entity
+
 @Getter
 @Setter
+@Entity
 @Table(name = "places")
 public class Place {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID placeId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "place_id")
+    private UUID id;
 
     private String name;
 
@@ -31,5 +29,4 @@ public class Place {
 
     private String moreInfoLink;
 
-    private String imageUrl;
 }
