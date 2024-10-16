@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { useUser } from '../../userProfile/UserContext'; // Importujemy nasz kontekst użytkownika
+import { useUser } from '../../../contexts/UserContext'; // Importujemy nasz kontekst użytkownika
 import './managementMenu.css'; // Importujemy stylizacje
 import Sidebar from '../../sidebar/Sidebar';
 

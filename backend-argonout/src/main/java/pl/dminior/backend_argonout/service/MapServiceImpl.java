@@ -95,7 +95,6 @@ public class MapServiceImpl implements MapService{
     @Override
     public boolean deletePlace(UUID placeId) {
         if (placeRepository.findById(placeId).isPresent()) {
-
             // Usuń powiązania w tabeli routes_places
             List<Route> routes = routeRepository.findAll();
 

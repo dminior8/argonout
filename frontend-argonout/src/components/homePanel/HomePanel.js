@@ -5,8 +5,9 @@ import axios from 'axios';
 
 import Sidebar from "../sidebar/Sidebar";
 import BasicMap from "../map/BasicMap";
-import { useUser } from '../userProfile/UserContext';
+import { useUser } from '../../contexts/UserContext';
 import './homePanel.css';
+import MiniStats from "../miniStats/MiniStats";
 
 // Komponent formularza dodawania miejsca
 const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
@@ -35,22 +36,21 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
   const [selectedMap, setSelectedMap] = useState(placeData?.selectedMap || null); // Stan do przechowywania wybranej mapy
 
   useEffect(() => {
+    const fetchMaps = async () => {
+      try {
+        const token = Cookies.get('accessTokenFront');
+        const response = await axios.get('http://localhost:8080/api/routes/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setMaps(response.data);
+      } catch (error) {
+        console.error('Error during routes fetching: ', error);
+      }
+    };
     fetchMaps();
   }, []);
-
-  const fetchMaps = async () => {
-    try {
-      const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/routes/all', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setMaps(response.data);
-    } catch (error) {
-      console.error('Error during routes fetching: ', error);
-    }
-  };
 
   const handleMapChange = (e) => {
     const selectedMapId = e.target.value;
@@ -242,31 +242,10 @@ const HomePage = () => {
 
   return (
     <div className="AppContent">
+      
       <Sidebar />
-      <div className="top-container">
-      <div className="right-top-container">
-          <div className="right-top-item">
-            <div className="d-flex align-items-center">
-              <img src="/icons/star_8605046.png" alt="Icon" className="points-icon" />
-              <span>LICZBA PUNKTÓW</span>
-              <div className="points">900</div>
-            </div>
-          </div>
-          <div className="right-top-item">
-            <div className="top-row">
-              <div className="first-element">
-                <span>{user?.role === 'USER' ? 'Srebrna Liga' : 'Inna Liga'}</span>
-              </div>
-              <div className="second-element">
-                <Link to="/api/leaderboard" className="leaderboard-link">Pokaż ranking</Link>
-              </div>
-            </div>
-            <div className="third-element">
-              <span>Zdobyłeś w tym miesiącu 99 XP</span>
-            </div>
-          </div>
-        </div>
-        </div>
+      <div className="top-container"><MiniStats /></div>
+      
 
         {/* Komponent mapy */}
         <BasicMap

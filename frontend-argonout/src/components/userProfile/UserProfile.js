@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Button, Container, Box, TextField, Card, CardContent, List, ListItem, ListItemText } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebar/Sidebar';
 
 const UserProfile = () => {

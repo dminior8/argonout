@@ -6,7 +6,7 @@ import LoginPanel from '../components/loginPanel/LoginPanel';
 import RegisterPage from '../components/loginPanel/RegisterPanel';
 import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
-import AdventureModePanel from '../components/adventureModePanel/adventureModePanel';
+import AdventureModePanel from '../components/adventureModePanel/AdventureModePanel';
 
 export const routes = (isLoggedIn, onLogin) => (
   <>

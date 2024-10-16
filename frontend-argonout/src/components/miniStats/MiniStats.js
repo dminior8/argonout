@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { useUser } from '../userProfile/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
 
 const MiniStats = () => {
   const { user } = useUser();
 
   return (
-        <div className="top-container">
             <div className="right-top-container">
                 <div className="right-top-item">
                     <div className="d-flex align-items-center">
@@ -31,7 +30,6 @@ const MiniStats = () => {
                     </div>
                 </div>
             </div>
-        </div>
   );
 };
 
