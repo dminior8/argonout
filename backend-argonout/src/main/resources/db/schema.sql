@@ -1,4 +1,3 @@
--- Create the roles table
 CREATE TABLE roles (
     role_id INT PRIMARY KEY,
     role_name VARCHAR(10) UNIQUE NOT NULL
@@ -20,7 +19,8 @@ CREATE TABLE "routes" (
   "route_id" UUID PRIMARY KEY,
   "name" VARCHAR(100) NOT NULL,
   "description" TEXT,
-  "max_time" INT
+  "max_time" INT,
+  "is_visited" BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE "places" (
@@ -29,96 +29,39 @@ CREATE TABLE "places" (
   "description" TEXT,
   "latitude" DECIMAL(10,8),
   "longitude" DECIMAL(11,8),
-  more_info_link VARCHAR(255)
+  more_info_link VARCHAR(255),
+  "is_visited" BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE "achievements" (
-  "achievement_id" UUID PRIMARY KEY,
-  "name" VARCHAR(100) NOT NULL,
-  "description" TEXT
-);
-
-CREATE TABLE "posts" (
-  "post_id" UUID PRIMARY KEY,
-  "user_id" UUID NOT NULL,
-  "content" TEXT NOT NULL,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
-);
-
-CREATE TABLE "threads" (
-  "thread_id" UUID PRIMARY KEY,
-  "title" VARCHAR(255) NOT NULL,
-  "created_by" UUID NOT NULL,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY ("created_by") REFERENCES "users" ("user_id")
-);
-
-CREATE TABLE "leagues" (
-  "league_id" UUID PRIMARY KEY,
-  "name" VARCHAR(50) NOT NULL,
-  "color" VARCHAR(10) NOT NULL
-);
-
-CREATE TABLE "notifications" (
-  "notification_id" UUID PRIMARY KEY,
-  "user_id" UUID NOT NULL,
-  "message" TEXT NOT NULL,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "read_at" TIMESTAMP,
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
-);
-
-CREATE TABLE "users_achievements" (
-  "user_id" UUID NOT NULL,
-  "achievement_id" UUID NOT NULL,
-  "progress" DOUBLE PRECISION,
-  "achieved_at" TIMESTAMP,
-  PRIMARY KEY ("user_id", "achievement_id"),
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id"),
-  FOREIGN KEY ("achievement_id") REFERENCES "achievements" ("achievement_id")
-);
-
-CREATE TABLE "users_routes" (
-  "user_id" UUID NOT NULL,
-  "route_id" UUID NOT NULL,
-  "visited_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY ("user_id", "route_id"),
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id"),
-  FOREIGN KEY ("route_id") REFERENCES "routes" ("route_id")
+CREATE TABLE "games" (
+  game_id UUID PRIMARY KEY,
+  route_id UUID REFERENCES "routes" ("route_id"),
+  start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_completed BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (route_id) REFERENCES "routes" ("route_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "routes_places" (
   "route_id" UUID NOT NULL,
   "place_id" UUID NOT NULL,
   PRIMARY KEY ("route_id", "place_id"),
-  FOREIGN KEY ("route_id") REFERENCES "routes" ("route_id"),
-  FOREIGN KEY ("place_id") REFERENCES "places" ("place_id")
+  FOREIGN KEY ("route_id") REFERENCES "routes" ("route_id") ON DELETE CASCADE,
+  FOREIGN KEY ("place_id") REFERENCES "places" ("place_id") ON DELETE CASCADE
 );
 
-CREATE TABLE "posts_threads" (
-  "post_id" UUID NOT NULL,
-  "thread_id" UUID NOT NULL,
-  PRIMARY KEY ("post_id", "thread_id"),
-  FOREIGN KEY ("post_id") REFERENCES "posts" ("post_id"),
-  FOREIGN KEY ("thread_id") REFERENCES "threads" ("thread_id")
-);
-
-CREATE TABLE "points_of_users" (
+CREATE TABLE "users_games" (
   "user_id" UUID NOT NULL,
-  "points" INT NOT NULL DEFAULT 0,
-  "period" DATE NOT NULL,
---   PRIMARY KEY ("user_id", "period"),
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
+  "game_id" UUID NOT NULL,
+  PRIMARY KEY ("user_id", "game_id"),
+  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id") ON DELETE CASCADE,
+  FOREIGN KEY ("game_id") REFERENCES "games" ("game_id") ON DELETE CASCADE
 );
 
-CREATE TABLE "leagues_of_users" (
-  "user_id" UUID NOT NULL,
-  "league_id" UUID NOT NULL,
-  "assigned_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   PRIMARY KEY ("user_id", "league_id"),
-  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id"),
-  FOREIGN KEY ("league_id") REFERENCES "leagues" ("league_id")
+CREATE TABLE "visited_places" (
+  "visited_places_id" UUID PRIMARY KEY,
+  "game_id" UUID REFERENCES "games" ("game_id"),
+  "place_id" UUID REFERENCES "places" ("place_id"),
+  "visited_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY ("game_id") REFERENCES "games" ("game_id") ON DELETE CASCADE,
+  FOREIGN KEY ("place_id") REFERENCES "places" ("place_id") ON DELETE CASCADE
 );

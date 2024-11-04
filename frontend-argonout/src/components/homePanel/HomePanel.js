@@ -121,6 +121,7 @@ const HomePage = () => {
   const [editPlaceMode, setEditPlaceMode] = useState(false); // Tryb edycji miejsca
   const [newPlacePosition, setNewPlacePosition] = useState(null); 
   const [selectedPlace, setSelectedPlace] = useState(null); 
+  const [places, setPlaces] = useState([]);
 
   const toggleAddPlaceMode = () => {
     setAddPlaceMode((prevMode) => !prevMode);
@@ -146,6 +147,28 @@ const HomePage = () => {
     setAddPlaceMode(false); // Wyłączenie trybu dodawania
   };
 
+  // Funkcja do pobierania lokalizacji
+  const handleGetAll = async () => {
+    try {
+      const token = Cookies.get('accessTokenFront');
+      const response = await axios.get('http://localhost:8080/api/places', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const locations = response.data;
+      setPlaces(locations);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+
+  };
+
+  useEffect(() => {
+    handleGetAll();
+  }, []);
+  
   const handleDeletePlace = async () => {
     if (selectedPlace) {
       const confirmation = window.confirm(`Czy na pewno chcesz usunąć miejsce: ${selectedPlace.name}?`);
@@ -188,7 +211,6 @@ const HomePage = () => {
       longitude: newPlacePosition.lng,
       routeId: selectedMap.id // Przesyłamy cały obiekt mapy
     };
-    console.log('Payload:', JSON.stringify(payload, null, 2));
 
   
     try {
@@ -200,8 +222,8 @@ const HomePage = () => {
         },
       });
       
-      console.log('New place added succesfully: ', response.data);
-      
+      console.log('New place added succesfully: ', payload);
+      alert(`Dodano nowe miejsce: ${payload.name}`);
       setAddPlaceMode(false);
       setNewPlacePosition(null);
       window.location.reload();
@@ -253,6 +275,8 @@ const HomePage = () => {
           onMapClick={handleMapClick}
           newPlacePosition={newPlacePosition}
           onPopupClick={handlePlaceSelect}
+          places={places}
+
         />
       
       <div>

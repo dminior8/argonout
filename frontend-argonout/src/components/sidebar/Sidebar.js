@@ -85,7 +85,7 @@ const Sidebar = () => {
 
           {user?.role === 'ADMIN' ? (
             <li>
-              <Link to="/api/management">
+              <Link to="/management">
                 <Button
                   variant="outlined"
                   startIcon={<img src="/icons/briefcase_6616238.png" alt="Icon" className="button-icon" />}

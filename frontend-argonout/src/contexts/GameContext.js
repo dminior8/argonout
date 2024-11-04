@@ -20,6 +20,11 @@ export const GameProvider = ({ children }) => {
   });
 
   const handleGameStatus = () => {
+    if(gameStatus === true){
+      const confirmation = window.confirm(`Czy na pewno chcesz zakończyć grę?`);
+      if(!confirmation) return;
+    }
+
     setGameStatus((prevStatus) => {
       const newStatus = !prevStatus;
       localStorage.setItem('gameStatus', newStatus); 

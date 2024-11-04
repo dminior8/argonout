@@ -22,16 +22,16 @@ function App() {
 
   return (
     <GameProvider>
-    <Router>
-      <UserProvider>
-        
-          <div className="App">
-            <Routes>
-              {routes(isLoggedIn, setIsLoggedIn)}
-            </Routes>
-          </div>
-      </UserProvider>
-    </Router>
+      <Router>
+        <UserProvider>
+          
+            <div className="App">
+              <Routes>
+                {routes(isLoggedIn, setIsLoggedIn)}
+              </Routes>
+            </div>
+        </UserProvider>
+      </Router>
     </GameProvider>
   );
 }

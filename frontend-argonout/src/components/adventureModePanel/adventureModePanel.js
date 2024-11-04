@@ -2,19 +2,19 @@ import React, { useEffect, useState, useContext } from "react";
 import Form from 'react-bootstrap/Form';
 import Cookies from "js-cookie";
 import axios from 'axios';
+import update from 'immutability-helper';
 
 import Sidebar from "../sidebar/Sidebar";
 import BasicMap from "../map/BasicMap";
 import MiniStats from "../miniStats/MiniStats";
 import Timer from "./Timer";
-
 import { useGameStatus } from '../../contexts/GameContext';
 
 import "./adventureModePanel.css";
 
 const AdventureModePanel = () => {
   const [routes, setRoutes] = useState([]);
-  //const [] = useState(null);
+  const [places, setPlaces] = useState([]);
   
   const [{ gameStatus, handleGameStatus },{timeToEnd, handleTimeToEnd},{selectedRoute, handleSelectedRoute}] = useGameStatus(); //Odwołanie do kontekstu
 
@@ -29,7 +29,7 @@ const AdventureModePanel = () => {
         });
         setRoutes(response.data);
         
-        //Po załadowaniu danych (bo [] na końcu useEffect) pobranie route z localStorage
+        //Po załadowaniu danych (bo [] na końcu useEffect) 
         const savedRouteId = localStorage.getItem("routeId");
         if (savedRouteId) {
           const savedRoute = response.data.find((route) => route.id === savedRouteId);
@@ -38,18 +38,62 @@ const AdventureModePanel = () => {
             handleTimeToEnd(localStorage.getItem("timeToEnd")/60);
           }
         }
-
       } catch (error) {
         console.error('Error during routes fetching: ', error);
       }
     };
-
     fetchRoutes();
   }, []);
 
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const savedRouteId = localStorage.getItem("routeId");
+        if(savedRouteId){
+          const token = Cookies.get('accessTokenFront');
+          const response = await axios.get(`http://localhost:8080/api/places/${savedRouteId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setPlaces(response.data);
+        }
+      } catch (error) {
+        console.error('Error during places fetching: ', error);
+      }
+    };
+    fetchPlaces();
+  },[selectedRoute]);
+
+  useEffect(() => {
+    const initPlacesWhenStart = async () => {
+      if(gameStatus){
+        
+        var oldPlaces = update(places, {$set: places.map(p => ({...p}))});
+
+        places.forEach(p => {
+          p.visited = true;
+        });
+      }
+    };
+    initPlacesWhenStart();
+  }, [gameStatus]);
+
+  useEffect(() => {
+    const handleVisitedPlace = async () => {
+      if(gameStatus){
+        places.forEach(p => {
+          p.visited = false;
+        });
+      }
+    };
+    handleVisitedPlace();
+  }, [places]);
+
+  
   const handleRouteChange = (event) => {
     const selectedRouteId = event.target.value; // route.id, które jest w <option value= 
-    
+    console.log()
     if (gameStatus) {
       handleGameStatus();
     }
@@ -65,6 +109,19 @@ const AdventureModePanel = () => {
     } 
     handleSelectedRoute(route); 
   };
+
+  const handleVisitedPlace = (place) => {
+    let placeToChange = places.find(p => p.id === place.id);
+
+  if (placeToChange) {
+    placeToChange.visited = true;
+    
+    alert(`You visited ${placeToChange.name}. Now it's visited: ${placeToChange.visited}`);
+    console.log(places);
+  } else {
+    console.log("Place not found.");
+  }
+  }
 
   return (
     <div className="AppContent">
@@ -84,15 +141,10 @@ const AdventureModePanel = () => {
           {selectedRoute ? `Czas na wykonanie: ` : ''} <b>{selectedRoute ? `${selectedRoute.maxTime} minut` : ''}</b>
           </div>
           {gameStatus || (selectedRoute && selectedRoute.maxTime) ? <Timer value={timeToEnd} /> : ''}
-          <div>
-            {selectedRoute || gameStatus ? (
-              <button className="btn-start" onClick={handleGameStatus}>{gameStatus ? 'Koniec gry' : 'Rozpocznij grę'}</button>) : ''}
-          </div>
-          
-           
+
           {gameStatus ? '' :
           <Form.Select
-            style={{ maxWidth: "200pt", margin: "10pt auto 10pt auto", display: "block" }}
+            style={{ maxWidth: "200pt", margin: "10pt auto 5pt auto", display: "block" }}
             aria-label="Routes select"
             value={selectedRoute ? selectedRoute.id : 'default'}
             onChange={handleRouteChange}
@@ -105,10 +157,16 @@ const AdventureModePanel = () => {
             ))}
           </Form.Select>
           }
+
+          <div>
+            {selectedRoute || gameStatus ? (
+              <button className="btn-start" onClick={handleGameStatus}>{gameStatus ? 'Koniec gry' : 'Rozpocznij grę'}</button>) : ''}
+          </div>
         </div>
       </div>
       <Sidebar />
-      <BasicMap />
+      <BasicMap places={places} onPlaceVisit={handleVisitedPlace}/>
+      <div style={{marginBottom: '30pt'}}></div>
       <MiniStats />
     </div>
   );
