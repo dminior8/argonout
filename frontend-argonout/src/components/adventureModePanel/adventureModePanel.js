@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import Form from 'react-bootstrap/Form';
 import Cookies from "js-cookie";
 import axios from 'axios';
-import update from 'immutability-helper';
 
 import Sidebar from "../sidebar/Sidebar";
 import BasicMap from "../map/BasicMap";
@@ -16,112 +15,110 @@ const AdventureModePanel = () => {
   const [routes, setRoutes] = useState([]);
   const [places, setPlaces] = useState([]);
   
-  const [{ gameStatus, handleGameStatus },{timeToEnd, handleTimeToEnd},{selectedRoute, handleSelectedRoute}] = useGameStatus(); //Odwołanie do kontekstu
+  const { //Odwołanie do kontekstu
+    gameStatus, handleGameStatus, 
+    timeToEnd, handleTimeToEnd, 
+    selectedRoute, handleSelectedRoute 
+  } = useGameStatus();
 
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const token = Cookies.get('accessTokenFront');
-        const response = await axios.get('http://localhost:8080/api/routes/all', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setRoutes(response.data);
-        
-        //Po załadowaniu danych (bo [] na końcu useEffect) 
-        const savedRouteId = localStorage.getItem("routeId");
-        if (savedRouteId) {
-          const savedRoute = response.data.find((route) => route.id === savedRouteId);
-          if (savedRoute) {
-            handleSelectedRoute(savedRoute);
-            handleTimeToEnd(localStorage.getItem("timeToEnd")/60);
-          }
-        }
-      } catch (error) {
-        console.error('Error during routes fetching: ', error);
-      }
-    };
-    fetchRoutes();
-  }, []);
+  // const fetchRoutes = async (token) => {
+  //     const response = await axios.get('http://localhost:8080/api/routes/all', {
+  //       headers: { Authorization: `Bearer ${token}`}
+  //     });
+  //     return response.data;
+  //   };
 
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      try {
-        const savedRouteId = localStorage.getItem("routeId");
-        if(savedRouteId){
+
+    useEffect(() => {
+      const fetchRoutes = async () => {
+        try {
           const token = Cookies.get('accessTokenFront');
-          const response = await axios.get(`http://localhost:8080/api/places/${savedRouteId}`, {
+          const response = await axios.get('http://localhost:8080/api/routes/all', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setPlaces(response.data);
+          setRoutes(response.data);
+          
+          //Po załadowaniu danych (bo [] na końcu useEffect) 
+          const savedRouteId = localStorage.getItem("routeId");
+          if (savedRouteId) {
+            const savedRoute = response.data.find((route) => route.id === savedRouteId);
+            if (savedRoute) {
+              handleSelectedRoute(savedRoute);
+              handleTimeToEnd(localStorage.getItem("timeToEnd")/60);
+            }
+          }
+        } catch (error) {
+          console.error('Error during routes fetching: ', error);
         }
-      } catch (error) {
-        console.error('Error during places fetching: ', error);
-      }
-    };
-    fetchPlaces();
-  },[selectedRoute]);
-
-  useEffect(() => {
-    const initPlacesWhenStart = async () => {
-      if(gameStatus){
-        
-        var oldPlaces = update(places, {$set: places.map(p => ({...p}))});
-
-        places.forEach(p => {
-          p.visited = true;
-        });
-      }
-    };
-    initPlacesWhenStart();
-  }, [gameStatus]);
-
-  useEffect(() => {
-    const handleVisitedPlace = async () => {
-      if(gameStatus){
-        places.forEach(p => {
-          p.visited = false;
-        });
-      }
-    };
-    handleVisitedPlace();
-  }, [places]);
-
+      };
+      fetchRoutes();
+    }, []);
+  
+    useEffect(() => {
+      const fetchPlaces = async () => {
+        try {
+          const savedRouteId = localStorage.getItem("routeId");
+          if(savedRouteId){
+            const token = Cookies.get('accessTokenFront');
+            const response = await axios.get(`http://localhost:8080/api/places/${savedRouteId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            setPlaces(response.data);
+          }
+        } catch (error) {
+          console.error('Error during places fetching: ', error);
+        }
+      };
+      fetchPlaces();
+    },[selectedRoute]);
+ 
   
   const handleRouteChange = (event) => {
     const selectedRouteId = event.target.value; // route.id, które jest w <option value= 
-    console.log()
     if (gameStatus) {
       handleGameStatus();
     }
+    const route = routes.find((r) => r.id === selectedRouteId);
 
     if (selectedRouteId === "default") {
       handleSelectedRoute(null);
       return;
     }
     
-    const route = routes.find((r) => r.id === selectedRouteId);
+    
     if (route && route.maxTime) {
       handleTimeToEnd(route.maxTime);
     } 
     handleSelectedRoute(route); 
   };
 
-  const handleVisitedPlace = (place) => {
-    let placeToChange = places.find(p => p.id === place.id);
-
-  if (placeToChange) {
-    placeToChange.visited = true;
+  const postVisitedPlace = async (place) => {
+    const gameId = localStorage.getItem("gameId");
     
-    alert(`You visited ${placeToChange.name}. Now it's visited: ${placeToChange.visited}`);
-    console.log(places);
-  } else {
-    console.log("Place not found.");
-  }
-  }
+    const token = Cookies.get('accessTokenFront');
+    const response = await axios.post(`http://localhost:8080/api/game/${gameId}/add-place/${place.id}`, {}, {
+      headers: { Authorization: `Bearer ${token}`}
+    });
+    return response.data;
+  };
+
+  const handleVisitedPlace = (place) => {
+    try{
+      const responseMessage = postVisitedPlace(place);
+      console.log("Message from server: ", responseMessage);
+    }catch (e){
+      console.error("Error during adding visited place: ", e);
+    }
+    
+    setPlaces((prevPlaces) =>
+      prevPlaces.map((p) => (p.id === place.id ? { ...p, visited: true } : p))
+    );
+    alert(`Odwiedziłeś ${place.name}.`);
+  };
 
   return (
     <div className="AppContent">

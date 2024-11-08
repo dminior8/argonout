@@ -28,7 +28,6 @@ public class GameServiceImpl implements GameService{
     public UUID initGame(UUID routeId){
         if(routeRepository.findById(routeId).isPresent()){
             Game game = new Game();
-            game.setId(routeId);
             game.setRouteId(routeId);
             game.setStartTime(LocalDateTime.now());
             game.setCompleted(false);

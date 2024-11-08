@@ -15,6 +15,13 @@ const customIcon = new Icon({
   popupAnchor: [8, -34],
 });
 
+const visitedIcon = new Icon({
+  iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/visited-marker.png', // Dodaj tu ścieżkę do ikony odwiedzonego miejsca
+  iconSize: [50, 50],
+  iconAnchor: [12, 41],
+  popupAnchor: [8, -34],
+});
+
 const blueOptions = { color: 'blue' };
 
 // Ustawienia domyślnej ikony
@@ -47,7 +54,7 @@ function LocationMarker({places, setNearbyPlaces, radius}) {
         const distance = map.distance(userLocation, placeLatLng);
         return distance <= radius;
       });
-      setNearbyPlaces(nearby.map(place => place.id));
+      setNearbyPlaces(nearby);
 
     },
   });
@@ -57,8 +64,16 @@ function LocationMarker({places, setNearbyPlaces, radius}) {
     if (simulatedLocation) {
       setPosition(simulatedLocation);
       map.flyTo(simulatedLocation, map.getZoom());
+  
+      const nearby = places.filter(place => {
+        const placeLatLng = L.latLng(place.latitude, place.longitude);
+        const distance = map.distance(simulatedLocation, placeLatLng);
+        return distance <= radius;
+      });
+      setNearbyPlaces(nearby);
+
     }
-  }, [simulatedLocation, map]);
+  }, [simulatedLocation, places]);
 
   return position === null ? null : (
     <Circle
@@ -96,16 +111,17 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, pl
     if (onPopupClick) {
       onPopupClick(markerData); // Wywołanie funkcji przekazanej z komponentu nadrzędnego
     }
-    console.log("MIEJSCA W MAPIE: ", places);
   };
 
-  const handleVisitedPlace = (place) => { //////////////////////////////COŚ TU POROBIĆ, BO PO ODŚWIEŻENIU POWRÓCI DO STANU WCZEŚNIEJSZEGO (false), chyba trzeba od razu POST API
+  const handleVisitedPlace = (place) => {
     onPlaceVisit(place);
+    
     setNearbyPlaces(prevNearbyPlaces =>
       prevNearbyPlaces.map(p =>
         p.id === place.id ? { ...p, visited: true } : p
-      ).filter(p => !p.visited)
+      )
     );
+    console.log("New nearby: ", nearbyPlaces);
   };
 
   return (
@@ -119,13 +135,14 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, pl
         <Marker 
         key={index} 
         position={[markerData.latitude, markerData.longitude]} 
-        icon={customIcon}
+        icon={nearbyPlaces.some(p => p.id === markerData.id && p.visited) ? visitedIcon : customIcon}
         eventHandlers={{
           click: () => {
             handlePopupClick(markerData); // Funkcja obsługująca kliknięcie na markerze
           },
         }}
       >
+        
           <Popup>
             <div className="popupContainer" >
               <h5>{markerData.name}</h5>
@@ -133,7 +150,7 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, pl
               <a href={markerData.moreInfoLink}>Kliknij po więcej informacji</a>
               <br/>
               {/* Sprawdzenie, czy dane miejsce jest w pobliżu i dodanie przycisku */}
-              {(nearbyPlaces.includes(markerData.id) && nearbyPlaces.filter(f => f.visited === false)) && (
+              {(nearbyPlaces.some(p => p.id === markerData.id && !p.visited)) && (
                 <button onClick={() => handleVisitedPlace(markerData)}>
                   Jestem w pobliżu!
                 </button>
