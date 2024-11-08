@@ -1,10 +1,10 @@
 /* sidebar.css */
 
 .sidebar {
-    min-width: 400px;
+    min-width: 350px;
     height: 100vh; /* Pełna wysokość okna przeglądarki */
     background-color: #131F24;
-    padding: 20px;
+    padding-left: 20px;
     position: fixed; /* Ustawienie sidebar na stałej pozycji */
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@
 }
 
 .sidebar-logo {
-    width: 340px; /* Szerokość logo */
+    width: 330px; /* Szerokość logo */
     height: auto; /* Automatyczna wysokość */
     margin-right: 10px; /* Odstęp między logo a tekstem */
 }
@@ -85,7 +85,7 @@
         display: block; /* Pokazuje przycisk hamburgera */
         position: fixed;
         top: 5%; /* Środek w pionie */
-        left: 50%; /* Środek w poziomie */
+        left: 5%; /* Środek w poziomie */
         transform: translate(-50%, -50%); /* Przesunięcie o połowę szerokości i wysokości, aby wyśrodkować */
         z-index: 1500; /* Wyższy indeks z-index dla przycisku hamburgera */
         background: #131F24;

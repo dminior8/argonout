@@ -4,9 +4,10 @@ import Cookies from "js-cookie";
 import axios from 'axios';
 
 import Sidebar from "../sidebar/Sidebar";
-import BasicMap from "./map/basicMap";
-import { useUser } from '../userProfile/UserContext';
+import BasicMap from "../map/BasicMap";
+import { useUser } from '../../contexts/UserContext';
 import './homePanel.css';
+import MiniStats from "../miniStats/MiniStats";
 
 // Komponent formularza dodawania miejsca
 const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
@@ -35,22 +36,21 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
   const [selectedMap, setSelectedMap] = useState(placeData?.selectedMap || null); // Stan do przechowywania wybranej mapy
 
   useEffect(() => {
+    const fetchMaps = async () => {
+      try {
+        const token = Cookies.get('accessTokenFront');
+        const response = await axios.get('http://localhost:8080/api/routes/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setMaps(response.data);
+      } catch (error) {
+        console.error('Error during routes fetching: ', error);
+      }
+    };
     fetchMaps();
   }, []);
-
-  const fetchMaps = async () => {
-    try {
-      const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/routes/all', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setMaps(response.data);
-    } catch (error) {
-      console.error('Error during routes fetching: ', error);
-    }
-  };
 
   const handleMapChange = (e) => {
     const selectedMapId = e.target.value;
@@ -121,6 +121,7 @@ const HomePage = () => {
   const [editPlaceMode, setEditPlaceMode] = useState(false); // Tryb edycji miejsca
   const [newPlacePosition, setNewPlacePosition] = useState(null); 
   const [selectedPlace, setSelectedPlace] = useState(null); 
+  const [places, setPlaces] = useState([]);
 
   const toggleAddPlaceMode = () => {
     setAddPlaceMode((prevMode) => !prevMode);
@@ -146,6 +147,34 @@ const HomePage = () => {
     setAddPlaceMode(false); // Wyłączenie trybu dodawania
   };
 
+  // Funkcja do pobierania lokalizacji
+  const handleGetAll = async () => {
+    try {
+      const token = Cookies.get('accessTokenFront');
+      const response = await axios.get('http://localhost:8080/api/places', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const locations = response.data;
+      setPlaces(locations);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+
+  };
+
+  useEffect(() => {
+    const gameId = localStorage.getItem("gameId");
+
+    if (!gameId) {
+      localStorage.removeItem("gameId");
+    }
+    handleGetAll();
+    
+  }, []);
+  
   const handleDeletePlace = async () => {
     if (selectedPlace) {
       const confirmation = window.confirm(`Czy na pewno chcesz usunąć miejsce: ${selectedPlace.name}?`);
@@ -188,7 +217,6 @@ const HomePage = () => {
       longitude: newPlacePosition.lng,
       routeId: selectedMap.id // Przesyłamy cały obiekt mapy
     };
-    console.log('Payload:', JSON.stringify(payload, null, 2));
 
   
     try {
@@ -200,8 +228,8 @@ const HomePage = () => {
         },
       });
       
-      console.log('New place added succesfully: ', response.data);
-      
+      console.log('New place added succesfully: ', payload);
+      alert(`Dodano nowe miejsce: ${payload.name}`);
       setAddPlaceMode(false);
       setNewPlacePosition(null);
       window.location.reload();
@@ -240,43 +268,44 @@ const HomePage = () => {
     }
   };
 
+  const postVisitedPlace = async (place) => {
+    
+    const token = Cookies.get('accessTokenFront');
+    const response = await axios.post(`http://localhost:8080/api/free-game/add-place/${place.id}`, {}, {
+      headers: { Authorization: `Bearer ${token}`}
+    });
+    return response.data;
+  };
+
+  const handleVisitedPlace = (place) =>  {
+    try{
+      const responseMessage = postVisitedPlace(place);
+      console.log("Message from server: ", responseMessage);
+    }catch (e){
+      console.error("Error during adding visited place: ", e);
+    }
+    
+    alert(`Odwiedziłeś ${place.name}.`);
+  };
+
   return (
     <div className="AppContent">
+      
       <Sidebar />
-      <div className="top-container">
-      <div className="right-top-container">
-          <div className="right-top-item">
-            <div className="d-flex align-items-center">
-              <img src="/icons/star_8605046.png" alt="Icon" className="points-icon" />
-              <span>LICZBA PUNKTÓW</span>
-              <div className="points">900</div>
-            </div>
-          </div>
-          <div className="right-top-item">
-            <div className="top-row">
-              <div className="first-element">
-                <span>{user?.role === 'USER' ? 'Srebrna Liga' : 'Inna Liga'}</span>
-              </div>
-              <div className="second-element">
-                <Link to="/api/leaderboard" className="leaderboard-link">Pokaż ranking</Link>
-              </div>
-            </div>
-            <div className="third-element">
-              <span>Zdobyłeś w tym miesiącu 99 XP</span>
-            </div>
-          </div>
-        </div>
-        </div>
+      <div className="top-container"><MiniStats /></div>
+      
 
         {/* Komponent mapy */}
-      <div className="bottom-container">
         <BasicMap
           addPlaceMode={addPlaceMode}
           onMapClick={handleMapClick}
           newPlacePosition={newPlacePosition}
           onPopupClick={handlePlaceSelect}
+          places={places}
+          onPlaceVisit={handleVisitedPlace}
+
         />
-      </div>
+      
       <div>
         <button
           className="btn-primary"
