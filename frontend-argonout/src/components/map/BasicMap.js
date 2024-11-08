@@ -5,6 +5,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import osm from "./osm-providers";
 import './basicMap.css';
+import './../adventureModePanel/adventureModePanel.css'
 import 'leaflet/dist/leaflet.css';
 
 // Ikona niestandardowa
@@ -124,6 +125,13 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, pl
     console.log("New nearby: ", nearbyPlaces);
   };
 
+  const checkMode = () => {
+    const gameId = localStorage.getItem("gameId");
+    const routeId = localStorage.getItem("routeId");
+
+    return (gameId !== null) === (routeId !== null);
+  }
+
   return (
     <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={true} className="rounded-map">
       <TileLayer
@@ -150,9 +158,9 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, pl
               <a href={markerData.moreInfoLink}>Kliknij po więcej informacji</a>
               <br/>
               {/* Sprawdzenie, czy dane miejsce jest w pobliżu i dodanie przycisku */}
-              {(nearbyPlaces.some(p => p.id === markerData.id && !p.visited)) && (
-                <button onClick={() => handleVisitedPlace(markerData)}>
-                  Jestem w pobliżu!
+              {(nearbyPlaces.some(p => p.id === markerData.id && !p.visited && checkMode())) && (
+                <button className="btn-start" onClick={() => handleVisitedPlace(markerData)}>
+                  Kliknij aby odwiedzić
                 </button>
               )}
             </div>

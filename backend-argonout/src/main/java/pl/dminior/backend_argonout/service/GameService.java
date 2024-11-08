@@ -10,5 +10,5 @@ public interface GameService {
 
     boolean endGame(UUID gameId);
 
-
+    boolean addPlaceInFreeGame(UUID placeId);
 }

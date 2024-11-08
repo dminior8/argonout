@@ -7,6 +7,7 @@ import RegisterPage from '../components/loginPanel/RegisterPanel';
 import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
 import AdventureModePanel from '../components/adventureModePanel/AdventureModePanel';
+import ProtectedRoute from './ProtectedRoute';
 
 export const routes = (isLoggedIn, onLogin) => (
   <>
@@ -20,7 +21,11 @@ export const routes = (isLoggedIn, onLogin) => (
     />
     <Route
       path="/home"
-      element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
+      element={
+        <ProtectedRoute>
+          {isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
+        </ProtectedRoute>
+      }
     />
     <Route
       path="/adventure"

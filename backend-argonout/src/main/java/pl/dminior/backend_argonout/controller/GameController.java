@@ -1,6 +1,7 @@
 package pl.dminior.backend_argonout.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
@@ -55,5 +56,14 @@ public class GameController {
         }
         return ResponseEntity.ok().body(new MessageResponse("Game ended - failed to visit all places"));
 
+    }
+
+    @PostMapping("/free-game/add-place/{placeId}")
+    public ResponseEntity<MessageResponse> addPlaceInFreeGame(@PathVariable UUID placeId){
+
+        if(gameService.addPlaceInFreeGame(placeId)){
+            return ResponseEntity.ok().body(new MessageResponse("Place visited succesfully"));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Place not found"));
     }
 }

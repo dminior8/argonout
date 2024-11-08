@@ -10,6 +10,7 @@ import pl.dminior.backend_argonout.model.VisitedPlace;
 import pl.dminior.backend_argonout.repository.GameRepository;
 import pl.dminior.backend_argonout.repository.PlaceRepository;
 import pl.dminior.backend_argonout.repository.RouteRepository;
+import pl.dminior.backend_argonout.repository.VisitedPlaceRepository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class GameServiceImpl implements GameService{
     private final RouteRepository routeRepository;
     private final PlaceRepository placeRepository;
     private final GameRepository gameRepository;
+    private final VisitedPlaceRepository visitedPlaceRepository;
 
     @Override
     @Transactional
@@ -95,6 +97,23 @@ public class GameServiceImpl implements GameService{
             game.get().setCompleted(true);
             routeRepository.save(route.get());
             gameRepository.save(game.get());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addPlaceInFreeGame(UUID placeId){
+        Optional<Place> place = placeRepository.findById(placeId);
+        if(place.isPresent()){
+            place.get().setVisited(true);
+
+            VisitedPlace visitedPlace = new VisitedPlace();
+            visitedPlace.setPlaceId(placeId);
+            visitedPlace.setVisitedAt(LocalDateTime.now());
+
+            placeRepository.save(place.get());
+            visitedPlaceRepository.save(visitedPlace);
+
             return true;
         }
         return false;
