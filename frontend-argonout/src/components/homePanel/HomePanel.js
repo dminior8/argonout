@@ -60,7 +60,8 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
 
   return (
     <div className="add-place-form">
-      <h3>{placeData ? 'EDYTUJ MIEJSCE' : 'DODAJ NOWE MIEJSCE'}</h3>
+      {placeData ? 'Edytuj miejsce' : 'Dodaj nowe miejsce'}
+      <br/>
       {position && (
         <p>Miejsce w lokalizacji: {`(${position.lat}, ${position.lng})`}</p>
       )}
@@ -72,6 +73,7 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
           placeholder="Nazwa"
           value={formData.name}
           onChange={handleInputChange}
+          style={{marginTop:"3vh"}}
           required
         />
         <textarea
@@ -292,9 +294,7 @@ const HomePage = () => {
     <div className="AppContent">
       
       <Sidebar />
-      <div className="top-container"><MiniStats /></div>
-      
-
+      <div style={{marginTop:"10vh"}} />
         {/* Komponent mapy */}
         <BasicMap
           addPlaceMode={addPlaceMode}
@@ -355,6 +355,9 @@ const HomePage = () => {
         )}
       </div>
 
+      <div className="right-container">
+        <MiniStats />
+        
       <div className="bottom-right-container"
         style={{
           display: addPlaceMode || editPlaceMode ? 'block' : 'none',
@@ -375,6 +378,7 @@ const HomePage = () => {
             onClose={() => setSelectedPlace(null)}
           />
         )}
+      </div>
       </div>
     </div>
   );

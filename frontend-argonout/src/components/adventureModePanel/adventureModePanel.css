@@ -1,25 +1,75 @@
+.right-container {
+  position: fixed;
+  top: 0;
+  right: 2rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.right-top-container {
+  margin-bottom: auto; /* Umieszczenie MiniStats na górze */
+}
+
+.game-container {
+  background-color: #131F24;
+  color: #D1D1D1;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 20vw;
+  max-height: 55vh;
+  font-size: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto; /* Ustawienie na dole kontenera */
+  border: 2px solid #2F7A7E;
+}
+
+.route-title {
+    color: #72FFE6;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.route-description, .route-max-time {
+    font-size: 0.8rem;
+    color: #D1D1D1;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .btn-start {
-    width: 200pt;
-    display: block;
-    padding: 10px 15px;
-    background-color: #2F7A7E; /* Główny kolor tła */
-    color: white; /* Kolor tekstu */
-    border: none; /* Bez obramowania */
-    border-radius: 5px; /* Zaokrąglenie krawędzi */
-    margin: 10pt auto; /* Marginesy */
-    font-size: 16px; /* Rozmiar czcionki */
-    cursor: pointer; /* Zmiana kursora na wskaźnik */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Przejrzystość dla animacji */
-  }
-  
-  /* Efekt najechania */
-  .btn-start:hover {
-    background-color: #2c8d8f; /* Zmiana koloru tła */
-  }
-  
-  /* Efekt kliknięcia */
-  .btn-start:active {
-    transform: scale(0.95); /* Lekkie zmniejszenie rozmiaru */
-    background-color: #1A5456; /* Inny kolor tła przy kliknięciu */
-  }
-  
+    background-color: #2F7A7E;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.btn-start:hover {
+    background-color: #1E585B; /* Zmiana koloru przy najechaniu */
+}
+
+.form-select {
+    max-width: 200px;
+    margin: 1rem auto;
+    color: #2F7A7E;
+    font-weight: bold;
+}
+
+.timer {
+    font-size: 1.2rem;
+    color: #72FFE6;
+    font-weight: bold;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { useUser } from '../../contexts/UserContext';
+import "./miniStats.css";
 
 
 const MiniStats = () => {

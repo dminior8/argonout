@@ -33,7 +33,7 @@ const Sidebar = () => {
       <button className="sidebar-button" onClick={toggleSidebar}>
         ☰ {/* Ikona hamburgera */}
       </button>
-      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <div className={`sidebar ${isOpen ? 'open' : '' }`}>
         <h2>
           <Link to="/home">
             <img src="/logo.png" alt="Logo" className="sidebar-logo" /> 

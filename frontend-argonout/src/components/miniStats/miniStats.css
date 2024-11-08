@@ -1,0 +1,82 @@
+.right-top-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column; /* Układa elementy w kolumnie, jeden pod drugim */
+    gap: 20px; /* Odstęp między elementami */
+    margin: 2rem 2rem 0 0;
+}
+
+.right-top-item {
+    display: flex;
+    align-items: left; /* Wyrównuje ikonę i tekst w pionie */
+    color: #D1D1D1;
+    font-size: 0.8rem;
+    padding-left: 20px;
+    background-color: #131F24; /* Opcjonalne tło */
+    border-radius: 12px; /* Zaokrąglenie krawędzi */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Opcjonalny cień */
+    width: 20vw;
+    height: 10vh;
+    border: 2px solid #2F7A7E;
+}
+
+.points-icon {
+    width: 2.5vw; /* Szerokość ikony */
+    height: 2.5vw; /* Wysokość ikony */
+    margin-right: 15px; /* Odstęp między ikoną a tekstem */
+}
+
+.points {
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+
+.right-top-item {
+    min-height: 8rem;
+    display: flex;
+}
+.right-top-item:first-child {
+    min-height: 4rem;
+    font-weight: 550;
+}
+
+
+.right-top-item:nth-child(2) {
+    min-height: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8rem 0;
+}
+  
+.top-row {
+    width: 95%;
+    display: flex; /* Ustawia elementy w rzędzie */
+    gap: 2rem; /* Odstęp między elementami w górnym wierszu */
+    text-align: center;
+}
+  
+.first-element {
+    font-weight: bold;
+    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+}
+
+.second-element {
+    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+    
+}
+
+.second-element a:hover{
+    font-weight: bold;
+    transition: 0.3s ease; /* Płynna animacja dla obwódki */
+}
+  
+.third-element {
+    width: 100%; /* Trzeci element zajmuje całą szerokość kontenera */
+    margin: 15px 0;
+    text-align: center; /* Wyrównanie tekstu do środka */
+}
+  
+.leaderboard-link {
+    text-decoration: none; /* Usunięcie podkreślenia z linku */
+    color: #2F7A7E; /* Kolor linku */
+}
