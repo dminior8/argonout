@@ -106,7 +106,7 @@ const AdventureModePanel = () => {
     return response.data;
   };
 
-  const handleVisitedPlace = (place) => {
+  const handleVisitedPlace = (place) =>  {
     try{
       const responseMessage = postVisitedPlace(place);
       console.log("Message from server: ", responseMessage);
@@ -122,51 +122,61 @@ const AdventureModePanel = () => {
 
   return (
     <div className="AppContent">
-      <div className="top-container">
-        <div style={{ marginTop: "30pt", textAlign: "center", display: "flex", fontSize: "30pt", fontWeight: "bold", justifyContent: "center", color: "#72FFE6" }}>
-          <div style={{ color: "#d6f0fa", float: "left", textAlign: "center", marginRight: "10pt" }}>TRYB </div>
-          <div style={{ color: "#72FFE6", float: "left", textAlign: "center", marginRight: "10pt" }}>WYZWANIA</div>
-          <div style={{ color: "#d6f0fa", float: "left", textAlign: "center" }} className="route-title">
+      <Sidebar />
+      
+      <div style={{marginTop: "10vh"}}/>
+      <BasicMap places={places} onPlaceVisit={handleVisitedPlace} />
+      <div className="right-container">
+        <MiniStats className="right-top-container" />
+        
+        <div className="game-container">
+          <div className="route-title" style={{color:"#D1D1D1"}}>
+            TRYB WYZWANIA
+          </div>
+
+          <div className="route-title">
             {selectedRoute ? selectedRoute.name : '- wybierz trasę'}
           </div>
-        </div>
-        <div className="row" style={{ textAlign: "center", color: "#FFFFFF", fontSize: "12pt", marginBottom: "20pt" }}>
-          <div style={{ marginBottom: "5pt" }} className="route-description">
-            {selectedRoute ? selectedRoute.description : ''} 
-          </div>
-          <div className="route-max-time">
-          {selectedRoute ? `Czas na wykonanie: ` : ''} <b>{selectedRoute ? `${selectedRoute.maxTime} minut` : ''}</b>
-          </div>
-          {gameStatus || (selectedRoute && selectedRoute.maxTime) ? <Timer value={timeToEnd} /> : ''}
 
-          {gameStatus ? '' :
-          <Form.Select
-            style={{ maxWidth: "200pt", margin: "10pt auto 5pt auto", display: "block" }}
-            aria-label="Routes select"
-            value={selectedRoute ? selectedRoute.id : 'default'}
-            onChange={handleRouteChange}
-          >
-            <option value="default" disabled={!routes.length}>Wybierz trasę</option>
-            {routes.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-              </option>
-            ))}
-          </Form.Select>
-          }
+          <div className="route-description">
+            {selectedRoute ? selectedRoute.description : ''}
+          </div>
+
+          <div className="route-max-time">
+            {selectedRoute ? 'Czas na wykonanie: ' : ''} 
+            <b>{selectedRoute ? `${selectedRoute.maxTime} minut` : ''}</b>
+          </div>
+
+          {gameStatus || (selectedRoute && selectedRoute.maxTime) ? <Timer value={timeToEnd} className="timer" /> : ''}
+
+          {!gameStatus && (
+            <Form.Select
+              className="form-select"
+              aria-label="Routes select"
+              value={selectedRoute ? selectedRoute.id : 'default'}
+              onChange={handleRouteChange}
+            >
+              <option value="default" disabled={!routes.length}>Wybierz trasę</option>
+              {routes.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </Form.Select>
+          )}
 
           <div>
-            {selectedRoute || gameStatus ? (
-              <button className="btn-start" onClick={handleGameStatus}>{gameStatus ? 'Koniec gry' : 'Rozpocznij grę'}</button>) : ''}
+            {(selectedRoute || gameStatus) && (
+              <button className="btn-start" onClick={handleGameStatus}>
+                {gameStatus ? 'Koniec gry' : 'Rozpocznij grę'}
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <Sidebar />
-      <BasicMap places={places} onPlaceVisit={handleVisitedPlace}/>
-      <div style={{marginBottom: '30pt'}}></div>
-      <MiniStats />
     </div>
-  );
+);
+
 };
 
 export default AdventureModePanel;

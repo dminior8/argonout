@@ -90,11 +90,34 @@ const UserProfile = () => {
   
 
   return (
-    <Container sx={{ paddingTop: '3.5rem', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Sidebar />
-      <Card sx={{width: '100%', maxWidth: '450px', backgroundColor: '#202F36', color: '#D1D1D1', borderRadius: '12px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', padding: '2rem', margin: '2rem 0' }}>
-        <CardContent>
-          <Box sx={{ textAlign: 'center', color: '#3ac2c9', marginBottom: '1.5rem', fontSize: '24px', fontWeight: 'bold' }}>
+    <Container 
+    maxWidth="md" // Ustawiamy maksymalną szerokość kontenera
+    sx={{ 
+    
+    minHeight: "100vh", 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    padding: '0 2rem' // Opcjonalnie: dodaj padding, aby karta nie przylegała do krawędzi kontenera
+  }}
+>
+  <Sidebar />
+  
+  <Card 
+    sx={{
+      maxWidth: '50vw', 
+      minWidth: "50vh",
+      maxHeight: '90vh',
+      backgroundColor: '#202F36', 
+      color: '#D1D1D1', 
+      borderRadius: '12px', 
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', 
+      padding: '2rem', 
+      flexShrink: 0 // Zapobiega ściskaniu karty, co pomaga ustawić szerokość maksymalną
+    }}
+  >
+    <CardContent>
+          <Box sx={{ textAlign: 'center', color: '#3ac2c9', marginBottom: '1rem', fontSize: '2vh', fontWeight: 'bold' }}>
             User Profile
           </Box>
           {isEditing ? (
@@ -156,11 +179,11 @@ const UserProfile = () => {
                   style: { color: '#def7f4' },
                 }}
               />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
-                <Button onClick={handleSave} variant="contained" color="primary" sx={{ minWidth: '8rem' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
+                <Button onClick={handleSave} variant="contained" color="primary" sx={{ minWidth: '4rem' }}>
                   Save
                 </Button>
-                <Button onClick={handleEditToggle} variant="outlined" color="secondary" sx={{ minWidth: '8rem' }}>
+                <Button onClick={handleEditToggle} variant="outlined" color="secondary" sx={{ minWidth: '4rem' }}>
                   Cancel
                 </Button>
               </Box>
@@ -172,7 +195,7 @@ const UserProfile = () => {
                   primary="Username" 
                   secondary={userProfile.username} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
                 />
               </ListItem>
               <ListItem>
@@ -180,7 +203,7 @@ const UserProfile = () => {
                   primary="Email" 
                   secondary={userProfile.email} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px'} }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh'} }}
                   
                 />
               </ListItem>
@@ -189,7 +212,7 @@ const UserProfile = () => {
                   primary="First Name" 
                   secondary={userProfile.firstName} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
                 />
               </ListItem>
               <ListItem>
@@ -197,7 +220,7 @@ const UserProfile = () => {
                   primary="Surname" 
                   secondary={userProfile.surname} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
                 />
               </ListItem>
               <ListItem>
@@ -205,15 +228,7 @@ const UserProfile = () => {
                   primary="Role" 
                   secondary={userProfile.role} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText 
-                  primary="Points" 
-                  secondary={userProfile.points} 
-                  primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
                 />
               </ListItem>
               <ListItem>
@@ -221,16 +236,16 @@ const UserProfile = () => {
                   primary="Created At" 
                   secondary={new Date(userProfile.createdAt).toLocaleString()} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
-                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '16px' } }}
+                  secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
                 />
               </ListItem>
 
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
-                <Button onClick={handleEditToggle} variant="contained" color="primary" sx={{ minWidth: '8rem' }}>
+                <Button onClick={handleEditToggle} variant="contained" color="primary" sx={{ minWidth: '6rem' }}>
                   Edit Profile
                 </Button>
-                <Button onClick={handleDeleteAccount} variant="outlined" color="error" sx={{ minWidth: '8rem' }}>
+                <Button onClick={handleDeleteAccount} variant="outlined" color="error" sx={{ marginLeft: "5vw", minWidth: '6rem' }}>
                   Delete Account
                 </Button>
               </Box>
