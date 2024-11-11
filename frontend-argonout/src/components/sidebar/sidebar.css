@@ -1,22 +1,21 @@
-/* sidebar.css */
-
 .sidebar {
-    min-width: 400px;
+    max-width: 25%;
+    display: block;
     height: 100vh; /* Pełna wysokość okna przeglądarki */
     background-color: #131F24;
-    padding: 20px;
-    position: fixed; /* Ustawienie sidebar na stałej pozycji */
+    position:absolute;
+    text-align: left;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
+    z-index: 9999; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
     transition: transform 0.3s ease; /* Płynne przejście przy ukrywaniu */
     transform: translateX(0); /* Domyślnie widoczny */
 }
 
 .sidebar-logo {
-    width: 340px; /* Szerokość logo */
+    width: 80%; /* Szerokość logo */
     height: auto; /* Automatyczna wysokość */
-    margin-right: 10px; /* Odstęp między logo a tekstem */
+    margin-top: 2vh; /* Odstęp między logo a tekstem */
 }
 
 .sidebar ul {
@@ -24,24 +23,19 @@
     padding: 0;
 }
 
-.sidebar ul li {
-    margin: 10px 0;
-    font-size: 20px;
-    min-width: 300px;
-}
+
 
 .sidebar ul li button {
-    margin: 10px 0;
-    font-size: 30px;
+    margin-bottom: 1.5vh;
+    font-size: 1.2vw;
     color: #D1D1D1;
+    min-width: 90%;
+
 }
 
 /* Stylizowanie przycisków */
 .sidebar .MuiButton-outlined {
-    font-size: 1.3rem; /* Rozmiar czcionki */
-    padding: 15px 20px;
-    min-width: 320px;
-    text-align: left; /* Wyrównanie tekstu do lewej */
+    padding: 2vh 2vw;
     justify-content: flex-start; /* Ustala położenie tekstu i ikony wewnątrz przycisku */
     border: 2px solid transparent; 
     border-radius: 12px;
@@ -56,8 +50,8 @@
 }
 
 .button-icon {
-    width: 45px; /* Szerokość ikony */
-    height: 45px; /* Wysokość ikony */
+    width: 2.5vw; /* Szerokość ikony */
+    height: 2.5vw; /* Wysokość ikony */
     margin-right: 10px; /* Odstęp między ikoną a tekstem */
 }
 
@@ -66,12 +60,9 @@
     color: inherit; /* Dziedziczy kolor z przycisku */
 }
 
-.sidebar-button {
-    display: none;
-}
 
 /* Media queries dla mniejszych ekranów */
-@media (max-width: 92rem) {
+/* @media (max-width: 60rem) { */
     .sidebar {
         transform: translateX(-100%); /* Ukrywa sidebar na mniejszych ekranach */
     }
@@ -82,24 +73,24 @@
     }
 
     .sidebar-button {
-        display: block; /* Pokazuje przycisk hamburgera */
-        position: fixed;
-        top: 5%; /* Środek w pionie */
-        left: 50%; /* Środek w poziomie */
+        display: none; /* Pokazuje przycisk hamburgera */
+        position: absolute;
+        
+        top: 34pt; /* Środek w pionie */
+        left: 22pt; /* Środek w poziomie */
         transform: translate(-50%, -50%); /* Przesunięcie o połowę szerokości i wysokości, aby wyśrodkować */
-        z-index: 1500; /* Wyższy indeks z-index dla przycisku hamburgera */
+        z-index: 99999; /* Wyższy indeks z-index dla przycisku hamburgera */
         background: #131F24;
         border: none;
         color: #D1D1D1;
-        font-size: 24px;
-        padding: 10px;
+        padding: 5px;
         border-radius: 12px;
         border: 2px solid #2F7A7E;
         cursor: pointer;
-        min-width: 5rem;
+        min-width: 3rem;
     }
 
     .sidebar-button:hover {
         background: #2F7A7E;
     }
-}
+

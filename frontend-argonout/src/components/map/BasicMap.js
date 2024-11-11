@@ -5,11 +5,19 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import osm from "./osm-providers";
 import './basicMap.css';
+import './../adventureModePanel/adventureModePanel.css'
 import 'leaflet/dist/leaflet.css';
 
 // Ikona niestandardowa
 const customIcon = new Icon({
   iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/marker.png',
+  iconSize: [50, 50],
+  iconAnchor: [12, 41],
+  popupAnchor: [8, -34],
+});
+
+const visitedIcon = new Icon({
+  iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/visited-marker.png', // Dodaj tu ścieżkę do ikony odwiedzonego miejsca
   iconSize: [50, 50],
   iconAnchor: [12, 41],
   popupAnchor: [8, -34],
@@ -26,24 +34,53 @@ L.Icon.Default.mergeOptions({
 });
 
 // Komponent do lokalizacji użytkownika
-function LocationMarker() {
+function LocationMarker({places, setNearbyPlaces, radius}) {
   const [position, setPosition] = useState(null);
+  const [simulatedLocation, setSimulatedLocation] = useState({
+    lat: 50.06339626,
+    lng: 20.01931608,
+  });
 
   const map = useMapEvents({
     click() {
       map.locate();
     },
     locationfound(e) {
-      setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
+      const userLocation = simulatedLocation;
+      setPosition(userLocation);
+      map.flyTo(userLocation, map.getZoom());
+
+      const nearby = places.filter(place => {
+        const placeLatLng = L.latLng(place.latitude, place.longitude);
+        const distance = map.distance(userLocation, placeLatLng);
+        return distance <= radius;
+      });
+      setNearbyPlaces(nearby);
+
     },
   });
+
+  // Ręczne wywołanie symulowanej lokalizacji
+  useEffect(() => {
+    if (simulatedLocation) {
+      setPosition(simulatedLocation);
+      map.flyTo(simulatedLocation, map.getZoom());
+  
+      const nearby = places.filter(place => {
+        const placeLatLng = L.latLng(place.latitude, place.longitude);
+        const distance = map.distance(simulatedLocation, placeLatLng);
+        return distance <= radius;
+      });
+      setNearbyPlaces(nearby);
+
+    }
+  }, [simulatedLocation, places]);
 
   return position === null ? null : (
     <Circle
       center={position}
       pathOptions={blueOptions}
-      radius={100}
+      radius={radius}
     >
       <Popup>Tu jesteś!</Popup>
     </Circle>
@@ -64,31 +101,12 @@ const MapClickHandler = ({ addPlaceMode, onMapClick }) => {
 };
 
 // Główny komponent mapy
-const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) => {
-  const ZOOM_LEVEL = 12;
-  const [center, setCenter] = useState({ lat: 50.05931, lng: 19.94251 });
-  const [places, setCoordinates] = useState([]);
-
-  // Funkcja do pobierania lokalizacji
-  const handleGetAll = async () => {
-    try {
-      const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/places', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const locations = response.data;
-      setCoordinates(locations);
-    } catch (error) {
-      console.error('Error fetching locations:', error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetAll();
-  }, []);
+const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, places, onPlaceVisit }) => {
+  const ZOOM_LEVEL = 14;
+  //const [places, setPlaces] = useState([]);
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const radius = 100;
+  const center = ({ lat: 50.05931, lng: 19.94251 });
 
   const handlePopupClick = (markerData) => {
     if (onPopupClick) {
@@ -96,8 +114,26 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) 
     }
   };
 
+  const handleVisitedPlace = (place) => {
+    onPlaceVisit(place);
+    
+    setNearbyPlaces(prevNearbyPlaces =>
+      prevNearbyPlaces.map(p =>
+        p.id === place.id ? { ...p, visited: true } : p
+      )
+    );
+    console.log("New nearby: ", nearbyPlaces);
+  };
+
+  const checkMode = () => {
+    const gameId = localStorage.getItem("gameId");
+    const routeId = localStorage.getItem("routeId");
+
+    return (gameId !== null) === (routeId !== null);
+  }
+
   return (
-    <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={false} className="rounded-map">
+    <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={true} className="rounded-map">
       <TileLayer
         url={osm.maptiler.url}
         attribution={osm.maptiler.attribution}
@@ -107,22 +143,33 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) 
         <Marker 
         key={index} 
         position={[markerData.latitude, markerData.longitude]} 
-        icon={customIcon}
+        icon={nearbyPlaces.some(p => p.id === markerData.id && p.visited) ? visitedIcon : customIcon}
         eventHandlers={{
           click: () => {
             handlePopupClick(markerData); // Funkcja obsługująca kliknięcie na markerze
           },
         }}
       >
+        
           <Popup>
             <div className="popupContainer" >
               <h5>{markerData.name}</h5>
               <p>{markerData.description}</p>
               <a href={markerData.moreInfoLink}>Kliknij po więcej informacji</a>
+              <br/>
+              {/* Sprawdzenie, czy dane miejsce jest w pobliżu i dodanie przycisku */}
+              {(nearbyPlaces.some(p => p.id === markerData.id && !p.visited && checkMode())) && (
+                <button className="btn-start" onClick={() => handleVisitedPlace(markerData)}>
+                  Kliknij aby odwiedzić
+                </button>
+              )}
             </div>
           </Popup>
         </Marker>
-      ))}
+        
+      )
+      )}
+
 
       {/* Renderowanie znacznika dodawanego miejsca */}
       {newPlacePosition && (
@@ -130,7 +177,7 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) 
           <Popup>
             <div>
               <h4>Nowe miejsce</h4>
-              <p>Uzupełnij formularz dodając szczegóły.</p>
+              <p>Uzupełnij formularz dodając szczegóły.{console.log("Miejsce: ", places)}</p>
             </div>
           </Popup>
         </Marker>
@@ -138,7 +185,7 @@ const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick }) 
 
       {/* Nasłuchiwacz kliknięć na mapie */}
       <MapClickHandler addPlaceMode={addPlaceMode} onMapClick={onMapClick} />
-      <LocationMarker />
+      <LocationMarker places={places} setNearbyPlaces={setNearbyPlaces} radius={radius}/>
     </MapContainer>
   );
 };

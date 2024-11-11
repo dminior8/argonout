@@ -4,10 +4,7 @@
     flex-direction: column;
     min-height: 100vh;
 }
-.top-container {
-    min-height: 10vh;
-    min-width: 70vh;
-}
+
 .right-top-container {
     position: fixed; /* Ustawienie na stałe */
     top: 0;          /* Przylega do górnej krawędzi */
@@ -15,153 +12,46 @@
     box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
     z-index: 1000;   /* Opcjonalne: aby znajdował się nad innymi elementami */
 }
-  
-.bottom-container {
-    min-width: 70vh;
+
+.add-place-form {
+    font-size: 3vh;
 }
 
-.add-place-container {
-    float: left;
+.text-input {
+    font-size: 1.5vh;
+    max-height: 5vh;
 }
 
-.edit-delete-container {
-    float: left;
+.form-select {
+    min-width: 100%;
+    max-height: 5vh;
+    font-size: 2vh !important;
 }
 
-.container-fluid {
-    min-height: 8vh;
-}
-
-.right-top-container {
+.right-container {
     position: fixed;
-    right: 20px; /* Odległość od prawej krawędzi */
-    top: 20px; /* Odległość od górnej krawędzi */
-    display: flex;
-    flex-direction: column; /* Układa elementy w kolumnie, jeden pod drugim */
-    gap: 20px; /* Odstęp między elementami */
-    margin: 5rem 5rem 0 0;
-}
-
-.right-top-item {
-    display: flex;
-    align-items: left; /* Wyrównuje ikonę i tekst w pionie */
-    color: #D1D1D1;
-    font-size: 1.3rem;
-    padding: 20px;
-    background-color: #202F36; /* Opcjonalne tło */
-    border-radius: 12px; /* Zaokrąglenie krawędzi */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Opcjonalny cień */
-    min-width: 25rem;
-    border: 2px solid #2F7A7E;
-}
-
-.points-icon {
-    width: 45px; /* Szerokość ikony */
-    height: 45px; /* Wysokość ikony */
-    margin-right: 15px; /* Odstęp między ikoną a tekstem */
-}
-
-.points {
-    margin-left: 2.5rem;
-    font-size: 1.6rem;
-}
-
-.right-top-item {
-    min-height: 8rem;
-    display: flex;
-}
-.right-top-item:first-child {
-    min-height: 4rem;
-    font-weight: 550;
-}
-
-
-.right-top-item:nth-child(2) {
-    min-height: 8rem;
+    top: 0;
+    right: 2rem;
+    bottom: 2rem;
     display: flex;
     flex-direction: column;
-}
-  
-.top-row {
-    width: 95%;
-    display: flex; /* Ustawia elementy w rzędzie */
-    gap: 2rem; /* Odstęp między elementami w górnym wierszu */
-    text-align: center;
-}
-  
-.first-element {
-    font-weight: bold;
-    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
-}
-
-.second-element {
-    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
-    
-}
-
-.second-element a:hover{
-    font-weight: bold;
-    transition: 0.3s ease; /* Płynna animacja dla obwódki */
-}
-  
-.third-element {
-    width: 100%; /* Trzeci element zajmuje całą szerokość kontenera */
-    background-color: #202F36; /* Opcjonalne tło */
-    border-radius: 12px; /* Zaokrąglenie krawędzi */
-    margin: 15px 0;
-    text-align: center; /* Wyrównanie tekstu do środka */
-}
-  
-.leaderboard-link {
-    text-decoration: none; /* Usunięcie podkreślenia z linku */
-    color: #2F7A7E; /* Kolor linku */
-}
-
-.bottom-right-container {
-    position: fixed; /* Element jest przyklejony do ekranu, nawet podczas przewijania */
-    bottom: 20px;    /* Odległość od dolnej krawędzi okna przeglądarki */
-    right: 20px;     /* Odległość od prawej krawędzi okna przeglądarki */
-    margin: 5rem 5rem 5rem 0;
-    background-color: #202F36;
-    border-radius: 8px; /* Zaokrąglone rogi */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Dodanie cienia */
-    padding: 25px;
-    line-height: 2;
-    color: #D1D1D1;
-    z-index: 1000;   /* Aby upewnić się, że jest nad innymi elementami */
-    max-width: 30rem;
+    align-items: flex-end;
+    gap: 20px;
   }
 
-/* Media queries dla mniejszych ekranów */
-@media (max-width: 1350px) {
-    .sidebar {
-        transform: translateX(-100%); /* Ukrywa sidebar na mniejszych ekranach */
-    }
-  
-    .sidebar.open {
-        transform: translateX(0); /* Pokazuje sidebar, gdy otwarty */
-        text-align: center;
-    }
-
-    .sidebar-button {
-        display: block; /* Pokazuje przycisk hamburgera */
-        position: fixed;
-        top: 5%; /* Środek w pionie */
-        left: 50%; /* Środek w poziomie */
-        transform: translate(-50%, -50%); /* Przesunięcie o połowę szerokości i wysokości, aby wyśrodkować */
-        z-index: 1500; /* Wyższy indeks z-index dla przycisku hamburgera */
-        background: #131F24;
-        border: none;
-        color: #D1D1D1;
-        font-size: 24px;
-        padding: 10px;
-        border-radius: 12px;
-        border: 2px solid #2F7A7E;
-        cursor: pointer;
-        min-width: 5rem;
-    }
-
-    .sidebar-button:hover {
-        background: #2F7A7E;
-    }
+.bottom-right-container {
+  background-color: #131F24;
+  color: #D1D1D1;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 20vw;
+  max-width: 300px;
+  max-height: 55vh;
+  font-size: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto; /* Ustawienie na dole kontenera */
+  border: 2px solid #2F7A7E;
 }

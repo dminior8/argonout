@@ -20,7 +20,7 @@ public class Route {
       private String name;
       private String description;
       private int maxTime;
-
+      private boolean isVisited;
       @OneToMany(cascade = CascadeType.ALL)
       @JoinTable(
               name = "routes_places",

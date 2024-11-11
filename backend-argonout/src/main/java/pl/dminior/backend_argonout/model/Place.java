@@ -29,4 +29,6 @@ public class Place {
 
     private String moreInfoLink;
 
+    private boolean isVisited;
+
 }

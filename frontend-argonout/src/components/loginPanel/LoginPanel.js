@@ -81,7 +81,7 @@ function LoginPanel({ onLogin }) {
             />
             <div className="another-option-btn">
               Don't have an account?&nbsp;
-              <Link to="/api/auth/register" className="register-link">Sign up!</Link>
+              <Link to="/auth/register" className="register-link">Sign up!</Link>
             </div>
             <br/>
             {info && <p className="error-message">{info}</p>}
