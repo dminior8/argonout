@@ -35,7 +35,7 @@
     width: 300px; /* Szerokość prostokąta */
     height: 200px; /* Wysokość prostokąta */
     background-color: #131F24 !important; /* Kolor tła prostokąta */
-    border: 3px solid #63b7bb !important; /* Obwódka prostokąta */
+    border: 1px solid #63b7bb !important; /* Obwódka prostokąta */
     text-align: center;
     border-radius: 12px; /* Zaokrąglenie rogów prostokąta */
     transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.3s ease; /* Dodaj przejście dla tła */

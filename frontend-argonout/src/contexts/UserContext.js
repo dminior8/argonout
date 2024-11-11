@@ -8,7 +8,9 @@ const UserContext = createContext();
 // Provider dla kontekstu
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [leaguesData, setLeaguesData] = useState([]);
 
+  // Fetchowanie profilu użytkownika
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
