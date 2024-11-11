@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,10 +24,13 @@ import pl.dminior.backend_argonout.security.jwt.AuthTokenFilter;
 
 import java.util.Arrays;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @Log
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
