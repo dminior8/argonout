@@ -14,7 +14,6 @@ import pl.dminior.backend_argonout.model.User;
 import pl.dminior.backend_argonout.repository.LeagueRepository;
 import pl.dminior.backend_argonout.repository.UserRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
