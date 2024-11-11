@@ -38,14 +38,13 @@ const LeaderboardPanel = () => {
     }, []);
 
     useEffect(() => {
-        // Dodajemy dodatkowy warunek, aby zapobiec nieskończonej pętli
         if (leaguesData.length > 0 && user && (!currentLeague || currentLeague.id !== user.league?.id)) {
             const league = leaguesData.find(
                 league => league.minPoints <= user.points && league.maxPoints >= user.points
             );
             if (league && (!user.league || user.league.id !== league.id)) {
-                setCurrentLeague(league); // Ustawiamy currentLeague tylko wtedy, gdy znajdziemy odpowiednią ligę
-                setUser(prevUser => ({ ...prevUser, league })); // Aktualizacja stanu `user` z nową ligą
+                setCurrentLeague(league);
+                setUser(prevUser => ({ ...prevUser, league })); 
             }
         }
     }, [leaguesData, user, currentLeague, setUser]);
@@ -76,7 +75,7 @@ const LeaderboardPanel = () => {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                    params: { page, size: 2 },
+                    params: { page, size: 10 },
                 });
                 setTotalPages(response.data.page.totalPages);
                 setUserList(response.data.content);
