@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.dto.LeaderboardUserDTO;
+import pl.dminior.backend_argonout.exception.UserAuthenticationException;
 import pl.dminior.backend_argonout.model.League;
 import pl.dminior.backend_argonout.model.User;
 import pl.dminior.backend_argonout.repository.LeagueRepository;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class LeagueServiceImpl implements LeagueService {
     private final UserRepository userRepository;
     private final LeagueRepository leagueRepository;
+    private final UserService userService;
 
     @Override
     public List<League> getAllLeagues() {
@@ -50,18 +52,15 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public Integer getCurrentPlayerPositionInLeague(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElse(null);
+    public Integer getCurrentPlayerPositionInLeague() throws UserAuthenticationException {
+        User user = userService.getCurrentUser();
         if (user == null) {
-            throw new RuntimeException("Użytkownik nie znaleziony");
+            throw new RuntimeException("User not found");
         }
 
         League league = leagueRepository.getLeagueByPoints(user.getPoints());
         if (league == null) {
-            throw new RuntimeException("Liga nieznaleziona dla podanej liczby punktów");
+            throw new RuntimeException("League not found");
         }
 
         List<User> usersInLeague = userRepository
@@ -69,8 +68,8 @@ public class LeagueServiceImpl implements LeagueService {
 
         int position = -1;
         for (int i = 0; i < usersInLeague.size(); i++) {
-            if (usersInLeague.get(i).getUsername().equals(username)) {
-                position = i + 1; // Pozycje w rankingu zaczynamy od 1
+            if (usersInLeague.get(i).getId().equals(user.getId())) {
+                position = i + 1;
                 break;
             }
         }
