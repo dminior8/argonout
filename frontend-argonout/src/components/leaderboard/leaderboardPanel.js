@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "./leaderboardPanel.css";
 
-import { useUser } from './../../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 import Sidebar from "../sidebar/Sidebar";
 import MiniStats from "../miniStats/MiniStats";
 
