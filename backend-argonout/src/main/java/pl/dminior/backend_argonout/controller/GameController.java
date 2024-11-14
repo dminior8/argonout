@@ -35,13 +35,16 @@ public class GameController {
                 return ResponseEntity.badRequest().body(new MessageResponse("Wrong placeId or gameId"));
             }
             case 1 -> {
-                return ResponseEntity.ok().body(new MessageResponse("Place added succesfully"));
+                return ResponseEntity.ok().body(new MessageResponse("Place added successfully"));
             }
             case 2 -> {
                 return ResponseEntity.badRequest().body(new MessageResponse("Place already added during this game"));
             }
             case 3 -> {
                 return ResponseEntity.badRequest().body(new MessageResponse("Place is not part of this game"));
+            }
+            case 4 -> {
+                return ResponseEntity.badRequest().body(new MessageResponse("Error during points adding"));
             }
             default -> {
                 return ResponseEntity.badRequest().body(new MessageResponse("Other error during adding place to game"));
