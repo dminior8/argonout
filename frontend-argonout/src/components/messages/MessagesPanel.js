@@ -31,9 +31,9 @@ const LeaderboardPanel = () => {
                 Authorization: `Bearer ${token}`,
               },
             });
-            console.log(response.data.message);
+
             alert(`${response.data.message}`);
-            //window.location.reload(true);
+            window.location.reload(true);
           } catch (error) {
             console.error('Error during logout:', error);
           }

@@ -87,6 +87,7 @@ textarea::placeholder {
     transition: background-color 0.3s ease;
     cursor: pointer;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .btn-send:hover {
