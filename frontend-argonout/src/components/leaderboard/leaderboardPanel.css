@@ -1,21 +1,21 @@
 .main-content {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    margin: 0 0 5vh 5vw
+    margin: 5vh 0 5vh 5vw
 }
 .leaderboard-title {
     color:#fff;
     font-style: bold;
     font-size: medium !important;
     padding-bottom: 3pt;
-    font-size: 2vw;
+    font-size: 1.8vw !important;
     width: 15vw;
     margin-bottom: 5vh;
     border-bottom: #2F7A7E 1px solid;
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+    width: 60%;
 }
 .leaderboard-list {
     width: 80%;

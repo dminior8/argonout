@@ -2,6 +2,8 @@ package pl.dminior.backend_argonout.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
@@ -99,5 +101,12 @@ public class UserServiceImpl implements UserService{
         }
         return false;
 
+    }
+
+    @Override
+    public User getCurrentUser() throws UserAuthenticationException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElse(null);
     }
 }

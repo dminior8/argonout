@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.dto.LeaderboardUserDTO;
+import pl.dminior.backend_argonout.exception.UserAuthenticationException;
 import pl.dminior.backend_argonout.model.League;
 import pl.dminior.backend_argonout.service.LeagueService;
 
@@ -43,12 +44,12 @@ public class LeagueController {
     }
 
     @GetMapping("leagues/current-player/position")
-    public ResponseEntity<Integer> getCurrentPlayerPositionInLeague(){
+    public ResponseEntity<Integer> getCurrentPlayerPositionInLeague() throws UserAuthenticationException {
         Integer position = leagueService.getCurrentPlayerPositionInLeague();
         if(position != 0){
             return new ResponseEntity<>(position, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    //TODO: Endpoint zwracający pozycję aktualnego użytkownika w lidze
+
 }

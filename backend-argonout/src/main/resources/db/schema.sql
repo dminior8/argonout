@@ -72,3 +72,12 @@ CREATE TABLE "leagues" (
   "min_points" INT,
   "max_points" INT
 );
+
+CREATE TABLE "messages" (
+  "message_id" UUID PRIMARY KEY,
+  "sender_id" UUID,
+  "topic" VARCHAR(100),
+  "content" VARCHAR(500),
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY ("sender_id") REFERENCES "users" ("user_id") ON DELETE CASCADE
+);

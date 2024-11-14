@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from 'axios';
 
@@ -230,7 +229,7 @@ const HomePage = () => {
         },
       });
       
-      console.log('New place added succesfully: ', payload);
+      console.log(response, payload);
       alert(`Dodano nowe miejsce: ${payload.name}`);
       setAddPlaceMode(false);
       setNewPlacePosition(null);
@@ -273,7 +272,7 @@ const HomePage = () => {
   const postVisitedPlace = async (place) => {
     
     const token = Cookies.get('accessTokenFront');
-    const response = await axios.post(`http://localhost:8080/api/free-game/add-place/${place.id}`, {}, {
+    const response = await axios.post("http://localhost:8080/api/messages/send", {}, {
       headers: { Authorization: `Bearer ${token}`}
     });
     return response.data;

@@ -3,6 +3,7 @@ package pl.dminior.backend_argonout.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.dminior.backend_argonout.dto.LeaderboardUserDTO;
+import pl.dminior.backend_argonout.exception.UserAuthenticationException;
 import pl.dminior.backend_argonout.model.League;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface LeagueService {
 
     Page<LeaderboardUserDTO> getAllUsersFromLeagueById(UUID id, Pageable pageable);
 
-    Integer getCurrentPlayerPositionInLeague();
+    Integer getCurrentPlayerPositionInLeague() throws UserAuthenticationException;
 }
