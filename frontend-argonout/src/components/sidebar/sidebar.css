@@ -37,7 +37,7 @@
 .sidebar .MuiButton-outlined {
     padding: 2vh 2vw;
     justify-content: flex-start; /* Ustala położenie tekstu i ikony wewnątrz przycisku */
-    border: 2px solid transparent; 
+    border: 1px solid transparent; 
     border-radius: 12px;
     color: #D1D1D1; /* Kolor tekstu */
     background-color: transparent; /* Tło przezroczyste */
@@ -45,7 +45,7 @@
 }
 
 .sidebar .MuiButton-outlined:hover {
-    border: 2px solid #2F7A7E; /* Obwódka po najechaniu */
+    border: 1px solid #2F7A7E; /* Obwódka po najechaniu */
     background-color: rgba(0, 0, 0, 0.1); /* Opcjonalnie dodaj tło po najechaniu */
 }
 

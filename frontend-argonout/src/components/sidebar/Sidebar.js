@@ -73,12 +73,12 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-          <Link to="/forum">
+          <Link to="/messages">
             <Button
               variant="outlined"
               startIcon={<img src="/icons/note_2356169.png" alt="Icon" className="button-icon" />}
             >
-              Forum
+              Wiadomości
             </Button>
           </Link>
           </li>

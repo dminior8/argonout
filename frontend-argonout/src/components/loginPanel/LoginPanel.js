@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useUser } from './../../contexts/UserContext';
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./loginPanel.css";
 
 function LoginPanel({ onLogin }) {
+  const { user } = useUser();
   let navigate = useNavigate();
 
   const [username, setUsername] = useState("");

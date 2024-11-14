@@ -1,4 +1,7 @@
-
+html, body, #root {
+  height: 100%; /* Ustawia pełną wysokość na całą stronę */
+  margin: 0;
+}
 .App{
   background-color: #131F24;
   background-size: cover; /* Dopasowanie obrazu do rozmiaru kontenera */

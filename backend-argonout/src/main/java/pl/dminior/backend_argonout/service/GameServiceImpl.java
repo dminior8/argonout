@@ -102,6 +102,8 @@ public class GameServiceImpl implements GameService{
         return false;
     }
 
+    @Transactional
+    @Override
     public boolean addPlaceInFreeGame(UUID placeId){
         Optional<Place> place = placeRepository.findById(placeId);
         if(place.isPresent()){

@@ -7,6 +7,9 @@ import RegisterPage from '../components/loginPanel/RegisterPanel';
 import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
 import AdventureModePanel from '../components/adventureModePanel/AdventureModePanel';
+import LeaderboardPanel from '../components/leaderboard/LeaderboardPanel';
+import MessagesPanel from '../components/messages/MessagesPanel';
+import ReceivedMessagesPanel from '../components/admin/receivedMessagesPanel/ReceivedMessagesPanel';
 import ProtectedRoute from './ProtectedRoute';
 
 export const routes = (isLoggedIn, onLogin) => (
@@ -32,12 +35,24 @@ export const routes = (isLoggedIn, onLogin) => (
       element={isLoggedIn ? <AdventureModePanel /> : <Navigate to="/auth/login" />}
     />
     <Route
+      path="/leaderboard"
+      element={isLoggedIn ? <LeaderboardPanel /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/messages"
+      element={isLoggedIn ? <MessagesPanel /> : <Navigate to="/auth/login" />}
+    />
+    <Route
       path="/users/me"
       element={isLoggedIn ? <UserProfile /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="/management"
       element={isLoggedIn ? <ManagementMenu /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/management/messages"
+      element={isLoggedIn ? <ReceivedMessagesPanel /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="/users/all"

@@ -15,19 +15,11 @@ const AdventureModePanel = () => {
   const [routes, setRoutes] = useState([]);
   const [places, setPlaces] = useState([]);
   
-  const { //Odwołanie do kontekstu
+  const { 
     gameStatus, handleGameStatus, 
     timeToEnd, handleTimeToEnd, 
     selectedRoute, handleSelectedRoute 
   } = useGameStatus();
-
-  // const fetchRoutes = async (token) => {
-  //     const response = await axios.get('http://localhost:8080/api/routes/all', {
-  //       headers: { Authorization: `Bearer ${token}`}
-  //     });
-  //     return response.data;
-  //   };
-
 
     useEffect(() => {
       const fetchRoutes = async () => {

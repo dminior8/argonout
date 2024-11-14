@@ -26,7 +26,7 @@ CREATE TABLE "routes" (
 CREATE TABLE "places" (
   "place_id" UUID PRIMARY KEY,
   "name" VARCHAR(100) NOT NULL,
-  "description" TEXT,
+  "description" VARCHAR(1000),
   "latitude" DECIMAL(10,8),
   "longitude" DECIMAL(11,8),
   more_info_link VARCHAR(255),
@@ -64,4 +64,20 @@ CREATE TABLE "visited_places" (
   "visited_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY ("game_id") REFERENCES "games" ("game_id") ON DELETE CASCADE,
   FOREIGN KEY ("place_id") REFERENCES "places" ("place_id") ON DELETE CASCADE
+);
+
+CREATE TABLE "leagues" (
+  "league_id" UUID PRIMARY KEY,
+  "name" VARCHAR(50),
+  "min_points" INT,
+  "max_points" INT
+);
+
+CREATE TABLE "messages" (
+  "message_id" UUID PRIMARY KEY,
+  "sender_id" UUID,
+  "topic" VARCHAR(100),
+  "content" VARCHAR(500),
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY ("sender_id") REFERENCES "users" ("user_id") ON DELETE CASCADE
 );

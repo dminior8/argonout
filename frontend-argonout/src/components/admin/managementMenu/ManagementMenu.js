@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { useUser } from '../../../contexts/UserContext'; // Importujemy nasz kontekst użytkownika
-import './managementMenu.css'; // Importujemy stylizacje
+import { useUser } from '../../../contexts/UserContext';
+import './managementMenu.css';
 import Sidebar from '../../sidebar/Sidebar';
 
 const ManagementMenu = () => {
-  const { user } = useUser(); // Pobieramy dane użytkownika z kontekstu
+  const { user } = useUser(); 
 
   if (user?.role !== 'ADMIN') {
-    return null; // Nie pokazujemy komponentu jeśli użytkownik nie jest administratorem
+    return null;
   }
 
   return (
@@ -18,6 +18,7 @@ const ManagementMenu = () => {
         <Sidebar />
         <div className="container-fluid">
           <div className="management-menu">
+            <h2>Panel Zarządzania</h2>
             <div className="menu-items">
               <Button
                 className="menu-button"
@@ -30,7 +31,7 @@ const ManagementMenu = () => {
               <Button
                 className="menu-button"
                 component={Link}
-                to="/messages"
+                to="/management/messages"
               >
                 Wiadomości
               </Button>
