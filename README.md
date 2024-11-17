@@ -14,7 +14,7 @@
 9. [Development Roadmap](#development-roadmap)
 10. [License](#license)
 
----
+
 
 ## Key Features
 
@@ -43,7 +43,7 @@
    - Register and log in securely with JWT authentication.
    - Edit user profiles and account details.
 
----
+
 
 ## GUI presentation
 https://github.com/user-attachments/assets/b72bab4f-92fa-45cb-a5d4-f65556c6db5f
@@ -175,7 +175,6 @@ Here's a summary of the available API endpoints:
 | PUT    | `/api/users/me`                           | Updates the user's profile.             | Status message.                |
 | DELETE | `/api/users/me`                           | Deletes the user's account.             | Status message.                |
 
----
 
 ## Technologies Used
 
@@ -191,7 +190,7 @@ Here's a summary of the available API endpoints:
 - Bootstrap
 - Axios
 
----
+
 
 ## Development Roadmap
 
@@ -217,13 +216,11 @@ Here's a summary of the available API endpoints:
    - CI/CD pipelines using GitHub Actions.
    - Auto-scaling and monitoring with AWS CloudWatch.
 
----
 
 ## License
 
 This project is licensed under the [Apache License](https://github.com/dminior8/argonout/blob/main/LICENSE).
 
----
 
 ## Author and Creation Date
 
