@@ -10,6 +10,7 @@ import AdventureModePanel from '../components/adventureModePanel/AdventureModePa
 import LeaderboardPanel from '../components/leaderboard/LeaderboardPanel';
 import MessagesPanel from '../components/messages/MessagesPanel';
 import ReceivedMessagesPanel from '../components/admin/receivedMessagesPanel/ReceivedMessagesPanel';
+import RouteEditorPanel from '../components/admin/routeEditorPanel/RouteEditorPanel';
 import ProtectedRoute from './ProtectedRoute';
 
 export const routes = (isLoggedIn, onLogin) => (
@@ -53,6 +54,10 @@ export const routes = (isLoggedIn, onLogin) => (
     <Route
       path="/management/messages"
       element={isLoggedIn ? <ReceivedMessagesPanel /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/management/routes"
+      element={isLoggedIn ? <RouteEditorPanel /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="/users/all"

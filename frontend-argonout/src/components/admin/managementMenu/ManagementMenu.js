@@ -23,7 +23,7 @@ const ManagementMenu = () => {
               <Button
                 className="menu-button"
                 component={Link}
-                to="/api/users"
+                to="/management/users"
               >
                 Użytkownicy
               </Button>
@@ -39,7 +39,7 @@ const ManagementMenu = () => {
               <Button
                 className="menu-button"
                 component={Link}
-                to="/tours"
+                to="/management/routes"
               >
                 Miejsca
               </Button>
