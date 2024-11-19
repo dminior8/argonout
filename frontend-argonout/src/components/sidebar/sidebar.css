@@ -15,7 +15,7 @@
 .sidebar-logo {
     width: 80%; /* Szerokość logo */
     height: auto; /* Automatyczna wysokość */
-    margin-top: 2vh; /* Odstęp między logo a tekstem */
+    margin-bottom: 2rem; /* Odstęp między logo a tekstem */
 }
 
 .sidebar ul {

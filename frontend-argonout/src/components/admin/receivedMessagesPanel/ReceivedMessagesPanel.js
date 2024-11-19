@@ -149,9 +149,18 @@ const ReceivedMessagesPanel = () => {
                             <div className="message-topic-desc" style={{ color: "#D1D1D1" }}>
                                 {currentMessage ? currentMessage.topic : "N/A"}
                             </div>
+                            <div className="sender-data">
+                                <div>
+                                    {currentMessage ? currentMessage.senderUsername	 : ""}
+                                </div>
+                                <span className="dot-divider" style={{ margin: "0 4pt", opacity: "0.5" }}>•</span>
+                                <div>
+                                    {currentMessage ? currentMessage.senderEmail	 : ""}
+                                </div>  
+                            </div>  
                             <div className="message-content-desc">
                                 {currentMessage ? currentMessage.content : ""}
-                            </div>      
+                            </div>     
                         </div>
                     </div>
                 </Col>

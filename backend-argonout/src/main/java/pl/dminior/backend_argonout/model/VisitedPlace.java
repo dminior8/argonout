@@ -22,20 +22,9 @@ public class VisitedPlace {
 
     private UUID placeId;
 
-    //@ManyToOne
-    //@JoinColumn(name = "game_id")
     private UUID gameId;
+
 
     private LocalDateTime visitedAt;
 
-//    public VisitedPlace(UUID gameId, UUID placeId, LocalDateTime visitedAt) {
-//        this.gameId = gameId;
-//        this.placeId = placeId;
-//        this.visitedAt = visitedAt;
-//    }
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "game_id", insertable = false, updatable = false)
-//    private Game game;
 }

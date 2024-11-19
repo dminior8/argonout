@@ -39,8 +39,6 @@ const Sidebar = () => {
             <img src="/logo.png" alt="Logo" className="sidebar-logo" /> 
           </Link>
         </h2>
-        <br/>
-        <br/>
         <ul>
           <li>
           <Link to="/home">
@@ -72,6 +70,18 @@ const Sidebar = () => {
               </Button>
             </Link>
           </li>
+
+          <li>
+            <Link to="/history">
+              <Button
+                variant="outlined"
+                startIcon={<img src="/icons/scroll_9288695.png" alt="Icon" className="button-icon" />}
+              >
+                Historia
+              </Button>
+            </Link>
+          </li>
+
           <li>
           <Link to="/messages">
             <Button
