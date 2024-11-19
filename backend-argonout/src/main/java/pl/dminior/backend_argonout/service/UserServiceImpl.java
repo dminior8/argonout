@@ -16,6 +16,7 @@ import pl.dminior.backend_argonout.dto.EditUserDTO;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +109,10 @@ public class UserServiceImpl implements UserService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return userRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public User findUserBy(UUID id) {
+        return userRepository.findById(id).orElse(null);
     }
 }

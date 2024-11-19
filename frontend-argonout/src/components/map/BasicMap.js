@@ -37,8 +37,8 @@ L.Icon.Default.mergeOptions({
 function LocationMarker({places, setNearbyPlaces, radius}) {
   const [position, setPosition] = useState(null);
   const [simulatedLocation, setSimulatedLocation] = useState({
-    lat: 50.06339626,
-    lng: 20.01931608,
+    lat: 50.05286484168532,
+    lng: 19.93407011032105,
   });
 
   const map = useMapEvents({
