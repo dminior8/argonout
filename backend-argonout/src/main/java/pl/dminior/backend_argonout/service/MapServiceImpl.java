@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import pl.dminior.backend_argonout.dto.PlaceDTO;
 import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
+import pl.dminior.backend_argonout.mapper.PlaceMapper;
 import pl.dminior.backend_argonout.mapper.RouteMapper;
 import pl.dminior.backend_argonout.model.Place;
 import pl.dminior.backend_argonout.model.Route;
@@ -37,16 +39,19 @@ public class MapServiceImpl implements MapService{
     private final VisitedPlaceRepository visitedPlaceRepository;
     private final UserRepository userRepository;
     private final RouteMapper routeMapper;
+    private final PlaceMapper placeMapper;
 
 
     @Override
-    public List<Place> getAllPlaces(){
-        return placeRepository.findAll();
+    public List<PlaceDTO> getAllPlaces(){
+        return placeRepository.findAll().stream()
+                .map(placeMapper::placeToPlaceDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<Place> getPlaceByRouteId(UUID routeId){
-        return routeRepository.findById(routeId).get().getPlaces();
+    public List<PlaceDTO> getPlaceByRouteId(UUID routeId){
+        return routeRepository.findById(routeId).get().getPlaces().stream()
+                .map(placeMapper::placeToPlaceDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -156,7 +161,7 @@ public class MapServiceImpl implements MapService{
                     visitedPlace.getVisitedAt().toLocalDate()
             );
         }).collect(Collectors.toList());
-        
+
         return new PageImpl<>(placeHistoryDTO, pageable, placeHistoryDTO.size());
     }
 

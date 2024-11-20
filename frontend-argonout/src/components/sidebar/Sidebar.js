@@ -22,6 +22,7 @@ const Sidebar = () => {
         },
       });
       Cookies.remove('accessTokenFront');
+      localStorage.clear();
       window.location.reload(true);
     } catch (error) {
       console.error('Error during logout:', error);

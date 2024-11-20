@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.dminior.backend_argonout.dto.PlaceDTO;
 import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
@@ -28,12 +29,12 @@ public class MapController {
 
 
     @GetMapping("/places")
-    public ResponseEntity<List<Place>> getAllPlaces() {
+    public ResponseEntity<List<PlaceDTO>> getAllPlaces() {
         return ResponseEntity.ok().body(mapService.getAllPlaces());
     }
 
     @GetMapping("/places/{routeId}")
-    public ResponseEntity<List<Place>> getPlacesByRouteId(@PathVariable UUID routeId) {
+    public ResponseEntity<List<PlaceDTO>> getPlacesByRouteId(@PathVariable UUID routeId) {
         return ResponseEntity.ok().body(mapService.getPlaceByRouteId(routeId));
     }
 

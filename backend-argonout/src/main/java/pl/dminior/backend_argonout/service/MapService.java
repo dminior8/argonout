@@ -2,6 +2,7 @@ package pl.dminior.backend_argonout.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pl.dminior.backend_argonout.dto.PlaceDTO;
 import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
@@ -11,9 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MapService {
-    List<Place> getAllPlaces();
+    List<PlaceDTO> getAllPlaces();
 
-    List<Place> getPlaceByRouteId(UUID routeId);
+    List<PlaceDTO> getPlaceByRouteId(UUID routeId);
 
     void setLocation(PlaceWithRouteDTO placeWithRouteDTO);
 

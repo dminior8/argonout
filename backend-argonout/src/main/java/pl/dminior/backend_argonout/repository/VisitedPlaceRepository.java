@@ -15,4 +15,10 @@ public interface VisitedPlaceRepository  extends JpaRepository<VisitedPlace, UUI
 
     List<VisitedPlace> findAllVisitedPlacesByUserId(UUID userId);
 
+    boolean existsByUserIdAndPlaceId(UUID userId, UUID placeId);
+
+    boolean existsByGameIdAndPlaceId(UUID placeId, UUID gameId);
+
+    List<UUID> findPlaceIdsByGameId(UUID gameId);
+
 }
