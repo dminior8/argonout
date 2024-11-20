@@ -93,15 +93,22 @@ INSERT INTO "users_games" (user_id, game_id) VALUES
                                                  ('b39289b0-b88a-4f09-b8fd-38ab15071acf', '3d1f0f1a-c7c3-4ff0-b6e7-6a7be0a41d4a');  -- Jan Kowalski
 
 -- Visited_Places
-INSERT INTO "visited_places" (visited_places_id, game_id, place_id, visited_at) VALUES
-                                                                             ('430e8c3f-7085-4bee-bae6-d27d5608bc12','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', 'c9f39e58-d9bb-47c8-b032-0d01339df459', CURRENT_TIMESTAMP),  -- Zamek Królewski na Wawelu
-                                                                             ('d4cd5ad7-f770-411c-b9da-2715c31189ed','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', 'c5291a74-15e0-4a45-9030-7a87e1e06817', CURRENT_TIMESTAMP),  -- Sukiennice
-                                                                             ('339cc237-154c-4b03-a8ff-2e7fa87842f0','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', '4c7576b6-4477-4c5f-9eed-b41539c9fabc', CURRENT_TIMESTAMP),  -- Kościół Mariacki
-                                                                             ('66d394b4-8088-490b-8384-924a07ff1303','e97c1b6b-c1a8-4625-bc8f-9e8cf3e9f2a0', '27b9a75f-ece8-4975-b89c-b614e312e388', CURRENT_TIMESTAMP),  -- Kopiec Kościuszki
-                                                                             ('e2c8e0ec-a9e7-4b48-878a-bd6b4fc7d8b4','3d1f0f1a-c7c3-4ff0-b6e7-6a7be0a41d4a', '40f24aa2-8af7-4a5f-920f-eeb1a6ac3736', CURRENT_TIMESTAMP);  -- Barbakan
+INSERT INTO "visited_places" (visited_places_id, user_id, game_id, place_id, visited_at) VALUES
+                                                                             ('430e8c3f-7085-4bee-bae6-d27d5608bc12','b3683311-a2e5-4546-b3e3-742f303b2d13','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', 'c9f39e58-d9bb-47c8-b032-0d01339df459', CURRENT_TIMESTAMP),  -- Zamek Królewski na Wawelu
+                                                                             ('d4cd5ad7-f770-411c-b9da-2715c31189ed','b3683311-a2e5-4546-b3e3-742f303b2d13','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', 'c5291a74-15e0-4a45-9030-7a87e1e06817', CURRENT_TIMESTAMP),  -- Sukiennice
+                                                                             ('339cc237-154c-4b03-a8ff-2e7fa87842f0','b3683311-a2e5-4546-b3e3-742f303b2d13','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', '4c7576b6-4477-4c5f-9eed-b41539c9fabc', CURRENT_TIMESTAMP),  -- Kościół Mariacki
+                                                                             ('66d394b4-8088-490b-8384-924a07ff1303','b39289b0-b88a-4f09-b8fd-38ab15071acf','e97c1b6b-c1a8-4625-bc8f-9e8cf3e9f2a0', '27b9a75f-ece8-4975-b89c-b614e312e388', CURRENT_TIMESTAMP),  -- Kopiec Kościuszki
+                                                                             ('e2c8e0ec-a9e7-4b48-878a-bd6b4fc7d8b4','b39289b0-b88a-4f09-b8fd-38ab15071acf','3d1f0f1a-c7c3-4ff0-b6e7-6a7be0a41d4a', '40f24aa2-8af7-4a5f-920f-eeb1a6ac3736', CURRENT_TIMESTAMP);  -- Barbakan
 
 INSERT INTO "leagues" (league_id, name, min_points, max_points) VALUES
                                                                     ('e2419a24-fd87-447b-bf62-d831e3d70da4', 'Drewniana liga', 0, 999),
                                                                     ('7eb2db2e-8d2e-41fc-9ba1-7236cd09b9a3', 'Srebrna liga', 1000, 4999),
                                                                     ('2bd51da3-3102-453c-a877-a6d35d939ddf', 'Złota liga', 5000, 9999),
                                                                     ('01eba262-6372-4e28-94ae-35e118286e34', 'Diamentowa liga', 10000, 2147483647);
+-- Przykładowe dane do tabeli messages
+INSERT INTO "messages" (message_id, sender_id, topic, content, created_at) VALUES
+                                                                    ('a5f2c76a-99c6-4d83-bc9d-3d5b6f489d57', 'b39289b0-b88a-4f09-b8fd-38ab15071acf', 'Zapytanie o trasę', 'Cześć! Jakie są polecane szlaki górskie na zimę?', CURRENT_TIMESTAMP),
+                                                                    ('bb23c58d-217f-4a67-bc98-98d34b9c5f4e', 'b3683311-a2e5-4546-b3e3-742f303b2d13', 'Propozycja trasy', 'Polecam wybrać się na Smoczy Szlak w Krakowie, świetna atrakcja dla rodzin.', CURRENT_TIMESTAMP),
+                                                                    ('cc73b5dd-8e22-42a8-8c26-982dd4b6b8a1', '46c520c6-8467-437b-9518-8126bc49cbd8', 'Zgłoszenie problemu', 'Mam problem z zaliczeniem punktu na trasie. Czy mogę otrzymać pomoc techniczną?', CURRENT_TIMESTAMP),
+                                                                    ('dd12a8a4-32c5-47cb-98ed-4a2b7894c1f5', 'd42e011d-966c-4e16-837f-0e7f3952c039', 'Pytanie o punkty', 'Ile punktów mogę zdobyć za ukończenie Szlaku Górskiego?', CURRENT_TIMESTAMP),
+                                                                    ('ee54c89d-4ba6-4df3-8df2-7e6e6e3bfc93', 'fc93bedd-290d-4061-8e39-4eeeb073190e', 'Podziękowanie', 'Dziękuję za świetną organizację wydarzenia! Trasy były wspaniałe.', CURRENT_TIMESTAMP);

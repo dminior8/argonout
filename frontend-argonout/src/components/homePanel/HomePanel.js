@@ -40,7 +40,7 @@ const HomePage = () => {
   const postVisitedPlace = async (place) => {
     
     const token = Cookies.get('accessTokenFront');
-    const response = await axios.post("http://localhost:8080/api/messages/send", {}, {
+    const response = await axios.post(`http://localhost:8080/api/free-game/add-place/${place.id}`, {}, {
       headers: { Authorization: `Bearer ${token}`}
     });
     return response.data;

@@ -273,26 +273,6 @@ const RouteEditorPanel = () => {
     }
   };
 
-  const postVisitedPlace = async (place) => {
-    
-    const token = Cookies.get('accessTokenFront');
-    const response = await axios.post("http://localhost:8080/api/messages/send", {}, {
-      headers: { Authorization: `Bearer ${token}`}
-    });
-    return response.data;
-  };
-
-  const handleVisitedPlace = (place) =>  {
-    try{
-      const responseMessage = postVisitedPlace(place);
-      console.log("Message from server: ", responseMessage);
-    }catch (e){
-      console.error("Error during adding visited place: ", e);
-    }
-    
-    alert(`Odwiedziłeś ${place.name}.`);
-  };
-
   return (
     <div className="AppContent">
       
@@ -305,7 +285,6 @@ const RouteEditorPanel = () => {
           newPlacePosition={newPlacePosition}
           onPopupClick={handlePlaceSelect}
           places={places}
-          onPlaceVisit={handleVisitedPlace}
 
         />
       

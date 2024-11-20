@@ -45,6 +45,8 @@ public class GameServiceImpl implements GameService{
         Optional<Game> game = gameRepository.findById(gameId);
         Optional<Place> place = placeRepository.findById(placeId);
         Optional<Route> route;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UUID userId = userRepository.findByUsername(auth.getName()).get().getId();
 
         if(game.isPresent() && place.isPresent()){
             route = Optional.ofNullable(routeRepository.getById(game.get().getRouteId()));
@@ -62,6 +64,7 @@ public class GameServiceImpl implements GameService{
                 }
 
                 VisitedPlace visitedPlace = new VisitedPlace();
+                visitedPlace.setUserId(userId);
                 visitedPlace.setGameId(gameId);
                 visitedPlace.setPlaceId(placeId);
                 visitedPlace.setVisitedAt(LocalDateTime.now());
@@ -106,11 +109,14 @@ public class GameServiceImpl implements GameService{
     @Transactional
     @Override
     public boolean addPlaceInFreeGame(UUID placeId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UUID userId = userRepository.findByUsername(auth.getName()).get().getId();
         Optional<Place> place = placeRepository.findById(placeId);
         if(place.isPresent()){
             place.get().setVisited(true);
 
             VisitedPlace visitedPlace = new VisitedPlace();
+            visitedPlace.setUserId(userId);
             visitedPlace.setPlaceId(placeId);
             visitedPlace.setVisitedAt(LocalDateTime.now());
 

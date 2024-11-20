@@ -115,8 +115,8 @@ const ReceivedMessagesPanel = () => {
                                     <div style={{ display: "flex", flexDirection: "row" }}>
                                         <div className="message-content">
                                             {singleMessage.content
-                                                ? singleMessage.content.length > 60 
-                                                    ? `${singleMessage.content.slice(0, 60)}...` 
+                                                ? singleMessage.content.length > 46 
+                                                    ? `${singleMessage.content.slice(0, 46)}...` 
                                                     : singleMessage.content
                                                 : "Brak treści"}
                                         </div>

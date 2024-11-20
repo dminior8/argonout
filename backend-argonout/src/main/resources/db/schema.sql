@@ -59,9 +59,11 @@ CREATE TABLE "users_games" (
 
 CREATE TABLE "visited_places" (
   "visited_places_id" UUID PRIMARY KEY,
+  "user_id" UUID REFERENCES "users" ("user_id") NOT NULL,
   "game_id" UUID REFERENCES "games" ("game_id"),
-  "place_id" UUID REFERENCES "places" ("place_id"),
+  "place_id" UUID REFERENCES "places" ("place_id") NOT NULL,
   "visited_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY ("user_id") REFERENCES "users" ("user_id") ON DELETE CASCADE,
   FOREIGN KEY ("game_id") REFERENCES "games" ("game_id") ON DELETE CASCADE,
   FOREIGN KEY ("place_id") REFERENCES "places" ("place_id") ON DELETE CASCADE
 );

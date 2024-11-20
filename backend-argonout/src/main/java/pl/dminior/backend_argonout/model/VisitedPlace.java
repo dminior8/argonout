@@ -19,12 +19,8 @@ public class VisitedPlace {
     @Column(name = "visited_places_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    private UUID placeId;
-
+    private UUID userId;
     private UUID gameId;
-
-
+    private UUID placeId;
     private LocalDateTime visitedAt;
-
 }

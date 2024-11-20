@@ -1,5 +1,8 @@
 package pl.dminior.backend_argonout.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
 import pl.dminior.backend_argonout.model.Place;
@@ -16,8 +19,9 @@ public interface MapService {
 
     PlaceWithRouteDTO editLocation(UUID placeId, PlaceWithRouteDTO place);
 
+    boolean deletePlace(UUID placeId);
+
     List<SimpleRouteDTO> getAllRoutes();
 
-
-    boolean deletePlace(UUID placeId);
+    Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable);
 }

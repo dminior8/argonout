@@ -1,11 +1,16 @@
 package pl.dminior.backend_argonout.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
 import pl.dminior.backend_argonout.model.Place;
@@ -62,4 +67,15 @@ public class MapController {
     public ResponseEntity<List<SimpleRouteDTO>> getAllRoutes() {
         return ResponseEntity.ok().body(mapService.getAllRoutes());
     }
+
+    @GetMapping("/places/all")
+    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("points")));
+        return mapService.getAllVisitedPlacesForCurrentUser(pageable);
+
+    }
+
 }
