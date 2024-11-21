@@ -156,6 +156,7 @@ Here's a summary of the available API endpoints:
 |--------|-------------------------------------------|-----------------------------------------|---------------------------------|
 | GET    | `/api/places`                             | Retrieves all places.                   | List of places.                |
 | GET    | `/api/places/{routeId}`                   | Gets places by route.                   | List of places.                |
+| GET    | `/api/places/visited`                     | Gets all visited places.                | Paginated list of places.      |
 | POST   | `/api/map/places/add`                     | Adds a new place (admin only).          | Status message.                |
 | PUT    | `/api/map/places/{placeId}`               | Updates a place (admin only).           | Status message.                |
 | DELETE | `/api/map/places/{placeId}`               | Deletes a place (admin only).           | Status message.                |
