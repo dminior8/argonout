@@ -4,14 +4,14 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import { useUser } from '../../contexts/UserContext';
-import './sidebar.css'; // Import stylów dla Sidebar
+import './sidebar.css'; 
 
 const Sidebar = () => {
-  const { user } = useUser(); // Use user context
-  const [isOpen, setIsOpen] = useState(true); // Stan do zarządzania widocznością paska bocznego
+  const { user } = useUser();
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen); // Przełączanie widoczności paska bocznego
+    setIsOpen(!isOpen);
   };
 
   const handleLogout = async () => {

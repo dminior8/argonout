@@ -59,19 +59,17 @@ const HomePage = () => {
 
   return (
     <div className="AppContent">
-      
       <Sidebar />
-      <div style={{marginTop:"10vh"}} />
+      <div className="map-container">
         {/* Komponent mapy */}
         <BasicMap
           places={places}
           onPlaceVisit={handleVisitedPlace}
-
         />
+      </div>
 
       <div className="right-container">
         <MiniStats />
-        
       </div>
     </div>
   );

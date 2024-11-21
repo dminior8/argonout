@@ -8,6 +8,7 @@ import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
 import AdventureModePanel from '../components/adventureModePanel/AdventureModePanel';
 import LeaderboardPanel from '../components/leaderboard/LeaderboardPanel';
+import HistoryPanel from '../components/history/HistoryPanel';
 import MessagesPanel from '../components/messages/MessagesPanel';
 import ReceivedMessagesPanel from '../components/admin/receivedMessagesPanel/ReceivedMessagesPanel';
 import RouteEditorPanel from '../components/admin/routeEditorPanel/RouteEditorPanel';
@@ -38,6 +39,10 @@ export const routes = (isLoggedIn, onLogin) => (
     <Route
       path="/leaderboard"
       element={isLoggedIn ? <LeaderboardPanel /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/history"
+      element={isLoggedIn ? <HistoryPanel /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="/messages"

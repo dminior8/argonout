@@ -1,0 +1,75 @@
+.main-content {
+    width: 100%;
+}
+.history-label {
+    color:#fff;
+    font-style: bold;
+    font-size: medium !important;
+    padding-bottom: 3pt;
+    font-size: 1.8vw !important;
+    width: 25vw !important;
+    border-bottom: #2F7A7E 1px solid;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+    text-align: left;
+    margin-bottom: 20pt;
+}
+
+.history-list {
+    width: 35vw;
+    height: calc(100vh - 150px);  /* Adjust this height to your needs */
+    overflow-y: auto;  /* This enables vertical scrolling */
+    padding-right: 10px;
+
+}
+.single-record {
+    font-size: 1.2vw;
+    color: #D1D1D1;
+    min-width: 90%;
+    height: 4rem;
+    border: 1px solid transparent; 
+    border-radius: 12px;
+    background-color: transparent;
+    padding: 1vh 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.single-record:hover {
+    transition: border 0.3s ease; /* Płynna animacja dla obwódki */
+    border: 1px solid #2F7A7E; /* Obwódka po najechaniu */
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.history-topic {
+    text-align: left;
+    font-weight: bold;
+}
+
+.other-history-info {
+    opacity: 0.7;
+    font-size: 0.7rem;
+}
+
+.history-name,
+.other-history-info {
+  white-space: nowrap; /* Zapobiega łamaniu wiersza */
+  overflow: hidden;     /* Ukrywa tekst, który nie mieści się w elemencie */
+  text-overflow: ellipsis; /* Dodaje "..." na końcu tekstu, jeśli nie mieści się w szerokości */
+  display: block;
+  width: 100%; /* Możesz dostosować szerokość w zależności od layoutu */
+}
+
+.map-content {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 30vw; 
+    height: 60vh;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

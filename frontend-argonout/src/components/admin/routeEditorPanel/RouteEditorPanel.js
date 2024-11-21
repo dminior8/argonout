@@ -121,7 +121,6 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
 };
 
 const RouteEditorPanel = () => {
-  const { user } = useUser();
   const [addPlaceMode, setAddPlaceMode] = useState(false); // Tryb dodawania miejsca
   const [editPlaceMode, setEditPlaceMode] = useState(false); // Tryb edycji miejsca
   const [newPlacePosition, setNewPlacePosition] = useState(null); 

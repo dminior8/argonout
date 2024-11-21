@@ -116,8 +116,13 @@ const AdventureModePanel = () => {
     <div className="AppContent">
       <Sidebar />
       
-      <div style={{marginTop: "10vh"}}/>
-      <BasicMap places={places} onPlaceVisit={handleVisitedPlace} />
+      <div className="map-container">
+        {/* Komponent mapy */}
+        <BasicMap
+          places={places}
+          onPlaceVisit={handleVisitedPlace}
+        />
+      </div>
       <div className="right-container">
         <MiniStats className="right-top-container" />
         
