@@ -99,13 +99,13 @@ INSERT INTO "visited_places" (visited_places_id, user_id, game_id, place_id, vis
                                                                              ('339cc237-154c-4b03-a8ff-2e7fa87842f0','b3683311-a2e5-4546-b3e3-742f303b2d13','1f95377a-10ed-4cc4-9b18-58a48e3e5e8a', '4c7576b6-4477-4c5f-9eed-b41539c9fabc', CURRENT_TIMESTAMP),  -- Kościół Mariacki
                                                                              ('66d394b4-8088-490b-8384-924a07ff1303','b39289b0-b88a-4f09-b8fd-38ab15071acf','e97c1b6b-c1a8-4625-bc8f-9e8cf3e9f2a0', '27b9a75f-ece8-4975-b89c-b614e312e388', CURRENT_TIMESTAMP),  -- Kopiec Kościuszki
                                                                              ('e2c8e0ec-a9e7-4b48-878a-bd6b4fc7d8b4','b39289b0-b88a-4f09-b8fd-38ab15071acf','3d1f0f1a-c7c3-4ff0-b6e7-6a7be0a41d4a', '40f24aa2-8af7-4a5f-920f-eeb1a6ac3736', CURRENT_TIMESTAMP);  -- Barbakan
-
+-- Leagues
 INSERT INTO "leagues" (league_id, name, min_points, max_points) VALUES
                                                                     ('e2419a24-fd87-447b-bf62-d831e3d70da4', 'Drewniana liga', 0, 999),
                                                                     ('7eb2db2e-8d2e-41fc-9ba1-7236cd09b9a3', 'Srebrna liga', 1000, 4999),
                                                                     ('2bd51da3-3102-453c-a877-a6d35d939ddf', 'Złota liga', 5000, 9999),
                                                                     ('01eba262-6372-4e28-94ae-35e118286e34', 'Diamentowa liga', 10000, 2147483647);
--- Przykładowe dane do tabeli messages
+-- Messages
 INSERT INTO "messages" (message_id, sender_id, topic, content, created_at) VALUES
                                                                     ('a5f2c76a-99c6-4d83-bc9d-3d5b6f489d57', 'b39289b0-b88a-4f09-b8fd-38ab15071acf', 'Zapytanie o trasę', 'Cześć! Jakie są polecane szlaki górskie na zimę?', CURRENT_TIMESTAMP),
                                                                     ('bb23c58d-217f-4a67-bc98-98d34b9c5f4e', 'b3683311-a2e5-4546-b3e3-742f303b2d13', 'Propozycja trasy', 'Polecam wybrać się na Smoczy Szlak w Krakowie, świetna atrakcja dla rodzin.', CURRENT_TIMESTAMP),

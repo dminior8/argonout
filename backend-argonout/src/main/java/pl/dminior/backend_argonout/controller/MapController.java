@@ -45,6 +45,15 @@ public class MapController {
             return ResponseEntity.ok().body(new MessageResponse("Place edited successfully"));
     }
 
+    @GetMapping("/places/visited")
+    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("points")));
+        return mapService.getAllVisitedPlacesForCurrentUser(pageable);
+    }
+
     @PutMapping("/map/places/{placeId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> editPlace(@PathVariable UUID placeId, @RequestBody PlaceWithRouteDTO placeWithRouteDTO) {
@@ -67,16 +76,6 @@ public class MapController {
     @GetMapping("/routes/all")
     public ResponseEntity<List<SimpleRouteDTO>> getAllRoutes() {
         return ResponseEntity.ok().body(mapService.getAllRoutes());
-    }
-
-    @GetMapping("/places/all")
-    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-    ){
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("points")));
-        return mapService.getAllVisitedPlacesForCurrentUser(pageable);
-
     }
 
 }

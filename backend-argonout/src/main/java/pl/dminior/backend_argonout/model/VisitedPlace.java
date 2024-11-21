@@ -2,7 +2,6 @@ package pl.dminior.backend_argonout.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +18,12 @@ public class VisitedPlace {
     @Column(name = "visited_places_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private UUID userId;
+
     private UUID gameId;
+
     private UUID placeId;
+
     private LocalDateTime visitedAt;
 }

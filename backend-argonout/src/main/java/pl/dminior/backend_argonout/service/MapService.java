@@ -16,6 +16,8 @@ public interface MapService {
 
     List<PlaceDTO> getPlaceByRouteId(UUID routeId);
 
+    Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable);
+
     void setLocation(PlaceWithRouteDTO placeWithRouteDTO);
 
     PlaceWithRouteDTO editLocation(UUID placeId, PlaceWithRouteDTO place);
@@ -23,6 +25,4 @@ public interface MapService {
     boolean deletePlace(UUID placeId);
 
     List<SimpleRouteDTO> getAllRoutes();
-
-    Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable);
 }

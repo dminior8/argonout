@@ -3,8 +3,6 @@ package pl.dminior.backend_argonout.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +25,6 @@ import pl.dminior.backend_argonout.repository.UserRepository;
 import pl.dminior.backend_argonout.repository.VisitedPlaceRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -52,6 +49,36 @@ public class MapServiceImpl implements MapService{
     public List<PlaceDTO> getPlaceByRouteId(UUID routeId){
         return routeRepository.findById(routeId).get().getPlaces().stream()
                 .map(placeMapper::placeToPlaceDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<VisitedPlace> visitedPlaces = visitedPlaceRepository.findAllVisitedPlacesByUserId(currentUser.getId());
+
+        List<PlaceHistoryDTO> placeHistoryDTO = visitedPlaces.stream().map(visitedPlace -> {
+            Place place = placeRepository.findById(visitedPlace.getPlaceId())
+                    .orElseThrow(() -> new EntityNotFoundException("Place not found"));
+
+            String routeName = routeRepository.findRouteNameByGameId(visitedPlace.getGameId())
+                    .orElse("Unknown Route");
+
+            return new PlaceHistoryDTO(
+                    place.getId(),
+                    place.getName(),
+                    place.getDescription(),
+                    place.getLatitude(),
+                    place.getLongitude(),
+                    routeName,
+                    visitedPlace.getVisitedAt().toLocalDate()
+            );
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(placeHistoryDTO, pageable, placeHistoryDTO.size());
     }
 
     @Override
@@ -134,39 +161,4 @@ public class MapServiceImpl implements MapService{
                 .map(routeMapper::mapToSimpleRouteDTO)
                 .toList();
     }
-
-    @Override
-    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User currentUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        List<VisitedPlace> visitedPlaces = visitedPlaceRepository.findAllVisitedPlacesByUserId(currentUser.getId());
-
-        List<PlaceHistoryDTO> placeHistoryDTO = visitedPlaces.stream().map(visitedPlace -> {
-            Place place = placeRepository.findById(visitedPlace.getPlaceId())
-                    .orElseThrow(() -> new EntityNotFoundException("Place not found"));
-
-            String routeName = routeRepository.findRouteNameByGameId(visitedPlace.getGameId())
-                    .orElse("Unknown Route");
-
-            return new PlaceHistoryDTO(
-                    place.getId(),
-                    place.getName(),
-                    place.getDescription(),
-                    place.getLatitude(),
-                    place.getLongitude(),
-                    routeName,
-                    visitedPlace.getVisitedAt().toLocalDate()
-            );
-        }).collect(Collectors.toList());
-
-        return new PageImpl<>(placeHistoryDTO, pageable, placeHistoryDTO.size());
-    }
-
-
-
-
-
 }

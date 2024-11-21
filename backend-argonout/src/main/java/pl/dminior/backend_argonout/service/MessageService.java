@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import pl.dminior.backend_argonout.dto.CurrentUserMessageDTO;
 import pl.dminior.backend_argonout.dto.UserMessageDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
-import pl.dminior.backend_argonout.model.Message;
 
 import java.util.UUID;
 

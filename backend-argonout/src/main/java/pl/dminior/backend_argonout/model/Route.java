@@ -17,9 +17,13 @@ public class Route {
       @GeneratedValue(strategy = GenerationType.UUID)
       @Column(name = "route_id")
       private UUID id;
+
       private String name;
+
       private String description;
+
       private int maxTime;
+
       @OneToMany(cascade = CascadeType.ALL)
       @JoinTable(
               name = "routes_places",

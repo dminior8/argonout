@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.dto.LeaderboardUserDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
@@ -74,7 +72,7 @@ public class LeagueServiceImpl implements LeagueService {
         }
 
         if (position == -1) {
-            throw new RuntimeException("Użytkownik nie znaleziony w lidze");
+            throw new RuntimeException("User not found in league");
         }
         return position;
     }

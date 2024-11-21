@@ -3,7 +3,6 @@ package pl.dminior.backend_argonout.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import pl.dminior.backend_argonout.model.Route;
 
 import java.util.UUID;
 
