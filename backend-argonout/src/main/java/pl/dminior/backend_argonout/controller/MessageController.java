@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.dto.CurrentUserMessageDTO;
+import pl.dminior.backend_argonout.dto.UserMessageDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
-import pl.dminior.backend_argonout.model.Message;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
 import pl.dminior.backend_argonout.service.MessageService;
 
@@ -32,7 +32,7 @@ public class MessageController {
 
     @GetMapping("/messages/get/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Page<Message> getAllMessages(
+    public Page<UserMessageDTO> getAllMessages(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){

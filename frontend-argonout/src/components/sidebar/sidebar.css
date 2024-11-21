@@ -15,7 +15,7 @@
 .sidebar-logo {
     width: 80%; /* Szerokość logo */
     height: auto; /* Automatyczna wysokość */
-    margin-top: 2vh; /* Odstęp między logo a tekstem */
+    margin: 0.4rem 0 0.9rem 0; /* Odstęp między logo a tekstem */
 }
 
 .sidebar ul {
@@ -35,7 +35,7 @@
 
 /* Stylizowanie przycisków */
 .sidebar .MuiButton-outlined {
-    padding: 2vh 2vw;
+    padding: 1.8vh 2vw;
     justify-content: flex-start; /* Ustala położenie tekstu i ikony wewnątrz przycisku */
     border: 1px solid transparent; 
     border-radius: 12px;

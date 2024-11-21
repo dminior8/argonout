@@ -115,9 +115,7 @@ const ReceivedMessagesPanel = () => {
                                     <div style={{ display: "flex", flexDirection: "row" }}>
                                         <div className="message-content">
                                             {singleMessage.content
-                                                ? singleMessage.content.length > 60 
-                                                    ? `${singleMessage.content.slice(0, 60)}...` 
-                                                    : singleMessage.content
+                                                ? singleMessage.content
                                                 : "Brak treści"}
                                         </div>
                                         <span className="dot-divider" style={{ margin: "0 4px", opacity: "0.5" }}>•</span>
@@ -149,9 +147,14 @@ const ReceivedMessagesPanel = () => {
                             <div className="message-topic-desc" style={{ color: "#D1D1D1" }}>
                                 {currentMessage ? currentMessage.topic : "N/A"}
                             </div>
+                            <div className="sender-data">
+                                <div>
+                                    {currentMessage ? currentMessage.senderEmail	 : ""}
+                                </div>  
+                            </div>  
                             <div className="message-content-desc">
                                 {currentMessage ? currentMessage.content : ""}
-                            </div>      
+                            </div>     
                         </div>
                     </div>
                 </Col>

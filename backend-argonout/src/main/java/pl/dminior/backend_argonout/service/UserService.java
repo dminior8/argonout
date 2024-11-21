@@ -6,6 +6,8 @@ import pl.dminior.backend_argonout.security.payloads.response.UserResponse;
 import pl.dminior.backend_argonout.security.payloads.request.RegisterRequest;
 import pl.dminior.backend_argonout.dto.EditUserDTO;
 
+import java.util.UUID;
+
 public interface UserService {
 
     void registerUser(RegisterRequest registerRequest);
@@ -17,4 +19,7 @@ public interface UserService {
     Boolean deleteCurrentUser(String username) throws UserAuthenticationException;
 
     User getCurrentUser() throws UserAuthenticationException;
+
+    User findUserBy(UUID senderId);
+
 }

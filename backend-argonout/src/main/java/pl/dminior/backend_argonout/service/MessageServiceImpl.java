@@ -3,11 +3,12 @@ package pl.dminior.backend_argonout.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.dto.CurrentUserMessageDTO;
+import pl.dminior.backend_argonout.dto.UserMessageDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
+import pl.dminior.backend_argonout.mapper.MessageMapper;
 import pl.dminior.backend_argonout.model.Message;
 import pl.dminior.backend_argonout.repository.MessageRepository;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class MessageServiceImpl implements MessageService {
     private final UserService userService;
     private final MessageRepository messageRepository;
+    private final MessageMapper messageMapper;
 
     @Override
     @Transactional
@@ -33,8 +35,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Page<Message> getAllMessages(Pageable pageable){
-        return messageRepository.findAll(pageable);
+    public Page<UserMessageDTO> getAllMessages(Pageable pageable){
+        Page<Message> messages = messageRepository.findAll(pageable);
+
+        return messages.map(messageMapper::mapToUserMessageDTO);
     }
 
     @Override

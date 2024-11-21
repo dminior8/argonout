@@ -24,6 +24,7 @@
     background-color: transparent;
     padding: 1vh 1vw;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     justify-content: center;
 }
@@ -40,6 +41,14 @@
     font-weight: bold;
 }
 
+.message-time {
+    text-align: right; /* Wyrównanie tekstu do prawej */
+    font-size: 0.8rem;
+    color: #D1D1D1;
+    opacity: 0.5;
+    margin-right:20pt;
+}
+
 .message-description{
   background-color: #131F24;
   color: #D1D1D1;
@@ -50,7 +59,7 @@
   height: 50%;
   max-width: 20vw;
   max-height: 55vh;
-  font-size: 1rem;
+  font-size: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -59,13 +68,27 @@
 }
 
 .message-topic-desc {
-    font-weight: bold;
     border-bottom:1px solid #2F7A7E;
     width: 80%;
     text-align: center;
     padding-bottom: 4pt;
+    font-weight: bold;
 }
 
 .message-content-desc {
     margin-top: 10pt;
+}
+
+.message-topic, .message-content, .message-topic-desc {
+    white-space: nowrap;   /* Zapobiega łamaniu wiersza */
+    overflow: hidden;      /* Ukrywa tekst, który nie mieści się w elemencie */
+    text-overflow: ellipsis; /* Dodaje "..." na końcu tekstu, jeśli nie mieści się w szerokości */
+}
+
+.sender-data {
+    font-size: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    flex-shrink: 1;
 }
