@@ -17,7 +17,10 @@ public class League {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "league_id")
     UUID id;
+
     String name;
+
     int minPoints;
+
     int maxPoints;
 }

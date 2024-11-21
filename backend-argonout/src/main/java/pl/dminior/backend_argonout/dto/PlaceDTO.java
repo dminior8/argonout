@@ -1,21 +1,16 @@
-package pl.dminior.backend_argonout.model;
+package pl.dminior.backend_argonout.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
-
 @Getter
 @Setter
-@Entity
-@Table(name = "places")
-public class Place {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "place_id")
+@RequiredArgsConstructor
+public class PlaceDTO {
     private UUID id;
 
     private String name;
@@ -29,4 +24,5 @@ public class Place {
 
     private String moreInfoLink;
 
+    private boolean isVisited;
 }

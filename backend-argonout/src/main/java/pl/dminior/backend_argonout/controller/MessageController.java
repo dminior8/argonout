@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.dto.CurrentUserMessageDTO;
 import pl.dminior.backend_argonout.dto.UserMessageDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
-import pl.dminior.backend_argonout.model.Message;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
 import pl.dminior.backend_argonout.service.MessageService;
 

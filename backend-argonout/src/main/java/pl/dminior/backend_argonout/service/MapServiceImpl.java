@@ -1,37 +1,84 @@
 package pl.dminior.backend_argonout.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import pl.dminior.backend_argonout.dto.PlaceDTO;
+import pl.dminior.backend_argonout.dto.PlaceHistoryDTO;
 import pl.dminior.backend_argonout.dto.PlaceWithRouteDTO;
 import pl.dminior.backend_argonout.dto.SimpleRouteDTO;
+import pl.dminior.backend_argonout.mapper.PlaceMapper;
 import pl.dminior.backend_argonout.mapper.RouteMapper;
 import pl.dminior.backend_argonout.model.Place;
 import pl.dminior.backend_argonout.model.Route;
+import pl.dminior.backend_argonout.model.User;
+import pl.dminior.backend_argonout.model.VisitedPlace;
 import pl.dminior.backend_argonout.repository.PlaceRepository;
 import pl.dminior.backend_argonout.repository.RouteRepository;
+import pl.dminior.backend_argonout.repository.UserRepository;
+import pl.dminior.backend_argonout.repository.VisitedPlaceRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MapServiceImpl implements MapService{
     private final RouteRepository routeRepository;
     private final PlaceRepository placeRepository;
+    private final VisitedPlaceRepository visitedPlaceRepository;
+    private final UserRepository userRepository;
     private final RouteMapper routeMapper;
+    private final PlaceMapper placeMapper;
+
 
     @Override
-    public List<Place> getAllPlaces(){
-        return placeRepository.findAll();
+    public List<PlaceDTO> getAllPlaces(){
+        return placeRepository.findAll().stream()
+                .map(placeMapper::placeToPlaceDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<Place> getPlaceByRouteId(UUID routeId){
-        return routeRepository.findById(routeId).get().getPlaces();
+    public List<PlaceDTO> getPlaceByRouteId(UUID routeId){
+        return routeRepository.findById(routeId).get().getPlaces().stream()
+                .map(placeMapper::placeToPlaceDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<VisitedPlace> visitedPlaces = visitedPlaceRepository.findAllVisitedPlacesByUserId(currentUser.getId());
+
+        List<PlaceHistoryDTO> placeHistoryDTO = visitedPlaces.stream().map(visitedPlace -> {
+            Place place = placeRepository.findById(visitedPlace.getPlaceId())
+                    .orElseThrow(() -> new EntityNotFoundException("Place not found"));
+
+            String routeName = routeRepository.findRouteNameByGameId(visitedPlace.getGameId())
+                    .orElse("Unknown Route");
+
+            return new PlaceHistoryDTO(
+                    place.getId(),
+                    place.getName(),
+                    place.getDescription(),
+                    place.getLatitude(),
+                    place.getLongitude(),
+                    routeName,
+                    visitedPlace.getVisitedAt().toLocalDate()
+            );
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(placeHistoryDTO, pageable, placeHistoryDTO.size());
     }
 
     @Override
@@ -95,7 +142,7 @@ public class MapServiceImpl implements MapService{
     @Override
     public boolean deletePlace(UUID placeId) {
         if (placeRepository.findById(placeId).isPresent()) {
-            // Usuń powiązania w tabeli routes_places
+
             List<Route> routes = routeRepository.findAll();
 
             for (Route route : routes) {

@@ -1,57 +1,26 @@
 .AppContent {
     display: flex;
     align-items: center;
+    justify-content: center; 
     flex-direction: column;
     min-height: 100vh;
 }
 
-.right-top-container {
-    position: fixed; /* Ustawienie na stałe */
-    top: 0;          /* Przylega do górnej krawędzi */
-    right: 0;        /* Przylega do prawej krawędzi */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-    z-index: 1000;   /* Opcjonalne: aby znajdował się nad innymi elementami */
-}
-
-.add-place-form {
-    font-size: 3vh;
-}
-
-.text-input {
-    font-size: 1.5vh;
-    max-height: 5vh;
-}
-
-.form-select {
-    min-width: 100%;
-    max-height: 5vh;
-    font-size: 2vh !important;
-}
-
-.right-container {
-    position: fixed;
-    top: 0;
-    right: 2rem;
-    bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 20px;
+.map-container {
+    width: 50%;  
+    height: 70vh; 
+    max-width: 1000px; 
+    min-width: 400px;
+    margin-top: 10vh;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-.bottom-right-container {
-  background-color: #131F24;
-  color: #D1D1D1;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 20vw;
-  max-width: 300px;
-  max-height: 55vh;
-  font-size: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: auto; /* Ustawienie na dole kontenera */
-  border: 2px solid #2F7A7E;
+/* Stylowanie dla samej mapy (kontener mapy Leaflet) */
+.leaflet-container {
+    position: absolute;
+    width: 100%; 
+    height: 100%;
+    border-radius: 8px; 
 }

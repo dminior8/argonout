@@ -1,98 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents } from "react-leaflet";
 import L, { Icon } from 'leaflet';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import osm from "./osm-providers";
 import './basicMap.css';
-import './../adventureModePanel/adventureModePanel.css'
 import 'leaflet/dist/leaflet.css';
 
-// Ikona niestandardowa
+// Ikony niestandardowe
 const customIcon = new Icon({
   iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/marker.png',
   iconSize: [50, 50],
-  iconAnchor: [12, 41],
-  popupAnchor: [8, -34],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -50],
 });
 
 const visitedIcon = new Icon({
-  iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/visited-marker.png', // Dodaj tu ścieżkę do ikony odwiedzonego miejsca
+  iconUrl: process.env.PUBLIC_URL + '/icons/mapMarkersImages/visited-marker.png',
   iconSize: [50, 50],
-  iconAnchor: [12, 41],
-  popupAnchor: [8, -34],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -50],
 });
 
 const blueOptions = { color: 'blue' };
 
-// Ustawienia domyślnej ikony
+// Ustawienia domyślnej ikony Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 // Komponent do lokalizacji użytkownika
-function LocationMarker({places, setNearbyPlaces, radius}) {
+function LocationMarker({ places, setNearbyPlaces, radius }) {
   const [position, setPosition] = useState(null);
-  const [simulatedLocation, setSimulatedLocation] = useState({
+  const simulatedLocation = {
     lat: 50.05286484168532,
     lng: 19.93407011032105,
-  });
+  };
 
   const map = useMapEvents({
-    click() {
-      map.locate();
-    },
-    locationfound(e) {
+    locationfound() {
       const userLocation = simulatedLocation;
       setPosition(userLocation);
       map.flyTo(userLocation, map.getZoom());
 
       const nearby = places.filter(place => {
-        const placeLatLng = L.latLng(place.latitude, place.longitude);
-        const distance = map.distance(userLocation, placeLatLng);
+        const distance = map.distance(userLocation, L.latLng(place.latitude, place.longitude));
         return distance <= radius;
       });
       setNearbyPlaces(nearby);
-
     },
   });
 
-  // Ręczne wywołanie symulowanej lokalizacji
+  // Symulowane ustawienie lokalizacji
   useEffect(() => {
-    if (simulatedLocation) {
-      setPosition(simulatedLocation);
-      map.flyTo(simulatedLocation, map.getZoom());
-  
-      const nearby = places.filter(place => {
-        const placeLatLng = L.latLng(place.latitude, place.longitude);
-        const distance = map.distance(simulatedLocation, placeLatLng);
-        return distance <= radius;
-      });
-      setNearbyPlaces(nearby);
-
-    }
-  }, [simulatedLocation, places]);
+    map.locate();
+  }, []);
 
   return position === null ? null : (
-    <Circle
-      center={position}
-      pathOptions={blueOptions}
-      radius={radius}
-    >
+    <Circle center={position} pathOptions={blueOptions} radius={radius}>
       <Popup>Tu jesteś!</Popup>
     </Circle>
   );
 }
 
-// Komponent nasłuchujący na kliknięcia na mapie w trybie dodawania miejsca
+// Komponent do obsługi kliknięć na mapie
 const MapClickHandler = ({ addPlaceMode, onMapClick }) => {
   useMapEvents({
     click(e) {
       if (addPlaceMode) {
-        onMapClick(e.latlng); // Ustaw pozycję nowego miejsca
+        onMapClick(e.latlng);
       }
     },
   });
@@ -101,91 +78,87 @@ const MapClickHandler = ({ addPlaceMode, onMapClick }) => {
 };
 
 // Główny komponent mapy
-const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, places, onPlaceVisit }) => {
+const BasicMap = ({ addPlaceMode, onMapClick, newPlacePosition, onPopupClick, places, onPlaceVisit, currentPlace }) => {
   const ZOOM_LEVEL = 14;
-  //const [places, setPlaces] = useState([]);
-  const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const radius = 100;
-  const center = ({ lat: 50.05931, lng: 19.94251 });
+  const center = { lat: 50.05931, lng: 19.94251 };
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const popupRefs = useRef({}); // Referencje do popupów
 
   const handlePopupClick = (markerData) => {
     if (onPopupClick) {
-      onPopupClick(markerData); // Wywołanie funkcji przekazanej z komponentu nadrzędnego
+      onPopupClick(markerData);
     }
   };
 
   const handleVisitedPlace = (place) => {
     onPlaceVisit(place);
-    
-    setNearbyPlaces(prevNearbyPlaces =>
-      prevNearbyPlaces.map(p =>
-        p.id === place.id ? { ...p, visited: true } : p
-      )
+
+    setNearbyPlaces(prev =>
+      prev.map(p => (p.id === place.id ? { ...p, visited: true } : p))
     );
-    console.log("New nearby: ", nearbyPlaces);
   };
 
-  const checkMode = () => {
-    const gameId = localStorage.getItem("gameId");
-    const routeId = localStorage.getItem("routeId");
-
-    return (gameId !== null) === (routeId !== null);
-  }
+  // Otwieranie popupu, gdy zmienia się `currentPlace`
+  useEffect(() => {
+    if (currentPlace && popupRefs.current[currentPlace]) {
+      popupRefs.current[currentPlace].openPopup();
+    }
+  }, [currentPlace]);
 
   return (
-    <MapContainer center={center} zoom={ZOOM_LEVEL} scrollWheelZoom={true} className="rounded-map">
-      <TileLayer
-        url={osm.maptiler.url}
-        attribution={osm.maptiler.attribution}
-      />
-      {/* Renderowanie istniejących miejsc */}
+    <MapContainer
+      center={center}
+      zoom={ZOOM_LEVEL}
+      scrollWheelZoom={true}
+      className="rounded-map"
+    >
+      <TileLayer url={osm.maptiler.url} attribution={osm.maptiler.attribution} />
+
+      {/* Renderowanie markerów */}
       {places.map((markerData, index) => (
-        <Marker 
-        key={index} 
-        position={[markerData.latitude, markerData.longitude]} 
-        icon={nearbyPlaces.some(p => p.id === markerData.id && p.visited) ? visitedIcon : customIcon}
-        eventHandlers={{
-          click: () => {
-            handlePopupClick(markerData); // Funkcja obsługująca kliknięcie na markerze
-          },
-        }}
-      >
-        
+        <Marker
+          key={`${markerData.placeId}-${index}`} 
+          position={[markerData.latitude, markerData.longitude]}
+          icon={nearbyPlaces.some(p => p.id === markerData.id && p.visited) ? visitedIcon : customIcon}
+          ref={(el) => (popupRefs.current[markerData.placeId] = el)}
+          eventHandlers={{
+            click: () => handlePopupClick(markerData),
+          }}
+        >
           <Popup>
-            <div className="popupContainer" >
+            <div className="popupContainer">
               <h5>{markerData.name}</h5>
               <p>{markerData.description}</p>
               <a href={markerData.moreInfoLink}>Kliknij po więcej informacji</a>
-              <br/>
-              {/* Sprawdzenie, czy dane miejsce jest w pobliżu i dodanie przycisku */}
-              {(nearbyPlaces.some(p => p.id === markerData.id && !p.visited && checkMode())) && (
-                <button className="btn-start" onClick={() => handleVisitedPlace(markerData)}>
+              <br />
+              {nearbyPlaces.some(p => p.id === markerData.id && !p.visited) && (
+                <button  className="btn-start" onClick={() => handleVisitedPlace(markerData)}>
                   Kliknij aby odwiedzić
                 </button>
               )}
             </div>
           </Popup>
         </Marker>
-        
-      )
-      )}
+      ))}
 
-
-      {/* Renderowanie znacznika dodawanego miejsca */}
+      {/* Nowe miejsce */}
       {newPlacePosition && (
         <Marker position={newPlacePosition} icon={customIcon}>
           <Popup>
             <div>
               <h4>Nowe miejsce</h4>
-              <p>Uzupełnij formularz dodając szczegóły.{console.log("Miejsce: ", places)}</p>
+              <p>Uzupełnij szczegóły w formularzu.</p>
             </div>
           </Popup>
         </Marker>
       )}
 
-      {/* Nasłuchiwacz kliknięć na mapie */}
+      {/* Obsługa kliknięć na mapie */}
       <MapClickHandler addPlaceMode={addPlaceMode} onMapClick={onMapClick} />
-      <LocationMarker places={places} setNearbyPlaces={setNearbyPlaces} radius={radius}/>
+
+      {/* Lokalizacja użytkownika */}
+      <LocationMarker places={places} setNearbyPlaces={setNearbyPlaces} radius={radius} />
     </MapContainer>
   );
 };
