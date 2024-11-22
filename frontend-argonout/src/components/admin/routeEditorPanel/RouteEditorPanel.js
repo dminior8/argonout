@@ -278,14 +278,17 @@ const RouteEditorPanel = () => {
       <Sidebar />
       <div style={{marginTop:"10vh"}} />
         {/* Komponent mapy */}
-        <BasicMap
-          addPlaceMode={addPlaceMode}
-          onMapClick={handleMapClick}
-          newPlacePosition={newPlacePosition}
-          onPopupClick={handlePlaceSelect}
-          places={places}
+        <div className="map-container">
+          <BasicMap
+            className="basic-map" 
+            addPlaceMode={addPlaceMode}
+            onMapClick={handleMapClick}
+            newPlacePosition={newPlacePosition}
+            onPopupClick={handlePlaceSelect}
+            places={places}
 
-        />
+          />
+        </div>
       
       <div>
         <button
@@ -303,7 +306,7 @@ const RouteEditorPanel = () => {
           {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
         </button>
         {selectedPlace && (
-          <div style={{ marginTop: '15px'}}>
+          <div style={{ marginTop: '15pt'}}>
             <button 
             className="btn-secondary" 
             onClick={handleEditPlace}

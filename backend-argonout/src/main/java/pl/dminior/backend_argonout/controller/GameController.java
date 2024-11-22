@@ -3,6 +3,7 @@ package pl.dminior.backend_argonout.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
 import pl.dminior.backend_argonout.service.GameService;
@@ -16,6 +17,7 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping("/game/init/{routeId}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UUID> initGame(@PathVariable UUID routeId){
         UUID gameId = gameService.initGame(routeId);
         if(gameId != null){
@@ -25,6 +27,7 @@ public class GameController {
     }
 
     @PostMapping("/game/{gameId}/add-place/{placeId}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     ResponseEntity<MessageResponse> addPlaceToGame(@PathVariable UUID gameId, @PathVariable UUID placeId){
         int status = gameService.addPlaceToGame(gameId, placeId);
         switch (status){
@@ -53,6 +56,7 @@ public class GameController {
     }
 
     @PostMapping("/game/{gameId}/end")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> endGame(@PathVariable UUID gameId){
         if(gameService.endGame(gameId)){
             return ResponseEntity.ok().body(new MessageResponse("Game ended - all places collected"));
@@ -62,6 +66,7 @@ public class GameController {
     }
 
     @PostMapping("/free-game/add-place/{placeId}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> addPlaceInFreeGame(@PathVariable UUID placeId){
 
         if(gameService.addPlaceInFreeGame(placeId)){

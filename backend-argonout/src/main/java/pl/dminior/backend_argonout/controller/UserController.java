@@ -15,12 +15,12 @@ import pl.dminior.backend_argonout.service.UserServiceImpl;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users/me")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
 
-    @GetMapping
+    @GetMapping("/me")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserResponse> getDataAboutUser() throws UserAuthenticationException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.getDataAboutUser(username));
     }
 
-    @PutMapping
+    @PutMapping("/me")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> editDataAboutUser(@RequestBody EditUserDTO editUserDTO) throws UserAuthenticationException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +41,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Error during account editing"));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/me")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteCurrentUser() throws UserAuthenticationException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,10 +54,5 @@ public class UserController {
 
         return ResponseEntity.status(404).body(new MessageResponse("Wrong username.")) ;
     }
-
-      //Pobranie osiągnięć zalogowanego użytkownika
-//    @GetMapping("/achievements")
-//    public ResponseEntity<MessageResponse> getUserAchivements() {}
-
 
 }
