@@ -1,15 +1,21 @@
--- Insert roles into the roles table
+-- Roles
 INSERT INTO "roles" (role_id, role_name) VALUES
                                              (0, 'USER'),
                                              (1, 'ADMIN');
 
--- Users, hasła: Admin123!
-INSERT INTO "users" (user_id, username, email, password_hash, first_name, surname, role_id, points, created_at) VALUES
-                                                                                                          ('b39289b0-b88a-4f09-b8fd-38ab15071acf', 'jkowalski', 'janek.kowalski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Jan', 'Kowalski', 0, 10,CURRENT_TIMESTAMP),
-                                                                                                          ('b3683311-a2e5-4546-b3e3-742f303b2d13', 'anowak', 'anna.nowak@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Anna', 'Nowak', 1, 20,CURRENT_TIMESTAMP),
-                                                                                                          ('46c520c6-8467-437b-9518-8126bc49cbd8', 'piotr_wisniewski', 'piotr.wisniewski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Piotr', 'Wiśniewski', 1, 30,CURRENT_TIMESTAMP),
-                                                                                                          ('d42e011d-966c-4e16-837f-0e7f3952c039', 'katarzyna_lewandowska', 'katarzyna.lewandowska@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Katarzyna', 'Lewandowska', 0, 40,CURRENT_TIMESTAMP),
-                                                                                                          ('fc93bedd-290d-4061-8e39-4eeeb073190e', 'pawel_zielinski', 'pawel.zielinski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Paweł', 'Zieliński', 0, 50,CURRENT_TIMESTAMP);
+-- Account status
+INSERT INTO "status" (status_id, status_name) VALUES
+                                             (0, 'DELETED'),
+                                             (1, 'ACTIVE'),
+                                             (2, 'SUSPENDED');
+
+-- Users, passwords: Admin123!
+INSERT INTO "users" (user_id, username, email, password_hash, first_name, surname, role_id, points, created_at, status_id) VALUES
+                                                                                                          ('b39289b0-b88a-4f09-b8fd-38ab15071acf', 'jkowalski', 'janek.kowalski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Jan', 'Kowalski', 0, 10,CURRENT_TIMESTAMP,1),
+                                                                                                          ('b3683311-a2e5-4546-b3e3-742f303b2d13', 'anowak', 'anna.nowak@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Anna', 'Nowak', 1, 20,CURRENT_TIMESTAMP,1),
+                                                                                                          ('46c520c6-8467-437b-9518-8126bc49cbd8', 'piotr_wisniewski', 'piotr.wisniewski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Piotr', 'Wiśniewski', 1, 30,CURRENT_TIMESTAMP,1),
+                                                                                                          ('d42e011d-966c-4e16-837f-0e7f3952c039', 'katarzyna_lewandowska', 'katarzyna.lewandowska@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Katarzyna', 'Lewandowska', 0, 40,CURRENT_TIMESTAMP,2),
+                                                                                                          ('fc93bedd-290d-4061-8e39-4eeeb073190e', 'pawel_zielinski', 'pawel.zielinski@example.com', '$2a$10$lS8vUm/10lIR3fkJHsA1feRLXkbtuk8ZcLqHzp6leNvX6i8Y9ozsS', 'Paweł', 'Zieliński', 0, 50,CURRENT_TIMESTAMP,0);
 
 -- Routes
 INSERT INTO "routes" (route_id, name, description, max_time, is_visited) VALUES

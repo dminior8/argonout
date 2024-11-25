@@ -19,7 +19,7 @@ public class MessageMapper {
         dto.setCreatedAt(message.getCreatedAt());
         dto.setSenderId(message.getSenderId());
 
-        var user = userService.findUserBy(message.getSenderId());
+        var user = userService.findUserById(message.getSenderId());
         dto.setSenderUsername(user.getUsername());
         dto.setSenderEmail(user.getEmail());
 
