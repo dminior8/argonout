@@ -7,7 +7,7 @@
     text-align: left;
     top: 0;
     left: 0;
-    z-index: 9999; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
+    z-index: 999; /* Ustawienie wyższego indeksu z-index, aby upewnić się, że sidebar nie jest przykrywany przez inne elementy */
     transition: transform 0.3s ease; /* Płynne przejście przy ukrywaniu */
     transform: translateX(0); /* Domyślnie widoczny */
 }

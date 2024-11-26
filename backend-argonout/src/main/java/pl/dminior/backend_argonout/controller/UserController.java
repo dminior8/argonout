@@ -97,7 +97,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> deleteUserById(@PathVariable UUID userId){
         if(userService.deleteUserById(userId)){
             return ResponseEntity.ok(new MessageResponse("Account successfully deleted"));

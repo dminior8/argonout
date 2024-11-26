@@ -4,10 +4,11 @@
     font-size: medium !important;
     padding-bottom: 3pt;
     font-size: 1.8vw !important;
-    width: 15vw;
+    width: 250pt;
     margin-bottom: 5vh;
     border-bottom: #2F7A7E 1px solid;
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+    font-weight: bold;
 }
 
 .message-form {

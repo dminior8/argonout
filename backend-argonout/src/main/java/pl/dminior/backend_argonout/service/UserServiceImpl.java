@@ -147,14 +147,19 @@ public class UserServiceImpl implements UserService{
 
         if (existingUser.isPresent()) {
             User userToUpdate = existingUser.get();
-
-            if(userDTO.getPoints() != null){
+            if(userDTO.getUsername() != null){
+                userToUpdate.setUsername(userDTO.getUsername());
+            }if(userDTO.getEmail() != null){
+                userToUpdate.setEmail(userDTO.getEmail());
+            }if(userDTO.getFirstName() != null){
+                userToUpdate.setFirstName(userDTO.getFirstName());
+            }if(userDTO.getSurname() != null){
+                userToUpdate.setSurname(userDTO.getSurname());
+            }if(userDTO.getPoints() != null){
                 userToUpdate.setPoints(userDTO.getPoints());
-            }
-            if(userDTO.getRole() != null){
+            }if(userDTO.getRole() != null){
                 userToUpdate.setRole(userDTO.getRole());
-            }
-            if(userDTO.getStatus() != null && userDTO.getStatus() != EStatus.DELETED){
+            }if(userDTO.getStatus() != null && userDTO.getStatus() != EStatus.DELETED){
                 userToUpdate.setStatus(userDTO.getStatus());
             }
 

@@ -1,29 +1,29 @@
 .right-top-container {
     position: fixed;
     display: flex;
-    flex-direction: column; /* Układa elementy w kolumnie, jeden pod drugim */
-    gap: 20px; /* Odstęp między elementami */
+    flex-direction: column;
+    gap: 20px;
     margin: 2rem 2rem 0 0;
 }
 
 .right-top-item {
     display: flex;
-    align-items: left; /* Wyrównuje ikonę i tekst w pionie */
+    align-items: left;
     color: #D1D1D1;
     font-size: 0.8rem;
     padding-left: 20px;
-    background-color: #131F24; /* Opcjonalne tło */
-    border-radius: 12px; /* Zaokrąglenie krawędzi */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Opcjonalny cień */
+    background-color: #131F24;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     width: 20vw;
     height: 6rem;
     border: 1px solid #2F7A7E;
 }
 
 .points-icon {
-    width: 2.5vw; /* Szerokość ikony */
-    height: 2.5vw; /* Wysokość ikony */
-    margin-right: 15px; /* Odstęp między ikoną a tekstem */
+    width: 2.5vw;
+    height: 2.5vw;
+    margin-right: 15px;
 }
 
 .points {
@@ -45,36 +45,36 @@
   
 .top-row {
     width: 95%;
-    display: flex; /* Ustawia elementy w rzędzie */
-    gap: 2rem; /* Odstęp między elementami w górnym wierszu */
+    display: flex;
+    gap: 2rem;
     text-align: center;
 }
   
 .first-element {
     font-weight: bold;
-    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+    flex: 1;
 }
 
 .second-element {
-    flex: 1; /* Oba elementy zajmują równą szerokość w wierszu */
+    flex: 1;
     height: 100%;
     
 }
 
 .second-element a:hover{
     font-weight: bold;
-    transition: 0.3s ease; /* Płynna animacja dla obwódki */
+    transition: 0.3s ease;
 }
 
 .leaderboard-link {
-    text-decoration: none; /* Usunięcie podkreślenia z linku */
-    color: #2F7A7E; /* Kolor linku */
+    text-decoration: none;
+    color: #2F7A7E;
 }
 
 .third-element {
-    width: 100%; /* Trzeci element zajmuje całą szerokość kontenera */
+    width: 100%;
     margin: 15px 0;
-    text-align: center; /* Wyrównanie tekstu do środka */
+    text-align: center;
     max-height: fit-content;
 }
 

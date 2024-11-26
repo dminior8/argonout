@@ -103,7 +103,7 @@ const LeaderboardPanel = () => {
                 <Col md={6}>
                     <div className="main-content">
                         <div className="leaderboard-title">
-                            {currentLeague ? currentLeague.name : "Brak aktualnej ligi"}
+                            {currentLeague ? currentLeague.name : "Ładowanie aktualnej ligi..."}
                         </div>
                         <div className="leaderboard-list">
                             {userList.map((userItem, index) => (
