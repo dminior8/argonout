@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> findAllByPointsGreaterThanAndPointsLessThan(int minPoints, int maxPoints, Pageable pageable);
 
     List<User> findAllByPointsBetweenOrderByPointsDesc(int minPoints, int maxPoints);
+
+    Optional<User> findById(UUID userId);
 }

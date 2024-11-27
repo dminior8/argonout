@@ -1,4 +1,3 @@
-// routes.js
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 import HomePage from '../components/homePanel/HomePanel';
@@ -6,12 +5,14 @@ import LoginPanel from '../components/loginPanel/LoginPanel';
 import RegisterPage from '../components/loginPanel/RegisterPanel';
 import UserProfile from '../components/userProfile/UserProfile';
 import ManagementMenu from '../components/admin/managementMenu/ManagementMenu';
+import UserList from '../components/admin/userList/UserList';
+import ReceivedMessagesPanel from '../components/admin/receivedMessagesPanel/ReceivedMessagesPanel';
+import RouteEditorPanel from '../components/admin/routeEditorPanel/RouteEditorPanel';
 import AdventureModePanel from '../components/adventureModePanel/AdventureModePanel';
 import LeaderboardPanel from '../components/leaderboard/LeaderboardPanel';
 import HistoryPanel from '../components/history/HistoryPanel';
 import MessagesPanel from '../components/messages/MessagesPanel';
-import ReceivedMessagesPanel from '../components/admin/receivedMessagesPanel/ReceivedMessagesPanel';
-import RouteEditorPanel from '../components/admin/routeEditorPanel/RouteEditorPanel';
+
 import ProtectedRoute from './ProtectedRoute';
 
 export const routes = (isLoggedIn, onLogin) => (
@@ -55,6 +56,10 @@ export const routes = (isLoggedIn, onLogin) => (
     <Route
       path="/management"
       element={isLoggedIn ? <ManagementMenu /> : <Navigate to="/auth/login" />}
+    />
+    <Route
+      path="/management/users"
+      element={isLoggedIn ? <UserList /> : <Navigate to="/auth/login" />}
     />
     <Route
       path="/management/messages"

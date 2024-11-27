@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.dminior.backend_argonout.dto.LeaderboardUserDTO;
 import pl.dminior.backend_argonout.exception.UserAuthenticationException;
@@ -23,6 +24,7 @@ public class LeagueController {
     private final LeagueService leagueService;
 
     @GetMapping("/leagues/all")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<League>> getAllLeagues(){
         List<League> leagues = leagueService.getAllLeagues();
 
@@ -33,6 +35,7 @@ public class LeagueController {
     }
 
     @GetMapping("/leagues/{leagueId}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Page<LeaderboardUserDTO> getAllUsersFromLeague(
             @PathVariable UUID leagueId,
             @RequestParam(defaultValue = "0") int page,
@@ -44,6 +47,7 @@ public class LeagueController {
     }
 
     @GetMapping("leagues/current-player/position")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Integer> getCurrentPlayerPositionInLeague() throws UserAuthenticationException {
         Integer position = leagueService.getCurrentPlayerPositionInLeague();
         if(position != 0){

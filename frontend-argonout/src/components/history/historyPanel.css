@@ -2,16 +2,17 @@
     width: 100%;
 }
 .history-label {
-    color:#fff;
+    color:#c1c1c1;
     font-style: bold;
-    font-size: medium !important;
+    font-size: medium;
     padding-bottom: 3pt;
-    font-size: 1.8vw !important;
-    width: 25vw !important;
+    font-size: 1.8vw;
+    width: 250pt;
     border-bottom: #2F7A7E 1px solid;
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
     text-align: left;
     margin-bottom: 20pt;
+    font-weight: bold;
 }
 
 .history-list {

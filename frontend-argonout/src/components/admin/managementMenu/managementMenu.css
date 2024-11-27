@@ -1,46 +1,64 @@
-  .container-fluid {
-    width: 100%; /* Użyj pełnej szerokości kontenera */
-  }
-
-
-  .management-menu > h2 {
-      color:#fff;
-      font-style: bold;
-      font-size: medium !important;
-      padding: 6pt;
-      font-size: 1.8vw !important;
-      width: 20vw;
-      margin-bottom: 5vh;
-      border-bottom: #2F7A7E 1px solid;
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
-      margin-bottom: 10vh;
-  }
-
-  .menu-items {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem; /* Margines między prostokątami */
-    min-width: 40vw; 
-    min-height: 20vh; 
-  }
-
-  .menu-button {
-    background-color: #131F24 !important; 
-    text-align: center;
-    border-radius: 16px !important;
-    text-decoration: none;
-    color: #dadada !important;
-    font-size: 1.2rem !important;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10pt;
-    border: 1px solid #2F7A7E !important;
-  }
-  
-  .menu-button:hover {
-    border: 1px solid #63b7bb !important;
-    transition: background-color 0.6s ease;
-    box-shadow: 0 6pt 10pt rgba(0, 0, 0, 0.2);
-  }
-
-  
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 5vh 0 5vh 5vw;
+}
+.management-label {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.8vw;
+  padding-bottom: 3pt;
+  width: 250pt;
+  margin-bottom: 5vh;
+  border-bottom: #2F7A7E 1px solid;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  font-style: bold;
+  text-align: left;
+}
+.management-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.menu-card {
+  text-align: center;
+  background-color: #131F24 !important;
+  border-radius: 16px !important;
+  color: #dadada;
+  padding: 10px;
+  transition: transform 0.5s ease, background-color 0.5s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  height: auto;
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
+  border: transparent 1px solid;
+}
+.menu-card:hover {
+  background-color: #2F7A7E;
+  transform: translateY(-10px);
+  border: #2F7A7E 1px solid;
+  transition: transform 0.5s ease, background-color 0.5s ease;
+  filter: brightness(0.9);
+}
+.menu-card .card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #2F7A7E;
+}
+.menu-icon {
+  font-size: 3rem;
+  color: #dadada;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+.menu-card:hover .menu-icon {
+  color: #fff;
+}
+.menu-card .card-text {
+  font-size: 1rem;
+  color: #dadada;
+}
