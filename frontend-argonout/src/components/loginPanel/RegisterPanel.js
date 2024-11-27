@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './loginPanel.css'; // Importujemy plik CSS dla stylizacji
+import './loginPanel.css'; // Import pliku CSS dla stylizacji
 
 function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -8,7 +8,8 @@ function RegisterPage() {
         surname: '',
         username: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: '' // Dodano pole confirmPassword
     });
 
     const navigate = useNavigate();
@@ -20,9 +21,9 @@ function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (formData.password !== formData.confirmPassword) {
-            alert("Different passwords");
+            alert("Hasła nie są takie same!");
             return;
         }
 
@@ -47,108 +48,105 @@ function RegisterPage() {
                 alert('User registered successfully!');
                 navigate('/api/auth/login');
             } else {
-                // Obsłuż błąd
                 const errorData = await response.json();
-                alert(`Błąd: ${errorData.message}`);
+                alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error during register!');
+            alert('Błąd podczas rejestracji. Spróbuj ponownie.');
         }
     };
 
     return (
-        <>
-            <div className="main-container">
-                <div className="signInForm">
-                    <h3>
-                        <span className="welcome-text">Welcome to </span>
-                        <span className="argonout-text">Argonout Game!</span>
-                    </h3>
-                    <h5>Register to continue</h5>
-                    <form className="form-container" onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="firstName">First Name</label>
-                            <input
-                                className="text-input"
-                                id="firstName"
-                                name="firstName"
-                                type="text"
-                                placeholder="First name"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                autoFocus
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="surname">Surname</label>
-                            <input
-                                className="text-input"
-                                id="surname"
-                                name="surname"
-                                type="text"
-                                placeholder="Surname"
-                                value={formData.surname}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <input
-                                className="text-input"
-                                id="username"
-                                name="username"
-                                type="text"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                className="text-input"
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="Email"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <input
-                                className="text-input"
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input
-                                className="text-input"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Confirm password"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <button className="submit-btn" type="submit">Register</button>
-                        <div className="another-option-btn">
-                            Already have an account?&nbsp;
-                            <Link to="/api/auth/login" className="login-link">Sign in!</Link>
-                        </div>
-                    </form>
-                </div>
+        <div className="main-container">
+            <div className="login-right">
+                <h3>
+                    <span className="welcome-text">Witaj w </span>
+                    <span className="argonout-text">Argonout!</span>
+                </h3>
+                <h7>Zarejestruj się, aby kontynuować</h7>
+                <form className="form-container" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="firstName">Imię</label>
+                        <input
+                            className="text-input"
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            placeholder="Imię"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            autoFocus
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="surname">Nazwisko</label>
+                        <input
+                            className="text-input"
+                            id="surname"
+                            name="surname"
+                            type="text"
+                            placeholder="Nazwisko"
+                            value={formData.surname}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="username">Nazwa użytkownika</label>
+                        <input
+                            className="text-input"
+                            id="username"
+                            name="username"
+                            type="text"
+                            placeholder="Nazwa użytkownika"
+                            value={formData.username}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            className="text-input"
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Hasło</label>
+                        <input
+                            className="text-input"
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Hasło"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="confirmPassword">Powtórz hasło</label>
+                        <input
+                            className="text-input"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="Powtórz hasło"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <button className="submit-btn" type="submit">Zarejestruj</button>
+                    <div className="another-option-btn">
+                        Masz już konto?&nbsp;
+                        <Link to="/api/auth/login" className="login-register-link">Zaloguj się!</Link>
+                    </div>
+                </form>
             </div>
-        </>
+        </div>
     );
 }
 

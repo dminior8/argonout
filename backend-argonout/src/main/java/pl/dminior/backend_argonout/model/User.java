@@ -24,7 +24,6 @@ public class User {
     @Column(name = "user_id")
     private UUID id;
 
-    @NotNull
     @Size(min = 3, max = 50)
     @Column(name = "username", unique = true)
     private String username;
@@ -56,6 +55,9 @@ public class User {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name="status_id")
+    private EStatus status;
 
     public List<ERole> getRoles() {
         List<ERole> enumList = new ArrayList<>();

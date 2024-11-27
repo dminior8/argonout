@@ -1,18 +1,25 @@
-CREATE TABLE roles (
+CREATE TABLE "roles" (
     role_id INT PRIMARY KEY,
-    role_name VARCHAR(10) UNIQUE NOT NULL
+    role_name VARCHAR(20) UNIQUE NOT NULL
+);
+
+CREATE TABLE "status" (
+  status_id INT PRIMARY KEY,
+  status_name VARCHAR(20) UNIQUE NOT NULL
 );
 
 CREATE TABLE "users" (
   "user_id" UUID PRIMARY KEY,
-  "username" VARCHAR(50) UNIQUE NOT NULL,
-  "email" VARCHAR(100) UNIQUE NOT NULL,
-  "password_hash" VARCHAR(255) NOT NULL,
+  "username" VARCHAR(50) UNIQUE,
+  "email" VARCHAR(100) UNIQUE,
+  "password_hash" VARCHAR(255),
   "first_name" VARCHAR(50),
   "surname" VARCHAR(50),
-  "role_id" INT NOT NULL,
+  "role_id" INT,
   "points" INT DEFAULT 0,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "status_id" INT NOT NULL,
+  FOREIGN KEY ("status_id") REFERENCES "status" ("status_id")
 );
 
 CREATE TABLE "routes" (

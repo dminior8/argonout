@@ -46,6 +46,7 @@ public class MapController {
     }
 
     @GetMapping("/places/visited")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Page<PlaceHistoryDTO> getAllVisitedPlacesForCurrentUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -74,6 +75,7 @@ public class MapController {
     }
 
     @GetMapping("/routes/all")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<SimpleRouteDTO>> getAllRoutes() {
         return ResponseEntity.ok().body(mapService.getAllRoutes());
     }

@@ -108,23 +108,30 @@ const UserProfile = () => {
       maxWidth: '50vw', 
       minWidth: "50vh",
       maxHeight: '90vh',
-      backgroundColor: '#202F36', 
       color: '#D1D1D1', 
       borderRadius: '12px', 
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', 
       padding: '2rem', 
-      flexShrink: 0 // Zapobiega ściskaniu karty, co pomaga ustawić szerokość maksymalną
+      flexShrink: 0, // Zapobiega ściskaniu karty, co pomaga ustawić szerokość maksymalną
+      backgroundColor: "#131F24",
+      border: "0.5pt solid #63b7bb",
     }}
   >
     <CardContent>
-          <Box sx={{ textAlign: 'center', color: '#3ac2c9', marginBottom: '1rem', fontSize: '2vh', fontWeight: 'bold' }}>
-            User Profile
+          <Box sx={{ 
+            textAlign: 'center', 
+            color: '#c1c1c1', 
+            marginBottom: '1rem', 
+            fontSize: '3vh', 
+            fontWeight: 'bold', 
+           }}>
+            Profil użytkownika
           </Box>
           {isEditing ? (
             <Box>
               <TextField
                 fullWidth
-                label="Username"
+                label="Nazwa użytkownika"
                 name="username"
                 value={editedProfile.username}
                 onChange={handleChange}
@@ -153,7 +160,7 @@ const UserProfile = () => {
               />
               <TextField
                 fullWidth
-                label="First Name"
+                label="Imię"
                 name="firstName"
                 value={editedProfile.firstName}
                 onChange={handleChange}
@@ -167,7 +174,7 @@ const UserProfile = () => {
               />
               <TextField
                 fullWidth
-                label="Surname"
+                label="Nazwisko"
                 name="surname"
                 value={editedProfile.surname}
                 onChange={handleChange}
@@ -192,7 +199,7 @@ const UserProfile = () => {
             <List>
               <ListItem>
                 <ListItemText 
-                  primary="Username" 
+                  primary="Nazwa użytkownika" 
                   secondary={userProfile.username} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
                   secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
@@ -209,7 +216,7 @@ const UserProfile = () => {
               </ListItem>
               <ListItem>
                 <ListItemText 
-                  primary="First Name" 
+                  primary="Imię" 
                   secondary={userProfile.firstName} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
                   secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
@@ -217,7 +224,7 @@ const UserProfile = () => {
               </ListItem>
               <ListItem>
                 <ListItemText 
-                  primary="Surname" 
+                  primary="Nazwisko" 
                   secondary={userProfile.surname} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold' } }}
                   secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}

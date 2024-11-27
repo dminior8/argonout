@@ -23,6 +23,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/messages/send")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> sendFeedbackMessageByCurrentUser(
             @RequestBody CurrentUserMessageDTO currentUserMessageDTO) throws UserAuthenticationException {
 
