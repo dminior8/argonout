@@ -53,7 +53,11 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));  // domena klienta, która ma mieć dostęp
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000"));
+//                "http://localhost:8081",
+//                "192.168.0.115:8080"));
+//                "192.168.0.115:8081"));  // domena klienta, która ma mieć dostęp
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
