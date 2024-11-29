@@ -25,7 +25,8 @@ const BasicMap = ({
     setUserLocation(location);
     const nearby = places.filter((place) => {
       const distance = calculateDistance(
-        location.latitude, location.longitude,
+        50.061796, 19.938244,
+        // location.latitude, location.longitude,
         place.latitude,
         place.longitude
       );
@@ -75,12 +76,18 @@ const BasicMap = ({
                 <View style={styles.popupContainer}>
                   <Text style={styles.popupTitle}>{place.name}</Text>
                   <Text style={styles.popupDescription}>{place.description}</Text>
-                  <Pressable
-                    style={styles.visitButton}
-                    onPress={() => onPlaceVisit(place)}
-                  >
-                    <Text style={styles.visitButtonText}>{`Odwiedź ${place.name}`}</Text>
-                  </Pressable>
+                  {nearbyPlaces.some((p) => p.id === place.id) ? (
+                    place.visited ? (
+                      <Text style={styles.visitedText}>Miejsce odwiedzone</Text>
+                    ) : (
+                      <Pressable
+                        style={styles.visitButton}
+                        onPress={() => onPlaceVisit(place)}
+                      >
+                        <Text style={styles.visitButtonText}>{`Odwiedź ${place.name}`}</Text>
+                      </Pressable>
+                    )
+                  ) : null}
                 </View>
               </Callout>
             </Marker>
@@ -89,7 +96,8 @@ const BasicMap = ({
 
         {userLocation && (
           <Circle
-            center={userLocation}
+            // center={userLocation}
+            center={{latitude: 50.061796, longitude: 19.938244}}
             radius={radius}
             fillColor="rgba(0, 0, 255, 0.3)"
             strokeColor="rgba(0, 0, 255, 0.5)"
@@ -111,11 +119,10 @@ const styles = StyleSheet.create({
       height: '100%',
     },
     popupContainer: {
-      padding: 15,
+      padding: 10,
       minWidth: 220,
       maxWidth: 280,
       backgroundColor: 'white',
-      borderRadius: 8
     },
     popupTitle: {
       fontWeight: 'bold',
@@ -142,5 +149,11 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: '600', 
     },
+    visitedText: {
+      color: "#56bfc1",
+      fontWeight: "bold",
+      textAlign: "center",
+      fontSize: 17
+    }
   });
 export default BasicMap;  

@@ -6,8 +6,9 @@ import axios from 'axios';
 
 import { BASE_URL } from '../config';
 
-import Sidebar from './Sidebar';
 import BasicMap from './BasicMap';
+import MiniStats from './MiniStats';
+import BottomMenu from './BottomMenu';
 
 const HomePage = () => {
   const [places, setPlaces] = useState([]); // Lista miejsc
@@ -55,16 +56,6 @@ const HomePage = () => {
       );
       return response.data;
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        Alert.alert('Sesja wygasła', 'Zostałeś wylogowany.');
-        await AsyncStorage.removeItem('accessTokenFront');
-        if (navigation) {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Login' }],
-          });
-        }
-      }
       console.error('Error during adding visited place: ', error);
     }
   };
@@ -91,8 +82,7 @@ const HomePage = () => {
 
   return (
     <View style={styles.appContent}>
-      {/* Sidebar nawigacyjny */}
-      <Sidebar />
+      <MiniStats />
       <View style={styles.mapContainer}>
         {isLoading ? 
         <Spinner visible={isLoading} textContent={'Ładowanie...'} textStyle={styles.spinnerTextStyle} />
@@ -107,6 +97,7 @@ const HomePage = () => {
         }
         
       </View>
+      <BottomMenu />
     </View>
   );
 };
@@ -119,7 +110,7 @@ const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
     width: '100%',
-    borderRadius: 8,
+    height:"50%",
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
