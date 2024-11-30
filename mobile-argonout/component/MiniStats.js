@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
+// MiniStats.js
 
+import React, { useEffect } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { useUser } from "../context/UserContext";
 
 const MiniStats = () => {
   const { user } = useUser();
-  console.log(user);
 
   if (!user) {
     return null;
@@ -13,7 +13,6 @@ const MiniStats = () => {
 
   return (
     <View style={styles.container}>
-      {/* Punktacja */}
       <View style={[styles.item, styles.pointsContainer]}>
         <Image source={require("../assets/icons/star_8605046.png")} style={styles.icon} />
         <Text style={styles.points}>{user.points}</Text>

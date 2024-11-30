@@ -11,16 +11,15 @@ import MiniStats from './MiniStats';
 import BottomMenu from './BottomMenu';
 
 const HomePage = () => {
-  const [places, setPlaces] = useState([]); // Lista miejsc
-  const [addPlaceMode, setAddPlaceMode] = useState(false); // Tryb dodawania miejsc
-  const [newPlacePosition, setNewPlacePosition] = useState(null); // Pozycja nowego miejsca
-  const [currentPlace, setCurrentPlace] = useState(null); // Obecne miejsce (do otwierania popupu)
-  const [isLoading, setIsLoading] = useState(true); // Stan ładowania
+  const [places, setPlaces] = useState([]);
+  const [addPlaceMode, setAddPlaceMode] = useState(false);
+  const [newPlacePosition, setNewPlacePosition] = useState(null);
+  const [currentPlace, setCurrentPlace] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Pobieranie wszystkich miejsc z API
   const handleGetAll = async () => {
     try {
-      setIsLoading(true); // Ustaw ładowanie na true przed rozpoczęciem pobierania
+      setIsLoading(true);
       const token = await AsyncStorage.getItem('accessTokenFront');
       await axios
       .get(`${BASE_URL}/api/places`, {
@@ -33,7 +32,7 @@ const HomePage = () => {
     } catch (error) {
       console.error('Error fetching locations:', error);
     } finally {
-      setIsLoading(false); // Wyłącz ładowanie po zakończeniu
+      setIsLoading(false);
     }
   };
 
@@ -43,34 +42,51 @@ const HomePage = () => {
       AsyncStorage.removeItem('gameId');
     }
     handleGetAll();
-  }, []); // Zmiana na pustą tablicę zależności []
+  }, []);
 
-  // Obsługa dodania odwiedzonego miejsca
   const postVisitedPlace = async (place) => {
     try {
       const token = await AsyncStorage.getItem('accessTokenFront');
+  
       const response = await axios.post(
         `${BASE_URL}/api/free-game/add-place/${place.id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+  
       return response.data;
     } catch (error) {
-      console.error('Error during adding visited place: ', error);
+      if (error.response) {
+        // Jeśli serwer zwrócił odpowiedź z błędem (np. status 400)
+        throw new Error(error.response.data.message || "Wystąpił błąd podczas dodawania miejsca.");
+      } else if (error.request) { // Jeśli żądanie nie zostało wysłane
+        throw new Error("Nie udało się nawiązać połączenia z serwerem.");
+      } else { // Inny błąd
+        throw new Error("Wystąpił nieoczekiwany błąd: " + error.message);
+      }
     }
   };
+  
+  
 
-  const handleVisitedPlace = (place) => {
-    postVisitedPlace(place).then((responseMessage) => {
-      console.log('Message from server:', responseMessage);
-    });
-
-    Alert.alert(`Odwiedziłeś ${place.name}.`);
+  const handleVisitedPlace = async (place) => {
+    try {
+      const data = await postVisitedPlace(place); // Jeśli funkcja zadziała poprawnie
+      Alert.alert("Sukces", `Odwiedziłeś ${place.name}`);
+      
+      setPlaces((prevPlaces) =>
+        prevPlaces.map((p) => (p.id === place.id ? { ...p, visited: true } : p))
+      );
+    } catch (error) {
+      Alert.alert("Błąd", error.message);
+      console.error("Error during adding visited place:", error);
+    }
   };
+  
 
   // Obsługa kliknięcia popupu
   const handlePopupClick = (markerData) => {
-    setCurrentPlace(markerData.placeId); // Zapisuje ID miejsca, które zostało kliknięte
+    setCurrentPlace(markerData.placeId);
   };
 
   useEffect(() => {
@@ -88,11 +104,11 @@ const HomePage = () => {
         <Spinner visible={isLoading} textContent={'Ładowanie...'} textStyle={styles.spinnerTextStyle} />
         :
         <BasicMap
-          newPlacePosition={newPlacePosition}
           onPopupClick={handlePopupClick}
-          places={places} // Przekazujemy załadowane dane do BasicMap
+          places={places}
           onPlaceVisit={handleVisitedPlace}
           currentPlace={currentPlace}
+
         />
         }
         

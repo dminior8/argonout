@@ -18,20 +18,21 @@ public abstract class PlaceMapper {
     private UserRepository userRepository;
     private VisitedPlaceRepository visitedPlaceRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository,
-                                  VisitedPlaceRepository visitedPlaceRepository) {
-        this.userRepository = userRepository;
-        this.visitedPlaceRepository = visitedPlaceRepository;
-    }
+//    @Autowired
+//    public void setUserRepository(UserRepository userRepository,
+//                                  VisitedPlaceRepository visitedPlaceRepository) {
+//        this.userRepository = userRepository;
+//        this.visitedPlaceRepository = visitedPlaceRepository;
+//    }
 
-    @Mapping(target = "visited", expression = "java(isVisited(place.getId()))")
+//    @Mapping(target = "visited", expression = "java(isVisited(place.getId()))")
+    @Mapping(target = "visited", expression = "java(false)")
     public abstract PlaceDTO placeToPlaceDTO(Place place);
 
-    public boolean isVisited(UUID placeId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UUID userId = userRepository.findByUsername(auth.getName()).map(user -> user.getId()).orElse(null);
-
-        return userId != null && visitedPlaceRepository.existsByUserIdAndPlaceId(userId, placeId);
-    }
+//    public boolean isVisited(UUID placeId) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UUID userId = userRepository.findByUsername(auth.getName()).map(user -> user.getId()).orElse(null);
+//
+//        return userId != null && visitedPlaceRepository.existsByUserIdAndPlaceId(userId, placeId);
+//    }
 }

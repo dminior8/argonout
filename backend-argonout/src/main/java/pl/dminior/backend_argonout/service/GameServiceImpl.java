@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import pl.dminior.backend_argonout.model.*;
 import pl.dminior.backend_argonout.repository.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -110,23 +109,35 @@ public class GameServiceImpl implements GameService {
 
     @Transactional
     @Override
-    public boolean addPlaceInFreeGame(UUID placeId) {
+    public int addPlaceInFreeGame(UUID placeId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UUID userId = userRepository.findByUsername(auth.getName()).map(User::getId).orElse(null);
 
         if (userId == null) {
-            return false; // User not found
+            return -1; // User not found
         }
 
         Optional<Place> placeOpt = placeRepository.findById(placeId);
 
         if (placeOpt.isEmpty()) {
-            return false; // Place not found
+            return -1; // Place not found
         }
 
-        if (visitedPlaceRepository.existsByUserIdAndPlaceId(userId, placeId)) {
-            return false; // Place already visited by user
+        List<LocalDateTime> lastVisited = visitedPlaceRepository.findByUserIdAndPlaceId(userId, placeId)
+                .stream()
+                .map(VisitedPlace::getVisitedAt)
+                .toList();
+
+        LocalDate today = LocalDate.now();
+
+        boolean alreadyVisitedToday = lastVisited.stream()
+                .map(LocalDateTime::toLocalDate)
+                .anyMatch(lastVisitedDate -> lastVisitedDate.equals(today));
+
+        if (alreadyVisitedToday) {
+            return 0; // Place already visited by user
         }
+
 
         VisitedPlace visitedPlace = new VisitedPlace();
         visitedPlace.setUserId(userId);
@@ -135,7 +146,7 @@ public class GameServiceImpl implements GameService {
         visitedPlaceRepository.save(visitedPlace);
 
         addPointsOfCurrentUser(BASE_POINTS);
-        return true; // Successfully added place
+        return 1; // Successfully added place
     }
 
     private boolean addPointsOfCurrentUser(int points) {

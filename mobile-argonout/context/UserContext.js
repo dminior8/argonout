@@ -6,23 +6,15 @@ import axios from 'axios';
 
 import { BASE_URL } from '../config';
 
-// Tworzenie kontekstu
 const UserContext = createContext();
 
-// Provider dla kontekstu
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigation = useNavigation();
 
-  // Funkcja pobierająca profil użytkownika
   const fetchUserProfile = async () => {
     try {
-      const token = await AsyncStorage.getItem('accessTokenFront'); // Pobranie tokena z AsyncStorage
-      if (!token) {
-        console.error('No token found.');
-        return;
-      }
-
+      const token = await AsyncStorage.getItem('accessTokenFront');
       const response = await axios.get(`${BASE_URL}/api/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -35,10 +27,18 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Wywołanie fetchUserProfile przy montowaniu komponentu
+  const updateUserPoints = async (newPoints) => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser; 
+      return { ...prevUser, points: newPoints };
+    });
+  };
+  
+
   useEffect(() => {
     fetchUserProfile();
   }, []);
+
 
   const logout = async () => {
     await AsyncStorage.removeItem('accessTokenFront');
@@ -56,7 +56,6 @@ export const UserProvider = ({ children }) => {
         return;
       }
 
-      // Dekodowanie tokena, aby uzyskać czas wygaśnięcia
       const decodedToken = jwtDecode(token);
       const expirationTime = decodedToken.exp * 1000; // Konwersja na milisekundy
       const currentTime = Date.now();
@@ -67,8 +66,8 @@ export const UserProvider = ({ children }) => {
 
         // Ustaw timer, aby automatycznie wylogować po wygaśnięciu tokena
         setTimeout(async () => {
-          await AsyncStorage.removeItem('accessTokenFront'); // Usuń token
-          logoutCallback(); // Wywołanie funkcji do przekierowania na ekran logowania
+          await AsyncStorage.removeItem('accessTokenFront');
+          logoutCallback();
         }, delay);
       } else {
         console.warn("Token already expired. Logging out immediately.");
@@ -82,12 +81,11 @@ export const UserProvider = ({ children }) => {
 
 
   useEffect(() => {
-    // Harmonogram automatycznego wylogowania po wygaśnięciu tokena
     scheduleLogout(logout);
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUserProfile }}>
+    <UserContext.Provider value={{ user, setUser, fetchUserProfile, updateUserPoints }}>
       {children}
     </UserContext.Provider>
   );

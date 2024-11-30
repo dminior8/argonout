@@ -6,6 +6,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import RegisterPage from './component/RegisterPage';
 import LoginPage from './component/LoginPage';
 import HomePage from './component/HomePage';
+import AdventureModePage from './component/AdventureModePage';
+import { GameProvider } from './context/GameContext'
 import { UserProvider } from './context/UserContext';
 
 const Stack = createNativeStackNavigator();
@@ -13,18 +15,21 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <UserProvider>
-        <Stack.Navigator 
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-        }}
-        >
-          <Stack.Screen name="Register" component={RegisterPage} />
-          <Stack.Screen name="Login" component={LoginPage} />
-          <Stack.Screen name="Home" component={HomePage} />
-        </Stack.Navigator>
-      </UserProvider>
+      <GameProvider>
+        <UserProvider>
+          <Stack.Navigator 
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+          }}
+          >
+            <Stack.Screen name="Register" component={RegisterPage} />
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen name="Home" component={HomePage} />
+            <Stack.Screen name="Adventure" component={AdventureModePage} />
+          </Stack.Navigator>
+        </UserProvider>
+      </GameProvider>
     </NavigationContainer>
   );
 }

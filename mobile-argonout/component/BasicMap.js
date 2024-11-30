@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker, Circle, Callout } from 'react-native-maps';
+import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Pressable, Alert, Image } from 'react-native';
 
 const BasicMap = ({
@@ -7,13 +7,22 @@ const BasicMap = ({
   places,
   onPlaceVisit,
   currentPlace,
+  gameStatus
 }) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
-  const [userLocation, setUserLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState({
+    latitude: 50.061796, 
+    longitude: 19.938244,
+  });
+  const [selectedPlace, setSelectedPlace] = useState(null);
   const radius = 100;
-  const center = { latitude: 50.05931, longitude: 19.94251 };
+  const center = { latitude: 50.061796, longitude: 19.938244 };
+
   const MarkerIcon = require('../assets/icons/mapMarkersImages/marker.png');
   const VisitedMarkerIcon = require('../assets/icons/mapMarkersImages/visited-marker.png');
+
+  useEffect(() => {
+  }, [userLocation, places, nearbyPlaces]);
 
   useEffect(() => {
     if (currentPlace) {
@@ -25,8 +34,8 @@ const BasicMap = ({
     setUserLocation(location);
     const nearby = places.filter((place) => {
       const distance = calculateDistance(
-        50.061796, 19.938244,
-        // location.latitude, location.longitude,
+        location.latitude, 
+        location.longitude,
         place.latitude,
         place.longitude
       );
@@ -47,6 +56,11 @@ const BasicMap = ({
     return R * c * 1000; // Convert to meters
   };
 
+  const handleMarkerPress = (place) => {
+    setSelectedPlace(place);
+    onPopupClick(place);
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -58,102 +72,117 @@ const BasicMap = ({
           longitudeDelta: 0.01,
         }}
         showsUserLocation={true}
-        onUserLocationChange={(e) => handleUserLocation(e.nativeEvent.coordinate)}
+        onUserLocationChange={(e) => handleUserLocation({ latitude: 50.061796, longitude: 19.938244 })}
       >
         {places.map((place, index) => (
           place.latitude && place.longitude && (
             <Marker
               key={`${place.id}-${index}`}
               coordinate={{ latitude: place.latitude, longitude: place.longitude }}
-              onPress={() => onPopupClick(place)}
+              onPress={() => handleMarkerPress(place)}
             >
               <Image
                 source={place.visited === true ? VisitedMarkerIcon : MarkerIcon}
                 style={{ width: 32, height: 32 }}
                 resizeMode="contain"
               />
-              <Callout>
-                <View style={styles.popupContainer}>
-                  <Text style={styles.popupTitle}>{place.name}</Text>
-                  <Text style={styles.popupDescription}>{place.description}</Text>
-                  {nearbyPlaces.some((p) => p.id === place.id) ? (
-                    place.visited ? (
-                      <Text style={styles.visitedText}>Miejsce odwiedzone</Text>
-                    ) : (
-                      <Pressable
-                        style={styles.visitButton}
-                        onPress={() => onPlaceVisit(place)}
-                      >
-                        <Text style={styles.visitButtonText}>{`Odwiedź ${place.name}`}</Text>
-                      </Pressable>
-                    )
-                  ) : null}
-                </View>
-              </Callout>
             </Marker>
           )
         ))}
 
         {userLocation && (
           <Circle
-            // center={userLocation}
-            center={{latitude: 50.061796, longitude: 19.938244}}
+            center={userLocation}
             radius={radius}
             fillColor="rgba(0, 0, 255, 0.3)"
             strokeColor="rgba(0, 0, 255, 0.5)"
           />
         )}
       </MapView>
+
+      {selectedPlace && (
+        <View style={styles.popupContainer}>
+          <Text style={styles.popupTitle}>{selectedPlace.name}</Text>
+          <Text style={styles.popupDescription}>{selectedPlace.description}</Text>
+          
+          {gameStatus || gameStatus == undefined ? (
+            <View>
+              <Pressable
+                style={[
+                  styles.visitButton,
+                  { opacity: nearbyPlaces.some((p) => p.id === selectedPlace.id) ? 1 : 0.3 }
+                ]}
+                onPress={() => onPlaceVisit(selectedPlace)}
+                disabled={!nearbyPlaces.some((p) => p.id === selectedPlace.id)}
+              >
+                <Text style={styles.visitButtonText}>{`Odwiedź ${selectedPlace.name}`}</Text>
+              </Pressable>
+
+              {selectedPlace.visited && (
+                <Text style={styles.visitedText}>Miejsce odwiedzone</Text>
+              )}
+            </View>
+          ) : null}
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      position: 'relative',
-    },
-    map: {
-      flex: 1,
-      width: '100%',
-      height: '100%',
-    },
-    popupContainer: {
-      padding: 10,
-      minWidth: 220,
-      maxWidth: 280,
-      backgroundColor: 'white',
-    },
-    popupTitle: {
-      fontWeight: 'bold',
-      fontSize: 16, 
-      marginBottom: 10,
-      textAlign: 'center',
-      flexWrap: 'wrap', // Pozwala na łamanie wierszy
-    },
-    popupDescription: {
-      textAlign: 'justify',
-      marginBottom: 15, 
-      lineHeight: 18, //Lepsza czytelność tekstu
-    },
-    visitButton: {
-      backgroundColor: '#008CBA',
-      paddingVertical: 12, // Większy pionowy padding, aby przycisk był wyraźny
-      paddingHorizontal: 20,
-      borderRadius: 5,
-      textAlign: 'center',
-      alignSelf: 'center', // Centruje przycisk w pop-upie
-    },
-    visitButtonText: {
-      color: 'white',
-      fontSize: 14,
-      fontWeight: '600', 
-    },
-    visitedText: {
-      color: "#56bfc1",
-      fontWeight: "bold",
-      textAlign: "center",
-      fontSize: 17
-    }
-  });
-export default BasicMap;  
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  map: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  popupContainer: {
+    position: 'absolute', // Umieszczamy popup nad mapą
+    top: 100,  // Możesz dostosować pozycję w zależności od potrzeb
+    left: 20,
+    right: 20,
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    zIndex: 999, // Upewniamy się, że popup jest na wierzchu
+  },
+  popupTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  popupDescription: {
+    textAlign: 'justify',
+    marginBottom: 15,
+    lineHeight: 18,
+  },
+  visitButton: {
+    backgroundColor: '#008CBA',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+  visitButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  visitedText: {
+    color: "#56bfc1",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 17,
+  }
+});
+
+export default BasicMap;
