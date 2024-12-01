@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
@@ -8,6 +7,7 @@ import LoginPage from './page/LoginPage';
 import HomePage from './page/HomePage';
 import AdventureModePage from './page/AdventureModePage';
 import LeaderboardPage from './page/LeaderboardPage';
+import HistoryPage from './page/HistoryPage';
 import MessagesPage from './page/MessagesPage';
 import SettingsPage from './page/SettingsPage';
 import { GameProvider } from './context/GameContext'
@@ -31,6 +31,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Adventure" component={AdventureModePage} />
             <Stack.Screen name="Leaderboard" component={LeaderboardPage} />
+            <Stack.Screen name="History" component={HistoryPage} />
             <Stack.Screen name="Messages" component={MessagesPage} />
             <Stack.Screen name="Settings" component={SettingsPage} />
           </Stack.Navigator>
