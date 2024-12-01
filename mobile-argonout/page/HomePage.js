@@ -6,9 +6,9 @@ import axios from 'axios';
 
 import { BASE_URL } from '../config';
 
-import BasicMap from './BasicMap';
-import MiniStats from './MiniStats';
-import BottomMenu from './BottomMenu';
+import BasicMap from '../component/BasicMap';
+import MiniStats from '../component/MiniStats';
+import BottomMenu from '../component/BottomMenu';
 
 const HomePage = () => {
   const [places, setPlaces] = useState([]);

@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } fr
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import BottomMenu from './BottomMenu'; 
-import BasicMap from './BasicMap'; 
-import MiniStats from './MiniStats'; 
-import GameConfigDrawer from './GameConfigDrawer';
+import BottomMenu from '../component/BottomMenu'; 
+import BasicMap from '../component/BasicMap'; 
+import MiniStats from '../component/MiniStats'; 
+import GameConfigDrawer from '../component/GameConfigDrawer';
 import { useUser } from '../context/UserContext';
 import { useGameStatus } from '../context/GameContext'; 
 import { BASE_URL } from '../config';

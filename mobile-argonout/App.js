@@ -3,10 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
 
-import RegisterPage from './component/RegisterPage';
-import LoginPage from './component/LoginPage';
-import HomePage from './component/HomePage';
-import AdventureModePage from './component/AdventureModePage';
+import RegisterPage from './page/RegisterPage';
+import LoginPage from './page/LoginPage';
+import HomePage from './page/HomePage';
+import AdventureModePage from './page/AdventureModePage';
+import LeaderboardPanel from './page/LeaderboardPage';
 import { GameProvider } from './context/GameContext'
 import { UserProvider } from './context/UserContext';
 
@@ -27,6 +28,7 @@ export default function App() {
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Adventure" component={AdventureModePage} />
+            <Stack.Screen name="Leaderboard" component={LeaderboardPanel} />
           </Stack.Navigator>
         </UserProvider>
       </GameProvider>
