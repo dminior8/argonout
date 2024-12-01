@@ -69,9 +69,11 @@ public class GameController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> addPlaceInFreeGame(@PathVariable UUID placeId){
 
-        if(gameService.addPlaceInFreeGame(placeId)){
-            return ResponseEntity.ok().body(new MessageResponse("Place visited succesfully"));
+        switch (gameService.addPlaceInFreeGame(placeId)){
+            case -1 -> {return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Place not found"));}
+            case 0 -> {return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Place already visited today"));}
+            case 1 -> {return ResponseEntity.ok().body(new MessageResponse("Place visited succesfully"));}
+            default -> {return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Unknown error"));}
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Place not found"));
     }
 }
