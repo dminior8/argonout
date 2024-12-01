@@ -57,29 +57,33 @@ export default function RegisterPage() {
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
-                <Text style={styles.header}>Witaj w Argonout!</Text>
+                <Text style={styles.header}>Witaj w <Text style={styles.argonoutText}>Argonout!</Text></Text>
                 <Text style={styles.subHeader}>Zarejestruj się, aby kontynuować</Text>
                 
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Imię"
                     value={formData.firstName}
                     onChangeText={(text) => handleChange('firstName', text)}
                 />
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Nazwisko"
                     value={formData.surname}
                     onChangeText={(text) => handleChange('surname', text)}
                 />
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Nazwa użytkownika"
                     value={formData.username}
                     onChangeText={(text) => handleChange('username', text)}
                 />
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Email"
                     keyboardType="email-address"
                     value={formData.email}
@@ -87,6 +91,7 @@ export default function RegisterPage() {
                 />
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Hasło"
                     secureTextEntry
                     value={formData.password}
@@ -94,19 +99,24 @@ export default function RegisterPage() {
                 />
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor="#c1c1c1"
                     placeholder="Powtórz hasło"
                     secureTextEntry
                     value={formData.confirmPassword}
                     onChangeText={(text) => handleChange('confirmPassword', text)}
                 />
-                
+                <Text style={styles.anotherOptionText}>
+                    Nie masz jeszcze konta?&nbsp;
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.loginLink}>Zaloguj się!</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.buttonText}>Zarejestruj</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.link}>Masz już konto? Zaloguj się!</Text>
-                </TouchableOpacity>
+                
             </View>
         </View>
     );
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0f1b1d',
     },
     formContainer: {
-        width: '80%',
+        width: '90%',
         padding: 20,
         backgroundColor: 'rgba(19, 31, 36, 0.7)',
         borderRadius: 16,
@@ -132,6 +142,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
     },
+    argonoutText: {
+        fontSize: 24,
+        color: '#56bfc1',
+        fontWeight: 'bold',
+      },
     subHeader: {
         fontSize: 16,
         color: '#b8d8d8',
@@ -162,10 +177,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    link: {
-        color: '#56bfc1',
-        fontSize: 16,
-        textDecorationLine: 'underline',
+    anotherOptionText: {
         marginTop: 10,
-    },
+        color:"#d1d1d1",
+        textAlign: "center"
+      },
+      loginLink: {
+        color: '#56bfc1',
+        fontWeight: 'bold',
+        textAlign: "center",
+        marginBottom: 20
+      },
 });

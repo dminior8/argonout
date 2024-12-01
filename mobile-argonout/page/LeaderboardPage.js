@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { useUser } from "../context/UserContext";
-import BottomMenu from "../component/BottomMenu"; // W razie potrzeby przystosuj Sidebar do React Native
-import MiniStats from "../component/MiniStats"; // W razie potrzeby przystosuj MiniStats do React Native
+import BottomMenu from "../component/BottomMenu";
+import MiniStats from "../component/MiniStats";
 import { BASE_URL } from "../config";
 
-const LeaderboardPanel = () => {
+const LeaderboardPage = () => {
     const { user } = useUser(); 
     const [leaguesData, setLeaguesData] = useState([]);
     const [currentLeague, setCurrentLeague] = useState(null);
     const [userList, setUserList] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [page, setPage] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
     const [position, setPosition] = useState("...");
 
     const fetchLeagues = async () => {
+        setIsLoading(true);
         try {
             const token = await AsyncStorage.getItem("accessTokenFront");
             const response = await axios.get(`${BASE_URL}/api/leagues/all`, {
@@ -29,6 +32,8 @@ const LeaderboardPanel = () => {
         } catch (e) {
             Alert.alert("Błąd", "Nie udało się pobrać danych lig.");
             console.error('Error fetching leagues:', e);
+        }finally{
+            setIsLoading(false);
         }
     };
 
@@ -37,14 +42,12 @@ const LeaderboardPanel = () => {
     }, []);
 
     useEffect(() => {
-        // console.log("LIGA UŻYTKOWNIKA: ", user.league);
         if (leaguesData.length > 0 && user && (!currentLeague || currentLeague.id !== user.league?.id)) {
             const league = leaguesData.find(
                 league => league.minPoints <= user.points && league.maxPoints >= user.points
             );
             if (league && (!user.league || user.league.id !== league.id)) {
                 setCurrentLeague(league);
-                // user(prevUser => ({ ...prevUser, league }));
             }
         }
     }, [leaguesData, user, currentLeague]);
@@ -107,7 +110,9 @@ const LeaderboardPanel = () => {
         <View style={styles.container}>
             <View style={styles.mainContent}>
                 <Text style={styles.leaderboardTitle}>
-                    {currentLeague ? currentLeague.name : "Ładowanie aktualnej ligi..."}
+                    {isLoading ? 
+                    (<Spinner visible={isLoading} textContent={"Ładowanie aktualnej ligi..."} textStyle={styles.spinnerTextStyle} />) : 
+                    currentLeague?.name }
                 </Text>
                 <FlatList
                     data={userList}
@@ -204,4 +209,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LeaderboardPanel;
+export default LeaderboardPage;

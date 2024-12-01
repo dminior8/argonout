@@ -7,7 +7,8 @@ import RegisterPage from './page/RegisterPage';
 import LoginPage from './page/LoginPage';
 import HomePage from './page/HomePage';
 import AdventureModePage from './page/AdventureModePage';
-import LeaderboardPanel from './page/LeaderboardPage';
+import LeaderboardPage from './page/LeaderboardPage';
+import SettingsPage from './page/SettingsPage';
 import { GameProvider } from './context/GameContext'
 import { UserProvider } from './context/UserContext';
 
@@ -28,7 +29,8 @@ export default function App() {
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Adventure" component={AdventureModePage} />
-            <Stack.Screen name="Leaderboard" component={LeaderboardPanel} />
+            <Stack.Screen name="Leaderboard" component={LeaderboardPage} />
+            <Stack.Screen name="Settings" component={SettingsPage} />
           </Stack.Navigator>
         </UserProvider>
       </GameProvider>

@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     position: 'absolute', // Umieszczamy popup nad mapą
-    top: 100,  // Możesz dostosować pozycję w zależności od potrzeb
+    top: 100,
     left: 20,
     right: 20,
     padding: 15,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
-    zIndex: 999, // Upewniamy się, że popup jest na wierzchu
+    zIndex: 999,
   },
   popupTitle: {
     fontWeight: 'bold',

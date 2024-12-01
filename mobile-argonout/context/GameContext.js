@@ -60,12 +60,12 @@ export const GameProvider = ({ children }) => {
   const handleGameStatus = async () => {
     if (gameStatus) {
       Alert.alert(
-        'Confirm',
-        'Do you really want to end the game?',
+        'Potwierdź',
+        'Czy na pewno chcesz zakończyć grę?',
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: 'Cofnij', style: 'cancel' },
           {
-            text: 'Yes',
+            text: 'Tak',
             onPress: async () => {
               await endGame();
             },

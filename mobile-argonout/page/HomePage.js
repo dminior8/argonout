@@ -12,8 +12,6 @@ import BottomMenu from '../component/BottomMenu';
 
 const HomePage = () => {
   const [places, setPlaces] = useState([]);
-  const [addPlaceMode, setAddPlaceMode] = useState(false);
-  const [newPlacePosition, setNewPlacePosition] = useState(null);
   const [currentPlace, setCurrentPlace] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,8 +64,6 @@ const HomePage = () => {
       }
     }
   };
-  
-  
 
   const handleVisitedPlace = async (place) => {
     try {
@@ -83,8 +79,6 @@ const HomePage = () => {
     }
   };
   
-
-  // Obsługa kliknięcia popupu
   const handlePopupClick = (markerData) => {
     setCurrentPlace(markerData.placeId);
   };

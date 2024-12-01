@@ -107,11 +107,7 @@ public class UserServiceImpl implements UserService{
     public Boolean deleteCurrentUser(String username) throws UserAuthenticationException {
         Optional<User> existingUser = userRepository.findByUsername(username);
 
-        if (existingUser.isPresent()) {
-            userRepository.deleteByUsername(username);
-            return true;
-        }
-        return false;
+        return resetUserWhenDelete(existingUser);
 
     }
 
@@ -172,8 +168,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean deleteUserById(UUID userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        return resetUserWhenDelete(userOptional);
+    }
+
+    private Boolean resetUserWhenDelete(Optional<User> existingUser) {
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
 
             user.setUsername(null);
             user.setEmail(null);

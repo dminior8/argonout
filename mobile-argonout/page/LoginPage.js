@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -25,13 +25,11 @@ const LoginPanel = () => {
         .then((response) => {
           if (response.data && response.data.token) {
             AsyncStorage.setItem('accessTokenFront', response.data.token); 
-            console.log("TOKEN: ", response.data.token);
             
             // onLogin(true);
             setInfo("Zalogowano pomyślnie!");
             navigation.navigate('Home');
           } else {
-            console.log("NIE MA TOKENA");
             console.error('Brak tokenu w odpowiedzi z serwera.');
             setInfo("Wystąpił błąd przy logowaniu.");
           }
@@ -53,35 +51,37 @@ const LoginPanel = () => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.loginRight}>
-        <Text style={styles.welcomeText}>Witaj w <Text style={styles.argonoutText}>Argonout!</Text></Text>
-        <Text style={styles.h7}>Zaloguj się, aby kontynuować</Text>
+        <Text style={styles.header}>Witaj w <Text style={styles.argonoutText}>Argonout!</Text></Text>
+        <Text style={styles.subHeader}>Zaloguj się, aby kontynuować</Text>
         <View style={styles.formContainer}>
           <TextInput
             style={styles.textInput}
-            placeholder="Username"
+            placeholderTextColor="#c1c1c1"
+            placeholder="Nazwa użytkownika"
             value={username}
             onChangeText={setUsername}
             autoFocus
           />
           <TextInput
             style={styles.textInput}
-            placeholder="Password"
+            placeholderTextColor="#c1c1c1"
+            placeholder="Hasło"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
           {info && <Text style={styles.errorMessage}>{info}</Text>}
-          <Button
-            title="Zaloguj"
-            onPress={handleLogin}
-            color="#2F7A7E"
-          />
           <View style={styles.anotherOptionBtn}>
             <Text style={styles.anotherOptionText}>
               Nie masz jeszcze konta?&nbsp;
-              <Text style={styles.loginRegisterLink}>Zarejestruj się!</Text>
             </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.loginRegisterLink}>Zarejestruj się!</Text>
+            </TouchableOpacity> 
           </View>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Zaloguj</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',  // Zamiast tła obrazu możesz użyć koloru
+    backgroundColor: '#000',
+    color: "#fff"
   },
   loginRight: {
     backgroundColor: 'rgba(19, 31, 36, 0.7)', 
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  welcomeText: {
+  header: {
     fontSize: 24,
     color: '#fff',
     marginBottom: 10,
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     color: '#56bfc1',
     fontWeight: 'bold',
   },
-  h7: {
+  subHeader: {
     fontSize: 16,
     color: '#b8d8d8',
     marginBottom: 20,
@@ -142,6 +143,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
+  anotherOptionText: {
+    color:"#d1d1d1",
+    textAlign: "center"
+  },
   anotherOptionBtn: {
     marginTop: 10,
     fontSize: 16,
@@ -151,7 +156,22 @@ const styles = StyleSheet.create({
   loginRegisterLink: {
     color: '#56bfc1',
     fontWeight: 'bold',
+    textAlign: "center",
+    marginBottom: 20
   },
+  button: {
+    backgroundColor: '#2F7A7E',
+    paddingVertical: 12,
+    width: '100%',
+    borderRadius: 8,
+    marginBottom: 10,
+    alignItems: 'center',
+},
+buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+},
 });
 
 export default LoginPanel;

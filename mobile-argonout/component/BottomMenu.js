@@ -21,7 +21,6 @@ const BottomMenu = () => {
 
   return (
     <>
-      {/* Bottom Menu */}
       <View style={styles.container}>
         {menuItems.map((item, index) => (
           <TouchableOpacity
@@ -33,7 +32,6 @@ const BottomMenu = () => {
           </TouchableOpacity>
         ))}
 
-        {/* Hamburger Icon */}
         <TouchableOpacity style={styles.hamburgerButton} onPress={toggleSidebar}>
           <Text style={styles.hamburgerText}>☰</Text>
         </TouchableOpacity>
@@ -42,16 +40,13 @@ const BottomMenu = () => {
       {/* Sidebar Modal */}
       <Modal visible={isOpen} animationType="slide" transparent={true}>
         <View style={styles.sidebar}>
-          {/* Close Button */}
           <TouchableOpacity style={styles.closeButton} onPress={toggleSidebar}>
             <Text style={styles.closeButtonText}>✖</Text>
           </TouchableOpacity>
           <View style={styles.logoContainer}>
             <Image source={require('../assets/logo.png')} style={styles.logo} />
           </View>
-          
 
-          {/* Sidebar Menu */}
           <View style={styles.menu}>
             {menuItems.map((item, index) => (
               <TouchableOpacity
