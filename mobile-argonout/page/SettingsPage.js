@@ -109,12 +109,12 @@ const SettingsPage = () => {
     <View style={styles.container}>
       <MiniStats />
       <View style={styles.card}>
-        <Text style={styles.title}>User Profile</Text>
+        <Text style={styles.title}>Profil użytkownika</Text>
         {isEditing ? (
           <View>
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Nazwa użytkownika"
               value={editedProfile.username}
               onChangeText={(value) => handleChange('username', value)}
             />
@@ -127,25 +127,25 @@ const SettingsPage = () => {
             />
             <TextInput
               style={styles.input}
-              placeholder="First Name"
+              placeholder="Imię"
               value={editedProfile.firstName}
               onChangeText={(value) => handleChange('firstName', value)}
             />
             <TextInput
               style={styles.input}
-              placeholder="Last Name"
+              placeholder="Nazwisko"
               value={editedProfile.surname}
               onChangeText={(value) => handleChange('surname', value)}
             />
             <View style={styles.buttonRow}>
-              <Button title="Save" onPress={handleSave} />
-              <Button title="Cancel" onPress={handleEditToggle} color="red" />
+              <Button title="Zapisz" onPress={handleSave} color="#c7ea46" />
+              <Button title="Cofnij" onPress={handleEditToggle} color="orange" />
             </View>
           </View>
         ) : (
           <View>
             <Text style={styles.infoText}>
-              <Text style={styles.label}>Username: </Text>
+              <Text style={styles.label}>Nazwa użytkownika: </Text>
               {userProfile.username}
             </Text>
             <Text style={styles.infoText}>
@@ -153,24 +153,24 @@ const SettingsPage = () => {
               {userProfile.email}
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.label}>First Name: </Text>
+              <Text style={styles.label}>Imię: </Text>
               {userProfile.firstName}
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.label}>Last Name: </Text>
+              <Text style={styles.label}>Nazwisko: </Text>
               {userProfile.surname}
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.label}>Role: </Text>
+              <Text style={styles.label}>Rola: </Text>
               {userProfile.role}
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.label}>Created At: </Text>
+              <Text style={styles.label}>Data dołączenia: </Text>
               {new Date(userProfile.createdAt).toLocaleString()}
             </Text>
             <View style={styles.buttonRow}>
-              <Button title="Edit Profile" onPress={handleEditToggle} />
-              <Button title="Delete Account" onPress={handleDeleteAccount} color="red" />
+              <Button title="Edytuj konto" onPress={handleEditToggle} color="orange" />
+              <Button title="Usuń konto" onPress={handleDeleteAccount} color="#ff5000" />
             </View>
           </View>
         )}

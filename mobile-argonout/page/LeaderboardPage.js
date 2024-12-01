@@ -140,7 +140,7 @@ const LeaderboardPage = () => {
                         )
                     }
                 />
-                <MiniStats isRanking={true} position={position} />
+                <MiniStats />
             </View>
             <BottomMenu />
         </View>
@@ -161,10 +161,10 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "bold",
         fontSize: 24,
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         borderBottomColor: "#2F7A7E",
-        marginTop: 53,
-        paddingBottom: 8,
+        marginTop: 40,
+        paddingBottom: 10,
         marginBottom: 24,
     },
     leaderboardList: {

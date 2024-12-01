@@ -8,6 +8,7 @@ import LoginPage from './page/LoginPage';
 import HomePage from './page/HomePage';
 import AdventureModePage from './page/AdventureModePage';
 import LeaderboardPage from './page/LeaderboardPage';
+import MessagesPage from './page/MessagesPage';
 import SettingsPage from './page/SettingsPage';
 import { GameProvider } from './context/GameContext'
 import { UserProvider } from './context/UserContext';
@@ -30,6 +31,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Adventure" component={AdventureModePage} />
             <Stack.Screen name="Leaderboard" component={LeaderboardPage} />
+            <Stack.Screen name="Messages" component={MessagesPage} />
             <Stack.Screen name="Settings" component={SettingsPage} />
           </Stack.Navigator>
         </UserProvider>
