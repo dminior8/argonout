@@ -7,7 +7,8 @@ const BasicMap = ({
   places,
   onPlaceVisit,
   currentPlace,
-  gameStatus
+  gameStatus,
+  onQRCodeScanned
 }) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [userLocation, setUserLocation] = useState({
@@ -61,6 +62,12 @@ const BasicMap = ({
     onPopupClick(place);
   };
 
+  const handlePlaceVisit = (place) => {
+    onQRCodeScanned(place.id);
+    onPlaceVisit(place); // Wywołanie callbacku do `AdventureModePage`
+     // Przekazywanie ID miejsca do funkcji skanowania QR
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -112,7 +119,7 @@ const BasicMap = ({
                   styles.visitButton,
                   { opacity: nearbyPlaces.some((p) => p.id === selectedPlace.id) ? 1 : 0.3 }
                 ]}
-                onPress={() => onPlaceVisit(selectedPlace)}
+                onPress={() => handlePlaceVisit(selectedPlace)}
                 disabled={!nearbyPlaces.some((p) => p.id === selectedPlace.id)}
               >
                 <Text style={styles.visitButtonText}>{`Odwiedź ${selectedPlace.name}`}</Text>
