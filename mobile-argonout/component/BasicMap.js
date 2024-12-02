@@ -63,7 +63,6 @@ const BasicMap = ({
   };
 
   const handlePlaceVisit = (place) => {
-    onQRCodeScanned(place.id);
     onPlaceVisit(place); // Wywołanie callbacku do `AdventureModePage`
      // Przekazywanie ID miejsca do funkcji skanowania QR
   };

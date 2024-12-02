@@ -173,20 +173,6 @@ const AdventureModePage = () => {
     setShowQRScanner(true); // Pokazanie QRScannera, gdy użytkownik kliknie przycisk "Odwiedź"
   };
 
-  // const handleVisitedPlace = (place) => {
-  //   try {
-  //     handleQRCodeScanned();
-  //     updatePointsInGame();
-      
-  //   } catch (e) {
-  //     console.error("Error during adding visited place: ", e);
-  //   }
-
-  //   setPlaces((prevPlaces) =>
-  //     prevPlaces.map((p) => (p.id === place.id ? { ...p, visited: true } : p))
-  //   );
-  // };
-
   const handlePopupClick = (markerData) => {
     setCurrentPlace(markerData.placeId);
   };
