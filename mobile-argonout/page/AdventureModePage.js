@@ -7,6 +7,7 @@ import BottomMenu from '../component/BottomMenu';
 import BasicMap from '../component/BasicMap'; 
 import MiniStats from '../component/MiniStats'; 
 import GameConfigDrawer from '../component/GameConfigDrawer';
+import QRScanner from '../component/QRScanner';
 import { useUser } from '../context/UserContext';
 import { useGameStatus } from '../context/GameContext'; 
 import { BASE_URL } from '../config';
@@ -16,9 +17,11 @@ const AdventureModePage = () => {
   const [routes, setRoutes] = useState([]);
   const [places, setPlaces] = useState([]);
   const [currentPlace, setCurrentPlace] = useState(null); 
+  const [scannedPlace, setScannedPlace] = useState(null);
   const [timeToEnd, setTimeToEnd] = useState(0);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   const { 
     gameStatus, handleGameStatus, 
@@ -103,37 +106,71 @@ const AdventureModePage = () => {
     await updateUserPoints(newPoints);
   };
 
-  const postVisitedPlace = async (place) => {
-    const token = await AsyncStorage.getItem('accessTokenFront');
+  const postVisitedPlace = async (place, qrCode) => {
     const gameId = await AsyncStorage.getItem("gameId");
   
-    const cleanedToken = token?.replace(/^"|"$/g, "");
-    const cleanedGameId = gameId?.replace(/^"|"$/g, "");
-  
     try {
-      const response = await axios.post(`${BASE_URL}/api/game/${cleanedGameId}/add-place/${place.id}`, {}, {
-        headers: { Authorization: `Bearer ${cleanedToken}` }
-      });
+      const token = await AsyncStorage.getItem('accessTokenFront');
+      const cleanedGameId = gameId?.replace(/^"|"$/g, "");
+      console.log("WYSYŁANE: ", gameId, " ", cleanedGameId, " ", qrCode);
+  
+      const response = await axios.post(
+        `${BASE_URL}/api/game/${cleanedGameId}/add-place/${place.id}`,
+        { "qrCodeData": qrCode },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if (response.data) {
+        Alert.alert("Sukces", "Miejsce zostało pomyślnie dodane do gry.");
+      }
+  
       return response.data;
     } catch (error) {
       console.error("Błąd podczas wykonywania zapytania:", error.message);
+  
+      // Obsługa różnych błędów na podstawie statusu HTTP
+      if (error.response) {
+        // Jeśli serwer odpowiedział, ale z błędem (np. 400, 404, 500)
+        const errorMessage = error.response.data.message || "Wystąpił błąd. Spróbuj ponownie.";
+  
+        // Pokazanie komunikatu błędu w postaci alertu
+        Alert.alert("Błąd", errorMessage);
+      } else if (error.request) {
+        // Jeśli nie ma odpowiedzi od serwera (np. problem z połączeniem)
+        Alert.alert("Błąd", "Brak odpowiedzi od serwera. Sprawdź połączenie internetowe.");
+      } else {
+        // Inne nieoczekiwane błędy
+        Alert.alert("Błąd", "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.");
+      }
+  
+      // Rzucenie błędu, aby umożliwić dalsze przetwarzanie
       throw error;
     }
   };
   
+  const handleQRCodeScanned = async (qrData) => {
+    
+    setShowQRScanner(false);
+      try {
+        await postVisitedPlace(scannedPlace, qrData); // Send QR code and place ID
+        updatePointsInGame();
+        Alert.alert("Odwiedziłeś", `${scannedPlace.name}`);
+        setPlaces((prevPlaces) =>
+          prevPlaces.map((p) => (p.id === scannedPlace.id ? { ...p, visited: true } : p))
+        );
+      } catch (error) {
+        console.error("Error during QR scan handling:", error);
+      }
+  };
 
-  const handleVisitedPlace = (place) => {
-    try {
-      updatePointsInGame();
-      postVisitedPlace(place);
-      Alert.alert("Odwiedziłeś", `${place.name}`);
-    } catch (e) {
-      console.error("Error during adding visited place: ", e);
-    }
-
-    setPlaces((prevPlaces) =>
-      prevPlaces.map((p) => (p.id === place.id ? { ...p, visited: true } : p))
-    );
+  const handlePlaceVisit = (place) => {
+    setScannedPlace(place); // Ustawienie ID miejsca, które odwiedzimy
+    setShowQRScanner(true); // Pokazanie QRScannera, gdy użytkownik kliknie przycisk "Odwiedź"
   };
 
   const handlePopupClick = (markerData) => {
@@ -155,9 +192,10 @@ const AdventureModePage = () => {
           <BasicMap
             onPopupClick={handlePopupClick}
             places={places}
-            onPlaceVisit={handleVisitedPlace}
+            onPlaceVisit={handlePlaceVisit}
             currentPlace={currentPlace}
             gameStatus={gameStatus}
+            onQRCodeScanned={handlePlaceVisit}
           />
         </View>
       )}
@@ -177,6 +215,8 @@ const AdventureModePage = () => {
       />
       
       <BottomMenu />
+
+      {showQRScanner && <QRScanner onQRCodeScanned={handleQRCodeScanned} />}
     </View>
   );
 };

@@ -126,6 +126,7 @@ const RouteEditorPanel = () => {
   const [newPlacePosition, setNewPlacePosition] = useState(null); 
   const [selectedPlace, setSelectedPlace] = useState(null); 
   const [places, setPlaces] = useState([]);
+  const [qrCodeImage, setQrCodeImage] = useState(null);
 
   const toggleAddPlaceMode = () => {
     setAddPlaceMode((prevMode) => !prevMode);
@@ -272,12 +273,50 @@ const RouteEditorPanel = () => {
     }
   };
 
+  const handleQrButton = () => {
+    if(addPlaceMode || editPlaceMode) return;
+    handleGetQRCode();
+  }
+
+  const handleGetQRCode = async () => {
+    if (!selectedPlace) {
+      console.error("No place selected.");
+      return;
+    }
+  
+    try {
+      const token = Cookies.get('accessTokenFront');
+      const response = await axios.get(`http://localhost:8080/api/qrcode/generate/${selectedPlace.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'blob', // Ustalamy odpowiedź jako blob (obrazek)
+      });
+  
+      // Używamy FileReader do konwersji blob na base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result.split(',')[1]; // Zbieramy tylko część base64
+        setQrCodeImage(base64Image);
+      };
+  
+      // Przekazujemy blob do FileReader
+      reader.readAsDataURL(response.data);
+    } catch (error) {
+      console.error('Error fetching QR Code:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetQRCode();
+  },[selectedPlace]);
+
   return (
     <div className="AppContent">
       
       <Sidebar />
       <div style={{marginTop:"10vh"}} />
-        {/* Komponent mapy */}
+        
         <div className="map-container">
           <BasicMap
             className="basic-map" 
@@ -290,54 +329,64 @@ const RouteEditorPanel = () => {
           />
         </div>
       
-      <div>
-        <button
-          className="btn-primary"
-          onClick={toggleAddPlaceMode}
-          style={{
-            marginTop: '15px',
-            padding: '10px 15px',
-            backgroundColor: addPlaceMode ? 'red' : '#2F7A7E',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-          }}
-        >
-          {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
-        </button>
-        {selectedPlace && (
-          <div style={{ marginTop: '15pt'}}>
-            <button 
-            className="btn-secondary" 
-            onClick={handleEditPlace}
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            className="btn-primary"
+            onClick={toggleAddPlaceMode}
             style={{
-              marginTop: '15px',
               padding: '10px 15px',
               backgroundColor: addPlaceMode ? 'red' : '#2F7A7E',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
+              marginTop: "10px",
+              flex: '1 0 auto', // Zapewnia elastyczność przycisków
             }}
-            >
-            {editPlaceMode ? 'Anuluj' : 'Edytuj miejsce'} 
-            </button>
-            <button
-             className="btn-danger"
-             onClick={handleDeletePlace}
-             style={{
-              margin: '15pt 0 0 10pt',
-              padding: '10px 15px',
-              backgroundColor: 'red',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              }}
-            >
-              Usuń miejsce
-            </button>
-          </div>
-        )}
-      </div>
+            display={editPlaceMode ? "none" : "block"}
+          >
+            {addPlaceMode ? 'Anuluj' : 'Dodaj miejsce'}
+          </button>
+          
+          {selectedPlace && (
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <button 
+                className="btn-secondary"
+                onClick={handleEditPlace}
+                style={{
+                  padding: '10px 15px',
+                  backgroundColor: editPlaceMode ? 'red' : '#2F7A7E',
+                  marginTop: "10px",
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  flex: '1 0 auto', // Zapewnia elastyczność przycisków
+                }}
+              >
+                {editPlaceMode && !addPlaceMode ? 'Anuluj' : 'Edytuj miejsce'}
+              </button>
+              
+              <button
+                className="btn-danger"
+                onClick={handleDeletePlace}
+                style={{
+                  padding: '10px 15px',
+                  backgroundColor: '#2F7A7E',
+                  color: 'white',
+                  marginTop: "10px",
+                  border: 'none',
+                  borderRadius: '5px',
+                  flex: '1 0 auto', // Zapewnia elastyczność przycisków
+                }}
+                display={editPlaceMode ? "none" : "block"}
+              >
+                Usuń miejsce
+              </button>
+            </div>
+          )}
+
+        </div>
+          
+
 
       <div className="right-container">
         <MiniStats />
@@ -363,6 +412,19 @@ const RouteEditorPanel = () => {
           />
         )}
       </div>
+
+      <div style={{ marginLeft: '20px', width: '30%' }}>
+          {(qrCodeImage  && (selectedPlace != null) && (!editPlaceMode && !addPlaceMode) ) && (
+            <div style={{ right: 0, bottom: 0, position: "absolute" }}>
+              <div style={{color:"#389ba0", fontWeight:"bold", marginBottom: "10px", fontSize:"14px"}}>Kod QR dla {selectedPlace.name}</div>
+              <img
+                src={`data:image/png;base64,${qrCodeImage}`}
+                alt="QR Code"
+                style={{ width: '200px', height: "200px" }}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
