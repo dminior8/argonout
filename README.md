@@ -1,6 +1,6 @@
 # Argonout
 
-**Argonout** is a web application designed for organizing and participating in outdoor games, inspired by Geocaching. Users can join games that involve visiting specific geographic locations and scanning QR codes to confirm their presence. The application also supports creating custom games with configurable locations, QR codes, and time limits. The backend is powered by Spring Boot, PostgreSQL, and REST API, while the frontend uses React. Future updates will include mobile support, containerization with Docker, and deployment to AWS.
+**Argonout** is a comprehensive platform for organizing and participating in outdoor games inspired by Geocaching. It allows users to visit specific locations, scan QR codes to confirm their presence, and track their progress and also supports creating custom games with configurable locations, QR codes, and time limits. The backend is powered by Spring Boot, PostgreSQL, and REST API, while the web application frontend uses React and mobile app uses React Native. Future updates will include containerization with Docker and deployment to AWS.
 
 ## Table of Contents
 
@@ -19,29 +19,34 @@
 ## Key Features
 
 1. **Outdoor Game Participation**:
-   - View available games on a map in Adventure Mode or play in Free Mode.
-   - Scan QR codes at locations to confirm your presence.
+   - Participate in games with predefined routes or free exploration mode.
+   - Use QR codes and user locations to confirm visits to specific locations.
+   - Receive real-time notifications for game progress.
 
 2. **Game Organization**:
    - Create custom games as an admin, specifying:
-     - Geographic locations.
-     - Time limits for game completion.
+   - Geographic locations.
+   - Time limits for game completion.
 
-3. **Progress Tracking**:
+3. **Cross-Platform Support**:
+   - Web application for detailed planning and management.
+   - Mobile application for on-the-go participation with QR code scanning and GPS tracking.
+
+4. **Progress Tracking**:
    - Real-time tracking via GPS and scanned QR codes.
    - Alerts for completed tasks and remaining time.
 
-4. **Leaderboards and History**:
+5. **Leaderboards and History**:
    - View personal game history and statistics.
    - Compare rankings with other users.
 
-5. **Feedback System**:
+6. **Feedback System**:
    - Send feedback messages as a user.
    - Read and manage feedback messages as an admin.
 
-6. **User Management**:
-   - Register and log in securely with JWT authentication.
-   - Edit user profiles and account details.
+7. **Secure and Scalable**:
+   - JWT-based authentication and user management.
+   - Optimized backend for scalability and responsiveness.
 
 
 
@@ -62,6 +67,7 @@ Follow the steps below to set up and run the **Argonout** application.
 
 #### Frontend
 - Node.js (LTS version) and npm/yarn
+- Expo (mobile)
 
 
 ## Setup Instructions
@@ -110,6 +116,28 @@ Follow the steps below to set up and run the **Argonout** application.
    ```
 
 4. Access the frontend at: `http://localhost:3000`
+
+### Mobile Application setup
+The mobile app is built using React Native and leverages the Expo framework for cross-platform support. It introduces new features like QR code scanning and a streamlined user interface for field participation.
+
+1. Navigate to the mobile app directory:
+   ```bash
+   cd mobile-argonout
+    ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+    ```
+
+3. Start the Expo development server:
+   ```bash
+   npx expo start
+    ```
+
+4. Run the app on your device:
+- Open the Expo Go app on your device.
+- Scan the QR code displayed in the Expo developer tools.
 
 ### Logging in
 
@@ -175,6 +203,10 @@ Here's a summary of the available API endpoints:
 | GET    | `/api/users/me`                           | Gets the logged-in user's profile.      | User details.                  |
 | PUT    | `/api/users/me`                           | Updates the user's profile.             | Status message.                |
 | DELETE | `/api/users/me`                           | Deletes the user's account.             | Status message.                |
+| GET | `/api/users/all`                           | Gets paginated all users list (Admin only). | Status message.                |
+| GET | `/api/users/{userId}`                      | Fetches the details of a specific user by user ID (Admin only).             | User details (DTO).               |
+| PATCH | `/api/users/{userId}`                      | Updates the details of a specific user by user ID (Admin only).             | Success or error message.               |
+| DELETE | `/api/users/{userId}`                      | Deletes a specific user account by user ID (Admin only).             | Success or error message.                |
 
 
 ## Technologies Used
@@ -186,11 +218,17 @@ Here's a summary of the available API endpoints:
 - PostgreSQL
 - JUnit and Mockito
 
-### Frontend
+### Frontend (web)
 - React
 - Bootstrap
+- MaterialUI
 - Axios
+- CSS
 
+### Frontend (mobile)
+- React Native
+- Axios
+- Expo
 
 
 ## Development Roadmap
