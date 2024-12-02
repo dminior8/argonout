@@ -5,9 +5,8 @@ import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 const QRScanner = ({ onQRCodeScanned }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-  const [scannedData, setScannedData] = useState(null); // Zmienna do przechowywania zeskanowanych danych
+  const [scannedData, setScannedData] = useState(null);
 
-  // Sprawdzanie uprawnień
   if (!permission) {
     return <View />;
   }
@@ -21,17 +20,15 @@ const QRScanner = ({ onQRCodeScanned }) => {
     );
   }
 
-  // Funkcja obsługująca zeskanowanie QR kodu
   const handleBarCodeScanned = ({ type, data }) => {
     if (scanned) return;
 
     setScanned(true);
     setScannedData(data);
     console.log("QR Code scanned!");
-    console.log("Data: ", data); // Wyświetlanie danych zeskanowanego kodu QR
+    console.log("Data: ", data);
   };
 
-  // Funkcja zatwierdzająca zeskanowane dane
   const handleConfirmScan = () => {
     if (scannedData) {
       onQRCodeScanned(scannedData);
@@ -45,9 +42,9 @@ const QRScanner = ({ onQRCodeScanned }) => {
       <CameraView
         style={styles.camera}
         barcodeScannerSettings={{
-          barcodeTypes: ['qr'], // Tylko QR kody
+          barcodeTypes: ['qr'],
         }}
-        onBarcodeScanned={handleBarCodeScanned} // Zatrzymujemy dalsze skanowanie po pierwszym QR
+        onBarcodeScanned={handleBarCodeScanned}
       >
         <View style={styles.overlay}>
           <Text style={styles.text}>Zeskanuj kod QR</Text>
@@ -56,7 +53,7 @@ const QRScanner = ({ onQRCodeScanned }) => {
 
       <View style={styles.buttonContainer}>
         <Button
-          title="Confirm QR Code"
+          title={scannedData ? "Wyślij" : "Brak kodu QR"}
           onPress={handleConfirmScan}
           disabled={!scannedData}
         />
@@ -67,7 +64,7 @@ const QRScanner = ({ onQRCodeScanned }) => {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject, // Zapewnia pełny ekran
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 9999,
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    width: '100%', // Zapewnia, że kamera zajmuje cały ekran
+    width: '100%',
   },
   overlay: {
     position: 'absolute',
@@ -100,21 +97,20 @@ const styles = StyleSheet.create({
     width: '80%',
     paddingHorizontal: 20,
     zIndex: 99999,
-    // Estetyczny cień oraz obramowanie
-    borderRadius: 8, // Zaokrąglenie rogów
+    borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#1D727E', // Morska ramka
-    backgroundColor: '#333', // Ciemne tło
+    borderColor: '#56bfc1',
+    backgroundColor: '#333',
   },
   button: {
-    backgroundColor: '#1D727E', // Jasny morski kolor tła
+    backgroundColor: '#56bfc1',
     paddingVertical: 15,
-    borderRadius: 8, // Zaokrąglenie rogów
+    borderRadius: 8, 
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff', // Biały kolor tekstu
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

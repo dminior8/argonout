@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import { BASE_URL } from '../config';
 
+import QRScanner from '../component/QRScanner';
 import BasicMap from '../component/BasicMap';
 import MiniStats from '../component/MiniStats';
 import BottomMenu from '../component/BottomMenu';
@@ -13,7 +14,9 @@ import BottomMenu from '../component/BottomMenu';
 const HomePage = () => {
   const [places, setPlaces] = useState([]);
   const [currentPlace, setCurrentPlace] = useState(null);
+  const [scannedPlace, setScannedPlace] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   const handleGetAll = async () => {
     try {
@@ -42,13 +45,13 @@ const HomePage = () => {
     handleGetAll();
   }, []);
 
-  const postVisitedPlace = async (place) => {
+  const postVisitedPlace = async (qrCode) => {
     try {
       const token = await AsyncStorage.getItem('accessTokenFront');
   
       const response = await axios.post(
-        `${BASE_URL}/api/free-game/add-place/${place.id}`,
-        {},
+        `${BASE_URL}/api/free-game/add-place/${scannedPlace.id}`,
+        {"qrCodeData": qrCode},
         { headers: { Authorization: `Bearer ${token}` } }
       );
   
@@ -65,18 +68,25 @@ const HomePage = () => {
     }
   };
 
-  const handleVisitedPlace = async (place) => {
+  const handleQRCodeScanned = async (qrData) => {
+    
+    setShowQRScanner(false);
     try {
-      const data = await postVisitedPlace(place); // Jeśli funkcja zadziała poprawnie
-      Alert.alert("Sukces", `Odwiedziłeś ${place.name}`);
+      const data = await postVisitedPlace(qrData); // Jeśli funkcja zadziała poprawnie
+      Alert.alert("Sukces", `Odwiedziłeś ${scannedPlace.name}`);
       
       setPlaces((prevPlaces) =>
-        prevPlaces.map((p) => (p.id === place.id ? { ...p, visited: true } : p))
+        prevPlaces.map((p) => (p.id === scannedPlace.id ? { ...p, visited: true } : p))
       );
     } catch (error) {
       Alert.alert("Błąd", error.message);
       console.error("Error during adding visited place:", error);
     }
+  };
+
+  const handlePlaceVisit = (place) => {
+    setScannedPlace(place);
+    setShowQRScanner(true);
   };
   
   const handlePopupClick = (markerData) => {
@@ -100,14 +110,16 @@ const HomePage = () => {
         <BasicMap
           onPopupClick={handlePopupClick}
           places={places}
-          onPlaceVisit={handleVisitedPlace}
+          onPlaceVisit={handlePlaceVisit}
           currentPlace={currentPlace}
+          onQRCodeScanned={handlePlaceVisit}
 
         />
         }
         
       </View>
       <BottomMenu />
+      {showQRScanner && <QRScanner onQRCodeScanned={handleQRCodeScanned} />}
     </View>
   );
 };

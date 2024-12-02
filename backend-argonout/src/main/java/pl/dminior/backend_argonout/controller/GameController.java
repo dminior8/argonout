@@ -39,7 +39,6 @@ public class GameController {
 
         try {
             UUID placeIdFromQR = UUID.fromString(qrCodeData.get("qrCodeData"));
-            System.out.println(placeIdFromQR + " " + placeId);
             if(!placeId.equals(placeIdFromQR)){
                 return ResponseEntity.badRequest().body(new MessageResponse("QR code is different from placeId"));
             }
@@ -85,7 +84,18 @@ public class GameController {
 
     @PostMapping("/free-game/add-place/{placeId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<MessageResponse> addPlaceInFreeGame(@PathVariable UUID placeId){
+    public ResponseEntity<MessageResponse> addPlaceInFreeGame(
+            @PathVariable UUID placeId,
+            @RequestBody Map<String, String> qrCodeData){
+
+        try {
+            UUID placeIdFromQR = UUID.fromString(qrCodeData.get("qrCodeData"));
+            if(!placeId.equals(placeIdFromQR)){
+                return ResponseEntity.badRequest().body(new MessageResponse("QR code is different from placeId"));
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Invalid QR data format"));
+        }
 
         switch (gameService.addPlaceInFreeGame(placeId)){
             case -1 -> {return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Place not found"));}
