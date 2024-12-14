@@ -51,8 +51,11 @@
 
 
 ## GUI presentation
-https://github.com/user-attachments/assets/b72bab4f-92fa-45cb-a5d4-f65556c6db5f
+### Web app
+https://github.com/user-attachments/assets/9c5aa190-d679-465b-952f-4f59ade284fe
 
+### Mobile app
+https://github.com/user-attachments/assets/3fd37cac-d226-4d9f-87f8-d07fca1103bb
 
 ## Getting Started
 
