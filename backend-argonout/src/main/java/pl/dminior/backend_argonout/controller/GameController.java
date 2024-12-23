@@ -5,12 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.dminior.backend_argonout.model.Place;
 import pl.dminior.backend_argonout.security.payloads.response.MessageResponse;
 import pl.dminior.backend_argonout.service.GameService;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
