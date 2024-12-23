@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service

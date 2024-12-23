@@ -32,7 +32,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder encoder;
+    //private final PasswordEncoder encoder;
     private final PasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
                 .surname(registerRequest.getSurname())
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
-                .password(encoder.encode(registerRequest.getPassword()))
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(ERole.USER)
                 .points(0)
                 .createdAt(LocalDateTime.now())
