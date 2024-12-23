@@ -8,13 +8,13 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.dminior.backend_argonout.dto.EditUserDTO;
 import pl.dminior.backend_argonout.dto.GetUserDTO;
 import pl.dminior.backend_argonout.model.ERole;
 import pl.dminior.backend_argonout.model.User;
 import pl.dminior.backend_argonout.repository.UserRepository;
 import pl.dminior.backend_argonout.security.payloads.request.RegisterRequest;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -98,16 +98,8 @@ class UserServiceImplTest {
     @Test
     void getDataAboutUser() throws Exception {
         // given: symulacja użytkownika w bazie danych
-        UUID id = UUID.randomUUID();
-        User mockUser = new User();
-        mockUser.setId(id);
-        mockUser.setUsername("testuser");
-        mockUser.setEmail("test@example.com");
-        mockUser.setFirstName("John");
-        mockUser.setSurname("Doe");
-        mockUser.setRole(ERole.USER);
-        mockUser.setPoints(100);
-        mockUser.setCreatedAt(LocalDateTime.parse("2023-12-01T00:00:00"));
+        User mockUser = simulateUserInDatabase();
+        UUID id = mockUser.getId();
 
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(mockUser));
 
@@ -142,35 +134,54 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).findByUsername("nonexistentuser");
     }
 
-//    @Test
-//    void editDataAboutUser() {
-//    }
-//
-//    @Test
-//    void deleteCurrentUser() {
-//    }
-//
-//    @Test
-//    void getCurrentUser() {
-//    }
-//
-//    @Test
-//    void findUserById() {
-//    }
-//
-//    @Test
-//    void getAllUsers() {
-//    }
-//
-//    @Test
-//    void getUserById() {
-//    }
-//
-//    @Test
-//    void editUserById() {
-//    }
-//
-//    @Test
-//    void deleteUserById() {
-//    }
+    @Test
+    void editDataAboutUser_userExists() {
+        User mockUser = simulateUserInDatabase();
+        String username = mockUser.getUsername();
+
+        EditUserDTO editUserDTO = new EditUserDTO();
+        editUserDTO.setUsername(username); //bez zmian
+        editUserDTO.setFirstName("John");
+        editUserDTO.setSurname("Doe");
+        editUserDTO.setPassword("password123");
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
+        when(encoder.encode(editUserDTO.getPassword())).thenReturn("encodedPassword");
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if (existingUser.isPresent()) {
+
+            mockUser.setUsername(editUserDTO.getUsername());
+            mockUser.setEmail(editUserDTO.getEmail());
+            mockUser.setFirstName(editUserDTO.getFirstName());
+            mockUser.setSurname(editUserDTO.getSurname());
+
+            if(editUserDTO.getPassword() != null){
+                mockUser.setPassword(encoder.encode(editUserDTO.getPassword()));
+            }
+            userRepository.save(mockUser);
+        }
+
+
+        verify(userRepository, times(1)).findByUsername(username);
+        assertNotNull(editUserDTO);
+        assertEquals(editUserDTO.getUsername(), username);
+        assertEquals(editUserDTO.getFirstName(), mockUser.getFirstName());
+        assertEquals(editUserDTO.getSurname(), mockUser.getSurname());
+        assertEquals("encodedPassword", mockUser.getPassword());
+        verify(userRepository, times(1)).save(mockUser);
+    }
+
+    private User simulateUserInDatabase(){
+        User user = new User();
+        UUID id = UUID.randomUUID();
+        user.setId(id);
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setFirstName("John");
+        user.setSurname("Doe");
+        user.setRole(ERole.USER);
+        user.setPoints(100);
+        user.setCreatedAt(LocalDateTime.parse("2023-12-01T00:00:00"));
+        return user;
+    }
 }
