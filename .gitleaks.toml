@@ -1,0 +1,13 @@
+# Plik .gitleaks.toml
+
+# 1. Definicja własnej reguły – musi zawierać id, description, regex i opcjonalnie tags
+[[rules]]
+id          = "AWSAccessKey"                          # unikalny identyfikator reguły
+description = "Wykrywanie kluczy AWS Access Key (AKIA...)"
+regex       = '''AKIA[0-9A-Z]{16}'''                  # wyrażenie do wykrywania
+tags        = ["key","aws"]                           # kategorie reguły
+
+# 2. Sekcja allowlists – ignorowane ścieżki lub wyrażenia
+[[allowlists]]
+description = "Wykluczenie plików testowych fixtures"
+paths       = ["tests/fixtures/.*"]                   # regex ścieżek do pominięcia
