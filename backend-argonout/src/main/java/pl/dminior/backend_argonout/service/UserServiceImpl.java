@@ -27,6 +27,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import static pl.dminior.backend_argonout.model.EStatus.ACTIVE;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -51,6 +53,7 @@ public class UserServiceImpl implements UserService{
                 .role(ERole.USER)
                 .points(0)
                 .createdAt(LocalDateTime.now())
+                .status(ACTIVE)
                 .build();
 
         userRepository.save(user);

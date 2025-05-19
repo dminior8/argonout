@@ -162,13 +162,13 @@ const AdventureModePanel = () => {
             </Form.Select>
           )}
 
-          <div>
+          {/* <div>
             {(selectedRoute || gameStatus) && (
               <button className="btn-start" onClick={handleGameStatus}>
                 {gameStatus ? 'Koniec gry' : 'Rozpocznij grę'}
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

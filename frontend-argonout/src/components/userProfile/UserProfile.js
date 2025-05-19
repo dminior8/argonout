@@ -232,7 +232,7 @@ const UserProfile = () => {
               </ListItem>
               <ListItem>
                 <ListItemText 
-                  primary="Role" 
+                  primary="Rola" 
                   secondary={userProfile.role} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
                   secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
@@ -240,7 +240,7 @@ const UserProfile = () => {
               </ListItem>
               <ListItem>
                 <ListItemText 
-                  primary="Created At" 
+                  primary="Zarejestrowany dnia" 
                   secondary={new Date(userProfile.createdAt).toLocaleString()} 
                   primaryTypographyProps={{ sx: { fontWeight: 'bold'} }}
                   secondaryTypographyProps={{ sx: { color: '#def7f4', fontSize: '2vh' } }}
