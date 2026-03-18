@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes } from "react-router-dom";
 import Cookies from "js-cookie";
 import { UserProvider } from '../contexts/UserContext';
 import { routes } from "../routes/Routes";
-import "./app.css";
+import "./App.css";
 import { GameProvider } from "../contexts/GameContext";
 
 function App() {

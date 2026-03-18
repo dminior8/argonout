@@ -54,7 +54,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000"));
+                "http://localhost:3000", "http://192.168.65.130"));
 //                "http://localhost:8081",
 //                "192.168.0.115:8080"));
 //                "192.168.0.115:8081"));  // domena klienta, która ma mieć dostęp

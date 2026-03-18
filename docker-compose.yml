@@ -1,0 +1,40 @@
+services:
+  # 1. Baza danych
+  db:
+    image: postgres:15-alpine
+    container_name: argonout-db
+    environment:
+      POSTGRES_DB: argonout
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend-argonout/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend-argonout/src/main/resources/db/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+
+  # 2. Backend (Spring Boot)
+  backend:
+    build: ./backend-argonout # ścieżka do modułu backendu
+    container_name: argonout-api
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/argonout
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
+  # 3. Frontend (Nginx)
+  frontend:
+    build: ./frontend-argonout # ścieżka do modułu frontendu
+    container_name: argonout-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

@@ -10,7 +10,6 @@ import Timer from "./Timer";
 import { useGameStatus } from '../../contexts/GameContext';
 
 import "./adventureModePanel.css";
-import {API_BASE_URL} from "../../config";
 
 const AdventureModePanel = () => {
   const [routes, setRoutes] = useState([]);
@@ -26,7 +25,7 @@ const AdventureModePanel = () => {
       const fetchRoutes = async () => {
         try {
           const token = Cookies.get('accessTokenFront');
-          const response = await axios.get(`${API_BASE_URL}/api/routes/all`, {
+          const response = await axios.get('http://localhost:8080/api/routes/all', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -55,7 +54,7 @@ const AdventureModePanel = () => {
           const savedRouteId = localStorage.getItem("routeId");
           if(savedRouteId){
             const token = Cookies.get('accessTokenFront');
-            const response = await axios.get(`${API_BASE_URL}/api/places/${savedRouteId}`, {
+            const response = await axios.get(`http://localhost:8080/api/places/${savedRouteId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -93,7 +92,7 @@ const AdventureModePanel = () => {
     const gameId = localStorage.getItem("gameId");
     
     const token = Cookies.get('accessTokenFront');
-    const response = await axios.post(`${API_BASE_URL}/api/game/${gameId}/add-place/${place.id}`, {}, {
+    const response = await axios.post(`http://localhost:8080/api/game/${gameId}/add-place/${place.id}`, {}, {
       headers: { Authorization: `Bearer ${token}`}
     });
     return response.data;
