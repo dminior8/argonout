@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import { useUser } from '../../contexts/UserContext';
-import './sidebar.css'; 
+import './sidebar.css';
+import {API_BASE_URL} from "../../config";
 
 const Sidebar = () => {
   const { user } = useUser();
@@ -16,7 +17,7 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8080/api/auth/logout', {}, {
+      await axios.post(`${API_BASE_URL}/api/auth/logout`, {}, {
         headers: {
           Authorization: `Bearer ${Cookies.get('accessTokenFront')}`,
         },

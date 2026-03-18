@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
+import {API_BASE_URL} from "../config";
 
 const GameContext = createContext();
 
@@ -48,7 +49,7 @@ export const GameProvider = ({ children }) => {
     if (newStatus) {
       // Rozpoczęcie gry
       if (selectedRoute && selectedRoute.id) {
-        const url = `http://localhost:8080/api/game/init/${selectedRoute.id}`;
+        const url = `${API_BASE_URL}/api/game/init/${selectedRoute.id}`;
         try {
           const response = await postGameStatus(url);
           localStorage.setItem("gameId", response);
@@ -59,7 +60,7 @@ export const GameProvider = ({ children }) => {
     } else {
       // Zakończenie gry
       const gameId = localStorage.getItem("gameId");
-      const url = `http://localhost:8080/api/game/${gameId}/end`;
+      const url = `${API_BASE_URL}/api/game/${gameId}/end`;
       try {
         await postGameStatus(url);
         localStorage.removeItem("gameId");

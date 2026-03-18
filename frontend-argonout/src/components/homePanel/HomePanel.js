@@ -6,6 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import BasicMap from "../map/BasicMap";
 import './homePanel.css';
 import MiniStats from "../miniStats/MiniStats";
+import {API_BASE_URL} from "../../config";
 
 const HomePage = () => {
   const [places, setPlaces] = useState([]);
@@ -13,7 +14,7 @@ const HomePage = () => {
   const handleGetAll = async () => {
     try {
       const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/places', {
+      const response = await axios.get(`${API_BASE_URL}/api/places`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,7 +41,7 @@ const HomePage = () => {
   const postVisitedPlace = async (place) => {
     
     const token = Cookies.get('accessTokenFront');
-    const response = await axios.post(`http://localhost:8080/api/free-game/add-place/${place.id}`, {}, {
+    const response = await axios.post(`${API_BASE_URL}/api/free-game/add-place/${place.id}`, {}, {
       headers: { Authorization: `Bearer ${token}`}
     });
     return response.data;

@@ -4,6 +4,7 @@ import { useUser } from "./../../contexts/UserContext";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./loginPanel.css";
+import {API_BASE_URL} from "../../config";
 
 function LoginPanel({ onLogin }) {
   const { user } = useUser();
@@ -19,7 +20,7 @@ function LoginPanel({ onLogin }) {
 
       axios
         .post(
-          `http://localhost:8080/api/auth/login`,
+          `${API_BASE_URL}/api/auth/login`,
           { username, password },
           {
             withCredentials: true,

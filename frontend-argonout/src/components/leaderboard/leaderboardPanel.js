@@ -8,6 +8,7 @@ import "./leaderboardPanel.css";
 import { useUser } from '../../contexts/UserContext';
 import Sidebar from "../sidebar/Sidebar";
 import MiniStats from "../miniStats/MiniStats";
+import {API_BASE_URL} from "../../config";
 
 const LeaderboardPanel = () => {
     const { user, setUser } = useUser();
@@ -22,7 +23,7 @@ const LeaderboardPanel = () => {
 
     const fetchLeagues = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/leagues/all", {
+            const response = await axios.get(`${API_BASE_URL}/api/leagues/all`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -53,7 +54,7 @@ const LeaderboardPanel = () => {
         const fetchUsersFromLeague = async () => {
             try {
                 const token = Cookies.get('accessTokenFront');
-                const response = await axios.get("http://localhost:8080/api/leagues/current-player/position", {
+                const response = await axios.get(`${API_BASE_URL}/api/leagues/current-player/position`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -71,7 +72,7 @@ const LeaderboardPanel = () => {
     const fetchUsersFromLeague = async () => {
         if (currentLeague) {
             try {
-                const response = await axios.get(`http://localhost:8080/api/leagues/${currentLeague.id}`, {
+                const response = await axios.get(`${API_BASE_URL}/api/leagues/${currentLeague.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

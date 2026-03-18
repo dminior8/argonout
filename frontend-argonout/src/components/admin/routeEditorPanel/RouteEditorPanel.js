@@ -7,6 +7,9 @@ import BasicMap from "../../map/BasicMap";
 import { useUser } from '../../../contexts/UserContext';
 import './routeEditorPanel.css';
 import MiniStats from "../../miniStats/MiniStats";
+import {API_BASE_URL} from "../../../config";
+
+
 
 // Komponent formularza dodawania miejsca
 const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
@@ -38,7 +41,7 @@ const PlaceForm = ({ position, onSubmit, onClose, placeData = null }) => {
     const fetchMaps = async () => {
       try {
         const token = Cookies.get('accessTokenFront');
-        const response = await axios.get('http://localhost:8080/api/routes/all', {
+        const response = await axios.get(`${API_BASE_URL}/api/routes/all`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -156,7 +159,7 @@ const RouteEditorPanel = () => {
   const handleGetAll = async () => {
     try {
       const token = Cookies.get('accessTokenFront');
-      const response = await axios.get('http://localhost:8080/api/places', {
+      const response = await axios.get(`${API_BASE_URL}/api/places`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -187,7 +190,7 @@ const RouteEditorPanel = () => {
   
       try {
         const token = Cookies.get('accessTokenFront');
-        await axios.delete(`http://localhost:8080/api/map/places/${selectedPlace.id}`, {
+        await axios.delete(`${API_BASE_URL}/api/map/places/${selectedPlace.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -226,7 +229,7 @@ const RouteEditorPanel = () => {
   
     try {
       const token = Cookies.get('accessTokenFront'); 
-      const response = await axios.post('http://localhost:8080/api/map/places/add', payload, {
+      const response = await axios.post(`${API_BASE_URL}/api/map/places/add`, payload, {
         headers: { 
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`, // Nagłówek autoryzacyjny
@@ -258,7 +261,7 @@ const RouteEditorPanel = () => {
     };
     try {
       const token = Cookies.get('accessTokenFront');
-      const response = await axios.put(`http://localhost:8080/api/map/places/${selectedPlace.id}`, payload, {
+      const response = await axios.put(`${API_BASE_URL}/api/map/places/${selectedPlace.id}`, payload, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -286,7 +289,7 @@ const RouteEditorPanel = () => {
   
     try {
       const token = Cookies.get('accessTokenFront');
-      const response = await axios.get(`http://localhost:8080/api/qrcode/generate/${selectedPlace.id}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/qrcode/generate/${selectedPlace.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

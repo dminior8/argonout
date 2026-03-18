@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import {API_BASE_URL} from "../config";
 
 // Tworzenie kontekstu
 const UserContext = createContext();
@@ -19,7 +20,7 @@ export const UserProvider = ({ children }) => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8080/api/users/me', {
+        const response = await axios.get(`${API_BASE_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

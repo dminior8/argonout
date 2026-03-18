@@ -7,6 +7,7 @@ import "./messagesPanel.css";
 
 import Sidebar from "../sidebar/Sidebar";
 import MiniStats from "../miniStats/MiniStats";
+import {API_BASE_URL} from "../../config";
 
 const LeaderboardPanel = () => {
     const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const LeaderboardPanel = () => {
 
         try {
             const token = Cookies.get('accessTokenFront');
-            const response = await axios.post('http://localhost:8080/api/messages/send', formData, {
+            const response = await axios.post(`${API_BASE_URL}/api/messages/send`, formData, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

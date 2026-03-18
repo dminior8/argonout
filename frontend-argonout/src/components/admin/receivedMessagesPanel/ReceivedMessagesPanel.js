@@ -8,6 +8,7 @@ import Sidebar from "../../sidebar/Sidebar";
 import MiniStats from "../../miniStats/MiniStats";
 
 import "./receivedMessagesPanel.css";
+import {API_BASE_URL} from "../../../config";
 
 const ReceivedMessagesPanel = () => {
     const [messageList, setMessageList] = useState([]);
@@ -19,7 +20,7 @@ const ReceivedMessagesPanel = () => {
         const fetchMessages = async () => {
             try {
                 const token = Cookies.get('accessTokenFront');
-                const response = await axios.get('http://localhost:8080/api/messages/get/all', {
+                const response = await axios.get(`${API_BASE_URL}/api/messages/get/all`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -66,7 +67,7 @@ const ReceivedMessagesPanel = () => {
     const deleteMessage = async (messageId) => {
         try {
             const token = Cookies.get('accessTokenFront');
-            await axios.delete(`http://localhost:8080/api/messages/${messageId}/delete`, {
+            await axios.delete(`${API_BASE_URL}/api/messages/${messageId}/delete`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

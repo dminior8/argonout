@@ -10,6 +10,7 @@ import Sidebar from '../../sidebar/Sidebar';
 import EditUserForm from './EditUserForm';
 
 import './userList.css';
+import {API_BASE_URL} from "../../../config";
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -33,7 +34,7 @@ const UserList = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/users/all", {
+            const response = await axios.get(`${API_BASE_URL}/api/users/all`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { page, size },
             });
@@ -50,7 +51,7 @@ const UserList = () => {
 
     const handleDeleteUser = async (userId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/users/${userId}`, {
+            await axios.delete(`${API_BASE_URL}/api/users/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert(`Usunięto użytkownika o ID: ${userId}`);
@@ -63,7 +64,7 @@ const UserList = () => {
     const handleEditUser = async (formData) => {
         if (!currentUser) return;
         try {
-            await axios.patch(`http://localhost:8080/api/users/${currentUser.id}`, formData, {
+            await axios.patch(`${API_BASE_URL}/api/users/${currentUser.id}`, formData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert(`Edytowano użytkownika: ${currentUser.username}`);

@@ -9,6 +9,7 @@ import BasicMap from "./../map/BasicMap";
 import MiniStats from './../miniStats/MiniStats';
 
 import './historyPanel.css';
+import {API_BASE_URL} from "../../config";
 
 const HistoryPanel = () => {
     const [places, setPlaces] = useState([]);
@@ -23,7 +24,7 @@ const HistoryPanel = () => {
     const fetchMorePlaces = async () => {
         try {
             const token = Cookies.get('accessTokenFront');
-            const response = await axios.get(`http://localhost:8080/api/places/visited`, {
+            const response = await axios.get(`${API_BASE_URL}/api/places/visited`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

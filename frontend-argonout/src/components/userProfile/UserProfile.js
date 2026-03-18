@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Button, Container, Box, TextField, Card, CardContent, List, ListItem, ListItemText } from '@mui/material';
 import Sidebar from '../sidebar/Sidebar';
+import {API_BASE_URL} from "../../config";
 
 const UserProfile = () => {
   const [userProfile, setUserProfile] = useState({
@@ -28,7 +29,7 @@ const UserProfile = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8080/api/users/me', {
+        const response = await axios.get(`${API_BASE_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -59,7 +60,7 @@ const UserProfile = () => {
   const handleSave = async () => {
     try {
       const token = Cookies.get('accessTokenFront');
-      await axios.put('http://localhost:8080/api/users/me', editedProfile, {
+      await axios.put(`${API_BASE_URL}/api/users/me`, editedProfile, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +76,7 @@ const UserProfile = () => {
   const handleDeleteAccount = async () => {
     try {
       const token = Cookies.get('accessTokenFront');
-      await axios.delete('http://localhost:8080/api/users/me', {
+      await axios.delete(`${API_BASE_URL}/api/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
